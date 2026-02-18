@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "resume-stack",
+      "description": "Stack of professional resume templates",
+      "imageUrl": "https://images.unsplash.com/photo-1761671613933-159512988cb3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxyZXN1bWUlMjBkb2N1bWVudHxlbnwwfHx8fDE3NzE0MDkwMzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "resume document"
+    },
+    {
+      "id": "hero-resumes",
+      "description": "Abstract resume previews for hero section",
+      "imageUrl": "https://images.unsplash.com/photo-1758844898896-956ccda94b59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxyZXN1bWUlMjB0ZW1wbGF0ZXxlbnwwfHx8fDE3NzEzNTI3MzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "resume template"
+    }
+  ]
 }
