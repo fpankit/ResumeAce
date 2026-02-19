@@ -3,14 +3,14 @@
     {
       "id": "resume-stack",
       "description": "Stack of professional resume templates",
-      "imageUrl": "https://images.unsplash.com/photo-1761671613933-159512988cb3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxyZXN1bWUlMjBkb2N1bWVudHxlbnwwfHx8fDE3NzE0MDkwMzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "resume document"
+      "imageUrl": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "resume documents"
     },
     {
       "id": "hero-resumes",
-      "description": "Abstract resume previews for hero section",
-      "imageUrl": "https://images.unsplash.com/photo-1758844898896-956ccda94b59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxyZXN1bWUlMjB0ZW1wbGF0ZXxlbnwwfHx8fDE3NzEzNTI3MzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "resume template"
+      "description": "Minimalist stack of resumes",
+      "imageUrl": "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "resume stack"
     }
   ]
 }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -119,8 +120,8 @@ export default function Home() {
                   alt="Resume Stack"
                   width={800}
                   height={600}
-                  className="rounded-xl shadow-2xl rotate-3 translate-x-12 hover:rotate-0 transition-transform duration-500"
-                  data-ai-hint="resume templates"
+                  className="rounded-3xl shadow-2xl rotate-3 translate-x-12 hover:rotate-0 transition-all duration-500 border border-slate-100"
+                  data-ai-hint="resume stack"
                 />
                 <div className="absolute -top-4 -right-4 text-[#EF593E] animate-bounce">
                   <Sparkles className="h-8 w-8" />
