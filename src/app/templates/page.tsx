@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -32,7 +33,10 @@ import {
   Layers,
   MapPin,
   Calendar,
-  Link as LinkIcon
+  Link as LinkIcon,
+  FileBadge,
+  Trophy,
+  BookOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -57,11 +61,6 @@ const THEMES = [
   { id: 'midnight', name: 'Midnight Professional', primary: '#0F172A', accent: '#334155', text: '#0F172A', secondary: '#475569' },
   { id: 'emerald', name: 'Emerald Executive', primary: '#064E3B', accent: '#059669', text: '#064E3B', secondary: '#374151' },
   { id: 'burgundy', name: 'Royal Burgundy', primary: '#450A0A', accent: '#991B1B', text: '#450A0A', secondary: '#4B5563' },
-  { id: 'slate', name: 'Modern Slate', primary: '#334155', accent: '#64748B', text: '#1E293B', secondary: '#64748B' },
-  { id: 'forest', name: 'Deep Forest', primary: '#14532D', accent: '#16A34A', text: '#14532D', secondary: '#4B5563' },
-  { id: 'gold', name: 'Warm Gold', primary: '#78350F', accent: '#D97706', text: '#451A03', secondary: '#78350F' },
-  { id: 'ocean', name: 'Deep Ocean', primary: '#164E63', accent: '#0891B2', text: '#164E63', secondary: '#475569' },
-  { id: 'charcoal', name: 'Pure Charcoal', primary: '#171717', accent: '#404040', text: '#171717', secondary: '#525252' },
 ];
 
 const FONTS = [
@@ -69,33 +68,14 @@ const FONTS = [
   { id: 'montserrat', name: 'Montserrat (Bold)', family: '"Montserrat", sans-serif' },
   { id: 'poppins', name: 'Poppins (Friendly)', family: '"Poppins", sans-serif' },
   { id: 'merriweather', name: 'Merriweather (Serif)', family: '"Merriweather", serif' },
-  { id: 'eb-garamond', name: 'EB Garamond (Classic)', family: '"EB Garamond", serif' },
-  { id: 'lora', name: 'Lora (Academic)', family: '"Lora", serif' },
-  { id: 'playfair', name: 'Playfair Display', family: '"Playfair Display", serif' },
-  { id: 'source-code', name: 'Source Code Pro', family: '"Source Code Pro", monospace' },
 ];
 
 const TEMPLATES = [
   { id: 'classic', name: 'Classic Single Column', category: 'Standard' },
   { id: 'modern', name: 'Modern Professional', category: 'Modern' },
   { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS' },
-  { id: 'two-column', name: 'Two Column Sidebar', category: 'Modern' },
-  { id: 'tech', name: 'Tech Developer Style', category: 'Tech' },
   { id: 'executive', name: 'Executive Clean', category: 'Executive' },
-  { id: 'academic', name: 'Academic CV', category: 'Academic' },
-  { id: 'management', name: 'Management Resume', category: 'Executive' },
-  { id: 'creative', name: 'Creative Minimal', category: 'Creative' },
-  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern' },
-  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant' },
-  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern' },
-  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive' },
-  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern' },
-  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern' },
-  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS' },
-  { id: 'compact', name: 'Compact Dense', category: 'Standard' },
-  { id: 'fresher', name: 'Compact Fresher', category: 'Compact' },
-  { id: 'senior', name: 'Senior Professional', category: 'Executive' },
-  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern' },
+  { id: 'tech', name: 'Tech Developer Style', category: 'Tech' },
 ];
 
 const Logo = () => (
@@ -146,9 +126,8 @@ export default function ResumeBuilderPage() {
       github: 'github.com/johndoe-cloud',
       portfolio: 'johndoe.cloud',
       twitter: 'twitter.com/johndoe_cloud',
-      stackoverflow: 'stackoverflow.com/u/1234567',
       nationality: 'United States',
-      maritalStatus: 'Prefer not to say',
+      maritalStatus: 'Married',
     },
     summary: {
       content: 'Principal Cloud Architect with over 12 years of experience in digital transformation. Expert at migrating legacy workloads to hybrid-cloud infrastructures with zero downtime. Proven track record of reducing operational costs by 35% while increasing system reliability to 99.99%.',
@@ -202,14 +181,12 @@ export default function ResumeBuilderPage() {
         degreeType: 'Master of Science',
         degree: 'M.S. in Computer Science', 
         field: 'Distributed Systems',
-        specialization: 'Cloud Computing',
         school: 'University of Washington', 
         location: 'Seattle, WA',
         startYear: '2012', 
         endYear: '2014',
         gpa: '3.95/4.0',
-        honors: 'President\'s Medalist',
-        thesisTitle: 'Optimized Resource Allocation in Multi-tenant Cloud Environments'
+        honors: 'President\'s Medalist'
       }
     ],
     projects: [
@@ -231,7 +208,8 @@ export default function ResumeBuilderPage() {
       { id: '1', title: 'Speaker at AWS re:Invent', description: 'Presented on serverless scaling strategies.', year: '2023', category: 'Professional' }
     ],
     languages: [
-      { id: '1', name: 'English', reading: 'Native', writing: 'Native', speaking: 'Native' }
+      { id: '1', name: 'English', reading: 'Native', writing: 'Native', speaking: 'Native' },
+      { id: '2', name: 'Hindi', reading: 'Native', writing: 'Native', speaking: 'Native' }
     ],
     interests: ['Blockchain Architecture', 'Aviation', 'Deep Sea Fishing'],
     customSections: [],
@@ -293,6 +271,10 @@ export default function ResumeBuilderPage() {
       Object.assign(newItem, { name: '', org: '', issueDate: '', expiryDate: '', credentialId: '', url: '' });
     } else if (key === 'languages') {
       Object.assign(newItem, { name: '', reading: 'Native', writing: 'Native', speaking: 'Native' });
+    } else if (key === 'achievements') {
+      Object.assign(newItem, { title: '', description: '', year: '', category: 'Professional' });
+    } else if (key === 'publications') {
+      Object.assign(newItem, { title: '', platform: '', year: '', link: '' });
     }
     setData(prev => ({ ...prev, [key]: [...(prev[key] as any[]), newItem] }));
   };
@@ -345,7 +327,7 @@ export default function ResumeBuilderPage() {
 
       <div className="flex flex-1 pt-16 h-full overflow-hidden">
         {/* Editor Sidebar */}
-        <aside className="w-[600px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10">
+        <aside className="w-[500px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 shrink-0">
               <TabsTrigger 
@@ -362,7 +344,7 @@ export default function ResumeBuilderPage() {
               </TabsTrigger>
             </TabsList>
 
-            <ScrollArea className="flex-1 w-full bg-slate-50/30">
+            <ScrollArea className="flex-1 w-full bg-[#F8FAFC]">
               <div className="p-8 pb-32">
                 
                 {/* DESIGN TAB */}
@@ -470,8 +452,8 @@ export default function ResumeBuilderPage() {
                 </TabsContent>
 
                 {/* CONTENT TAB */}
-                <TabsContent value="content" className="m-0 space-y-4">
-                  <Accordion type="multiple" defaultValue={['personal']} className="space-y-4">
+                <TabsContent value="content" className="m-0 space-y-6">
+                  <Accordion type="multiple" defaultValue={['personal', 'experience', 'skills', 'languages']} className="space-y-6">
                     
                     {/* PERSONAL DETAILS */}
                     <AccordionItem value="personal" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
@@ -482,7 +464,7 @@ export default function ResumeBuilderPage() {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="pt-2 pb-8 space-y-8">
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label className="text-[10px] font-black text-slate-400 uppercase">First Name</Label>
                             <Input value={data.personal.fullName.split(' ')[0]} onChange={(e) => updateField('personal.fullName', `${e.target.value} ${data.personal.fullName.split(' ').slice(1).join(' ')}`)} className="rounded-xl h-11" />
@@ -490,10 +472,6 @@ export default function ResumeBuilderPage() {
                           <div className="space-y-2">
                             <Label className="text-[10px] font-black text-slate-400 uppercase">Middle Name</Label>
                             <Input value={data.personal.middleName} onChange={(e) => updateField('personal.middleName', e.target.value)} className="rounded-xl h-11" />
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-[10px] font-black text-slate-400 uppercase">Last Name</Label>
-                            <Input value={data.personal.fullName.split(' ').slice(-1)[0]} onChange={(e) => updateField('personal.fullName', `${data.personal.fullName.split(' ').slice(0, -1).join(' ')} ${e.target.value}`)} className="rounded-xl h-11" />
                           </div>
                         </div>
                         
@@ -548,14 +526,6 @@ export default function ResumeBuilderPage() {
                               <Label className="text-[10px] font-black text-slate-400 uppercase">GitHub Profile</Label>
                               <Input value={data.personal.github} onChange={(e) => updateField('personal.github', e.target.value)} className="rounded-xl h-11" placeholder="github.com/..." />
                             </div>
-                            <div className="space-y-2">
-                              <Label className="text-[10px] font-black text-slate-400 uppercase">Portfolio Website</Label>
-                              <Input value={data.personal.portfolio} onChange={(e) => updateField('personal.portfolio', e.target.value)} className="rounded-xl h-11" placeholder="yourdomain.com" />
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-[10px] font-black text-slate-400 uppercase">Twitter / X</Label>
-                              <Input value={data.personal.twitter} onChange={(e) => updateField('personal.twitter', e.target.value)} className="rounded-xl h-11" placeholder="twitter.com/..." />
-                            </div>
                           </div>
                         </div>
                       </AccordionContent>
@@ -607,7 +577,7 @@ export default function ResumeBuilderPage() {
                       </AccordionTrigger>
                       <AccordionContent className="pt-2 pb-8 space-y-8">
                         {data.experience.map((exp, i) => (
-                          <div key={exp.id} className="p-8 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-8 group relative transition-all hover:border-orange-200">
+                          <div key={exp.id} className="p-8 rounded-3xl bg-[#F8FAFC] border border-slate-100 space-y-8 group relative transition-all hover:border-orange-200">
                             <Button variant="ghost" size="icon" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeArrayItem('experience', exp.id)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -619,7 +589,7 @@ export default function ResumeBuilderPage() {
                                   const newExp = [...data.experience];
                                   newExp[i].title = e.target.value;
                                   updateField('experience', newExp);
-                                }} className="h-11 rounded-xl" />
+                                }} className="h-11 rounded-xl bg-white" />
                               </div>
                               <div className="space-y-2">
                                 <Label className="text-[10px] font-black text-slate-400 uppercase">Company Name</Label>
@@ -627,7 +597,7 @@ export default function ResumeBuilderPage() {
                                   const newExp = [...data.experience];
                                   newExp[i].company = e.target.value;
                                   updateField('experience', newExp);
-                                }} className="h-11 rounded-xl" />
+                                }} className="h-11 rounded-xl bg-white" />
                               </div>
                             </div>
 
@@ -639,7 +609,7 @@ export default function ResumeBuilderPage() {
                                   newExp[i].employmentType = v as any;
                                   updateField('experience', newExp);
                                 }}>
-                                  <SelectTrigger className="h-11 rounded-xl"><SelectValue /></SelectTrigger>
+                                  <SelectTrigger className="h-11 rounded-xl bg-white"><SelectValue /></SelectTrigger>
                                   <SelectContent>
                                     <SelectItem value="Full-time">Full-time</SelectItem>
                                     <SelectItem value="Part-time">Part-time</SelectItem>
@@ -655,7 +625,7 @@ export default function ResumeBuilderPage() {
                                   const newExp = [...data.experience];
                                   newExp[i].industry = e.target.value;
                                   updateField('experience', newExp);
-                                }} className="h-11 rounded-xl" />
+                                }} className="h-11 rounded-xl bg-white" />
                               </div>
                               <div className="space-y-2">
                                 <Label className="text-[10px] font-black text-slate-400 uppercase">Reporting To</Label>
@@ -663,46 +633,42 @@ export default function ResumeBuilderPage() {
                                   const newExp = [...data.experience];
                                   newExp[i].reportingTo = e.target.value;
                                   updateField('experience', newExp);
-                                }} className="h-11 rounded-xl" />
+                                }} className="h-11 rounded-xl bg-white" />
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Start Month</Label>
-                                <Input value={exp.startMonth} onChange={(e) => {
-                                  const newExp = [...data.experience];
-                                  newExp[i].startMonth = e.target.value;
-                                  updateField('experience', newExp);
-                                }} className="h-11 rounded-xl" />
-                              </div>
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Start Year</Label>
-                                <Input value={exp.startYear} onChange={(e) => {
-                                  const newExp = [...data.experience];
-                                  newExp[i].startYear = e.target.value;
-                                  updateField('experience', newExp);
-                                }} className="h-11 rounded-xl" />
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Start Date</Label>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <Input placeholder="Month" value={exp.startMonth} onChange={(e) => {
+                                    const newExp = [...data.experience];
+                                    newExp[i].startMonth = e.target.value;
+                                    updateField('experience', newExp);
+                                  }} className="h-11 rounded-xl bg-white" />
+                                  <Input placeholder="Year" value={exp.startYear} onChange={(e) => {
+                                    const newExp = [...data.experience];
+                                    newExp[i].startYear = e.target.value;
+                                    updateField('experience', newExp);
+                                  }} className="h-11 rounded-xl bg-white" />
+                                </div>
                               </div>
                               {!exp.current && (
-                                <>
-                                  <div className="space-y-2">
-                                    <Label className="text-[10px] font-black text-slate-400 uppercase">End Month</Label>
-                                    <Input value={exp.endMonth} onChange={(e) => {
+                                <div className="space-y-2">
+                                  <Label className="text-[10px] font-black text-slate-400 uppercase">End Date</Label>
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <Input placeholder="Month" value={exp.endMonth} onChange={(e) => {
                                       const newExp = [...data.experience];
                                       newExp[i].endMonth = e.target.value;
                                       updateField('experience', newExp);
-                                    }} className="h-11 rounded-xl" />
-                                  </div>
-                                  <div className="space-y-2">
-                                    <Label className="text-[10px] font-black text-slate-400 uppercase">End Year</Label>
-                                    <Input value={exp.endYear} onChange={(e) => {
+                                    }} className="h-11 rounded-xl bg-white" />
+                                    <Input placeholder="Year" value={exp.endYear} onChange={(e) => {
                                       const newExp = [...data.experience];
                                       newExp[i].endYear = e.target.value;
                                       updateField('experience', newExp);
-                                    }} className="h-11 rounded-xl" />
+                                    }} className="h-11 rounded-xl bg-white" />
                                   </div>
-                                </>
+                                </div>
                               )}
                             </div>
 
@@ -715,7 +681,7 @@ export default function ResumeBuilderPage() {
                               <Label className="text-[10px] font-black uppercase text-slate-500">I currently work here</Label>
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-slate-100">
+                            <div className="space-y-4 pt-4 border-t border-slate-200">
                               <div className="flex items-center justify-between">
                                 <Label className="text-[10px] font-black text-slate-400 uppercase">Core Responsibilities</Label>
                                 <Button variant="ghost" size="sm" onClick={() => handleAiRefine('experience', i)} className="h-7 text-[10px] font-black uppercase text-[#EF593E] gap-2">
@@ -726,25 +692,16 @@ export default function ResumeBuilderPage() {
                                 const newExp = [...data.experience];
                                 newExp[i].responsibilities = e.target.value;
                                 updateField('experience', newExp);
-                              }} className="min-h-[120px] rounded-xl text-sm" placeholder="List your primary duties..." />
+                              }} className="min-h-[120px] rounded-xl text-sm bg-white" placeholder="List your primary duties..." />
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-slate-100">
+                            <div className="space-y-4 pt-4 border-t border-slate-200">
                               <Label className="text-[10px] font-black text-slate-400 uppercase">Key Achievements & Impact</Label>
                               <Textarea value={exp.achievements} onChange={(e) => {
                                 const newExp = [...data.experience];
                                 newExp[i].achievements = e.target.value;
                                 updateField('experience', newExp);
-                              }} className="min-h-[100px] rounded-xl text-sm" placeholder="Quantify your success (e.g. Increased revenue by 20%)..." />
-                            </div>
-
-                            <div className="space-y-4 pt-4 border-t border-slate-100">
-                              <Label className="text-[10px] font-black text-slate-400 uppercase">Technologies Used (Tags)</Label>
-                              <Input value={exp.technologies} onChange={(e) => {
-                                const newExp = [...data.experience];
-                                newExp[i].technologies = e.target.value;
-                                updateField('experience', newExp);
-                              }} className="h-11 rounded-xl" placeholder="e.g. AWS, React, Python..." />
+                              }} className="min-h-[100px] rounded-xl text-sm bg-white" placeholder="Quantify your success (e.g. Increased revenue by 20%)..." />
                             </div>
                           </div>
                         ))}
@@ -764,7 +721,7 @@ export default function ResumeBuilderPage() {
                       </AccordionTrigger>
                       <AccordionContent className="pt-2 pb-8 space-y-8">
                         {data.skills.map((group, i) => (
-                          <div key={group.id} className="p-6 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-6">
+                          <div key={group.id} className="p-6 rounded-3xl bg-[#F8FAFC] border border-slate-100 space-y-6">
                             <div className="flex justify-between items-center">
                               <div className="space-y-2 w-1/2">
                                 <Label className="text-[10px] font-black text-slate-400 uppercase">Skill Category</Label>
@@ -773,7 +730,7 @@ export default function ResumeBuilderPage() {
                                   newSkills[i].category = v as any;
                                   updateField('skills', newSkills);
                                 }}>
-                                  <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
+                                  <SelectTrigger className="h-10 rounded-xl bg-white"><SelectValue /></SelectTrigger>
                                   <SelectContent>
                                     <SelectItem value="Programming Languages">Programming Languages</SelectItem>
                                     <SelectItem value="Frameworks & Libraries">Frameworks & Libraries</SelectItem>
@@ -812,20 +769,6 @@ export default function ResumeBuilderPage() {
                                       updateField('skills', newSkills);
                                     }} />
                                   </div>
-                                  <div className="col-span-3 space-y-2">
-                                    <Label className="text-[9px] font-black text-slate-400 uppercase">Priority</Label>
-                                    <Select value={skill.priority} onValueChange={(v) => {
-                                      const newSkills = [...data.skills];
-                                      newSkills[i].items[si].priority = v as any;
-                                      updateField('skills', newSkills);
-                                    }}>
-                                      <SelectTrigger className="h-9 rounded-lg text-xs"><SelectValue /></SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="Primary">Primary</SelectItem>
-                                        <SelectItem value="Secondary">Secondary</SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
                                   <div className="col-span-1">
                                     <Button variant="ghost" size="icon" className="text-slate-300 hover:text-red-400 h-9" onClick={() => {
                                       const newSkills = [...data.skills];
@@ -840,100 +783,13 @@ export default function ResumeBuilderPage() {
                                 newSkills[i].items.push({ id: Math.random().toString(36).substr(2, 9), name: '', level: 50, priority: 'Primary' });
                                 updateField('skills', newSkills);
                               }}>
-                                <Plus className="h-3 w-3" /> Add Skill to {group.category}
+                                <Plus className="h-3 w-3" /> Add Skill
                               </Button>
                             </div>
                           </div>
                         ))}
                         <Button variant="outline" className="w-full h-14 rounded-2xl border-dashed border-2 font-black uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E]" onClick={() => addArrayItem('skills')}>
                           <PlusCircle className="h-5 w-5" /> Add Skill Category
-                        </Button>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    {/* EDUCATION */}
-                    <AccordionItem value="education" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
-                      <AccordionTrigger className="hover:no-underline py-5">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><GraduationCap className="h-4 w-4 text-[#EF593E]" /></div>
-                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">5. Academic Background</span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pt-2 pb-8 space-y-8">
-                        {data.education.map((edu, i) => (
-                          <div key={edu.id} className="p-8 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-6 relative group">
-                            <Button variant="ghost" size="icon" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100" onClick={() => removeArrayItem('education', edu.id)}>
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                            
-                            <div className="grid grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Degree Title</Label>
-                                <Input value={edu.degree} onChange={(e) => {
-                                  const newEdu = [...data.education];
-                                  newEdu[i].degree = e.target.value;
-                                  updateField('education', newEdu);
-                                }} className="h-11 rounded-xl" placeholder="e.g. Master of Science" />
-                              </div>
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Field of Study</Label>
-                                <Input value={edu.field} onChange={(e) => {
-                                  const newEdu = [...data.education];
-                                  newEdu[i].field = e.target.value;
-                                  updateField('education', newEdu);
-                                }} className="h-11 rounded-xl" placeholder="e.g. Computer Science" />
-                              </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">University / School</Label>
-                                <Input value={edu.school} onChange={(e) => {
-                                  const newEdu = [...data.education];
-                                  newEdu[i].school = e.target.value;
-                                  updateField('education', newEdu);
-                                }} className="h-11 rounded-xl" />
-                              </div>
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Location</Label>
-                                <Input value={edu.location} onChange={(e) => {
-                                  const newEdu = [...data.education];
-                                  newEdu[i].location = e.target.value;
-                                  updateField('education', newEdu);
-                                }} className="h-11 rounded-xl" />
-                              </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-4">
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">End Year</Label>
-                                <Input value={edu.endYear} onChange={(e) => {
-                                  const newEdu = [...data.education];
-                                  newEdu[i].endYear = e.target.value;
-                                  updateField('education', newEdu);
-                                }} className="h-11 rounded-xl" />
-                              </div>
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">GPA / Score</Label>
-                                <Input value={edu.gpa} onChange={(e) => {
-                                  const newEdu = [...data.education];
-                                  newEdu[i].gpa = e.target.value;
-                                  updateField('education', newEdu);
-                                }} className="h-11 rounded-xl" />
-                              </div>
-                              <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Honors</Label>
-                                <Input value={edu.honors} onChange={(e) => {
-                                  const newEdu = [...data.education];
-                                  newEdu[i].honors = e.target.value;
-                                  updateField('education', newEdu);
-                                }} className="h-11 rounded-xl" />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                        <Button variant="outline" className="w-full h-14 rounded-2xl border-dashed border-2 font-black uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E]" onClick={() => addArrayItem('education')}>
-                          <PlusCircle className="h-5 w-5" /> Add Academic Qualification
                         </Button>
                       </AccordionContent>
                     </AccordionItem>
@@ -948,69 +804,71 @@ export default function ResumeBuilderPage() {
                       </AccordionTrigger>
                       <AccordionContent className="pt-2 pb-8 space-y-6">
                         {data.languages.map((lang, i) => (
-                          <div key={lang.id} className="grid grid-cols-4 gap-4 bg-slate-50/50 p-6 rounded-2xl border border-slate-100 relative group">
-                            <Button variant="ghost" size="icon" className="absolute -top-2 -right-2 text-red-400 opacity-0 group-hover:opacity-100 h-8 w-8 bg-white shadow-sm border border-slate-100" onClick={() => removeArrayItem('languages', lang.id)}>
+                          <div key={lang.id} className="p-6 rounded-3xl bg-[#F8FAFC] border border-slate-100 relative group">
+                            <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100 h-8 w-8 bg-white shadow-sm border border-slate-100" onClick={() => removeArrayItem('languages', lang.id)}>
                               <Trash2 className="h-3 w-3" />
                             </Button>
-                            <div className="space-y-2">
-                              <Label className="text-[10px] font-black text-slate-400 uppercase">Language</Label>
-                              <Input value={lang.name} onChange={(e) => {
-                                const newLang = [...data.languages];
-                                newLang[i].name = e.target.value;
-                                updateField('languages', newLang);
-                              }} className="h-10 rounded-xl" />
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-[10px] font-black text-slate-400 uppercase">Reading</Label>
-                              <Select value={lang.reading} onValueChange={(v) => {
-                                const newLang = [...data.languages];
-                                newLang[i].reading = v as any;
-                                updateField('languages', newLang);
-                              }}>
-                                <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="Basic">Basic</SelectItem>
-                                  <SelectItem value="Intermediate">Intermediate</SelectItem>
-                                  <SelectItem value="Advanced">Advanced</SelectItem>
-                                  <SelectItem value="Native">Native</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-[10px] font-black text-slate-400 uppercase">Writing</Label>
-                              <Select value={lang.writing} onValueChange={(v) => {
-                                const newLang = [...data.languages];
-                                newLang[i].writing = v as any;
-                                updateField('languages', newLang);
-                              }}>
-                                <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="Basic">Basic</SelectItem>
-                                  <SelectItem value="Intermediate">Intermediate</SelectItem>
-                                  <SelectItem value="Advanced">Advanced</SelectItem>
-                                  <SelectItem value="Native">Native</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-[10px] font-black text-slate-400 uppercase">Speaking</Label>
-                              <Select value={lang.speaking} onValueChange={(v) => {
-                                const newLang = [...data.languages];
-                                newLang[i].speaking = v as any;
-                                updateField('languages', newLang);
-                              }}>
-                                <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="Basic">Basic</SelectItem>
-                                  <SelectItem value="Intermediate">Intermediate</SelectItem>
-                                  <SelectItem value="Advanced">Advanced</SelectItem>
-                                  <SelectItem value="Native">Native</SelectItem>
-                                </SelectContent>
-                              </Select>
+                            <div className="grid grid-cols-4 gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Language</Label>
+                                <Input value={lang.name} onChange={(e) => {
+                                  const newLang = [...data.languages];
+                                  newLang[i].name = e.target.value;
+                                  updateField('languages', newLang);
+                                }} className="h-10 rounded-xl bg-white" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Reading</Label>
+                                <Select value={lang.reading} onValueChange={(v) => {
+                                  const newLang = [...data.languages];
+                                  newLang[i].reading = v as any;
+                                  updateField('languages', newLang);
+                                }}>
+                                  <SelectTrigger className="h-10 rounded-xl bg-white"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Basic">Basic</SelectItem>
+                                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                    <SelectItem value="Advanced">Advanced</SelectItem>
+                                    <SelectItem value="Native">Native</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Writing</Label>
+                                <Select value={lang.writing} onValueChange={(v) => {
+                                  const newLang = [...data.languages];
+                                  newLang[i].writing = v as any;
+                                  updateField('languages', newLang);
+                                }}>
+                                  <SelectTrigger className="h-10 rounded-xl bg-white"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Basic">Basic</SelectItem>
+                                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                    <SelectItem value="Advanced">Advanced</SelectItem>
+                                    <SelectItem value="Native">Native</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Speaking</Label>
+                                <Select value={lang.speaking} onValueChange={(v) => {
+                                  const newLang = [...data.languages];
+                                  newLang[i].speaking = v as any;
+                                  updateField('languages', newLang);
+                                }}>
+                                  <SelectTrigger className="h-10 rounded-xl bg-white"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Basic">Basic</SelectItem>
+                                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                    <SelectItem value="Advanced">Advanced</SelectItem>
+                                    <SelectItem value="Native">Native</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
                             </div>
                           </div>
                         ))}
-                        <Button variant="ghost" size="sm" className="w-full h-12 text-[10px] font-black uppercase text-[#EF593E] border border-dashed border-orange-100 hover:bg-orange-50 gap-2 rounded-xl" onClick={() => addArrayItem('languages')}>
+                        <Button variant="ghost" size="sm" className="w-full h-14 text-[10px] font-black uppercase text-[#EF593E] border border-dashed border-2 border-orange-100 hover:bg-orange-50 gap-2 rounded-2xl" onClick={() => addArrayItem('languages')}>
                           <Plus className="h-4 w-4" /> Add Language
                         </Button>
                       </AccordionContent>
@@ -1029,7 +887,7 @@ export default function ResumeBuilderPage() {
                         <Textarea 
                           value={data.interests.join(', ')} 
                           onChange={(e) => updateField('interests', e.target.value.split(',').map(i => i.trim()))} 
-                          className="min-h-[80px] rounded-2xl text-sm" 
+                          className="min-h-[100px] rounded-2xl text-sm border-2 border-slate-900" 
                           placeholder="e.g. Hiking, Photography, Chess..." 
                         />
                       </AccordionContent>
