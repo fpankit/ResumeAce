@@ -8,9 +8,14 @@ import {
   Sparkles, 
   CheckCircle2, 
   ArrowUpRight, 
-  Loader2, 
-  User, 
-  Camera 
+  Linkedin,
+  MousePointer2,
+  PieChart,
+  FileText,
+  Lightbulb,
+  ArrowLeftRight,
+  Paintbrush,
+  Camera
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -114,95 +119,73 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Steps Section */}
-        <section className="py-24 bg-white">
+        {/* How to use the resume checker - Overlapping Stacking Section */}
+        <section className="py-24 bg-white overflow-visible">
           <div className="container mx-auto px-6">
-            <h2 className="text-4xl font-bold text-center text-slate-900 mb-16">The free ATS resume rater</h2>
+            <h2 className="text-4xl font-bold text-center text-slate-900 mb-20">How to use the resume checker</h2>
             
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
-              {/* Left Side: Steps */}
-              <div className="space-y-4">
-                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between group cursor-default">
-                  <span className="text-lg font-bold text-slate-900">1. Upload your resume</span>
-                  <ArrowUpRight className="h-5 w-5 text-slate-300 group-hover:text-primary transition-colors" />
-                </div>
-                
-                <div className="p-8 rounded-2xl bg-white shadow-xl shadow-slate-200/50 border border-slate-100 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-slate-900">2. Get instant feedback</span>
-                    <div className="h-5 w-5 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+            <div className="relative space-y-24">
+              {/* Step 1 Card */}
+              <div className="sticky top-28 z-10">
+                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-blue-500/20 shadow-xl shadow-blue-500/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
+                  <div className="flex-1 space-y-6">
+                    <div className="text-blue-600 font-semibold text-lg">Step 1</div>
+                    <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+                      Import your existing resume into the resume builder
+                    </h3>
+                    <p className="text-slate-500">
+                      Upload your resume or import from LinkedIn. (Or start from scratch.)
+                      <br /><br />
+                      You&apos;ll get structured sections and tools to help you organize fast.
+                    </p>
                   </div>
-                  <p className="text-sm text-slate-500">Learn exactly what&apos;s good, and how to improve</p>
-                </div>
-
-                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between group cursor-default">
-                  <span className="text-lg font-bold text-slate-900">3. Add the job description</span>
-                  <ArrowUpRight className="h-5 w-5 text-slate-300 group-hover:text-primary transition-colors" />
-                </div>
-
-                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between group cursor-default">
-                  <span className="text-lg font-bold text-slate-900">4. Update your resume</span>
-                  <ArrowUpRight className="h-5 w-5 text-slate-300 group-hover:text-primary transition-colors" />
-                </div>
-              </div>
-
-              {/* Right Side: Mockup */}
-              <div className="relative bg-slate-50 rounded-3xl p-8 lg:p-12 border border-slate-100 overflow-hidden">
-                {/* Floating Score Badge */}
-                <div className="absolute top-12 left-12 z-20 bg-white rounded-xl shadow-2xl p-4 flex items-center gap-4 border border-slate-100 animate-in fade-in slide-in-from-left-4 duration-700">
-                  <div className="w-14 h-14 rounded-lg bg-green-500 flex items-center justify-center text-white text-xl font-bold">
-                    81%
-                  </div>
-                  <div>
-                    <div className="font-bold text-slate-800">Resume Score</div>
-                    <div className="text-xs text-green-500 font-medium">+2% Add desired job title</div>
-                  </div>
-                </div>
-
-                {/* Mockup Form */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8 space-y-8 mt-12 opacity-90 scale-[0.98]">
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-slate-900">Personal Details</h3>
-                    <div className="grid gap-6">
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <Label className="text-slate-400 font-medium">Wanted Job Title</Label>
-                          <span className="text-[10px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded font-bold">+2%</span>
-                        </div>
-                        <Input disabled placeholder="e.g. Teacher" className="bg-slate-50/50 border-slate-100" />
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4 items-center">
-                         <div className="space-y-2">
-                            <Label className="text-slate-400 font-medium">First Name</Label>
-                            <Input disabled defaultValue="John" className="bg-slate-50/50 border-slate-100" />
-                         </div>
-                         <div className="flex flex-col items-center justify-center pt-6">
-                            <div className="w-12 h-12 rounded bg-slate-50 border border-dashed border-slate-200 flex flex-col items-center justify-center gap-1">
-                               <Camera className="h-4 w-4 text-slate-300" />
-                               <span className="text-[8px] text-primary font-bold">Upload photo</span>
-                            </div>
-                         </div>
-                         <div className="space-y-2">
-                            <Label className="text-slate-400 font-medium">Last Name</Label>
-                            <Input disabled defaultValue="Hill" className="bg-slate-50/50 border-slate-100" />
-                         </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label className="text-slate-400 font-medium">Email</Label>
-                          <Input disabled defaultValue="john.hill@gmail.com" className="bg-slate-50/50 border-slate-100" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-slate-400 font-medium">Phone</Label>
-                          <Input disabled className="bg-slate-50/50 border-slate-100" />
-                        </div>
-                      </div>
+                  <div className="flex-1 w-full max-w-md space-y-4">
+                    <div className="bg-white border border-slate-200 rounded-lg p-3">
+                      <Input disabled placeholder="www.linkedin.com/in/yourprofileurl" className="bg-slate-50/50 border-none shadow-none text-xs" />
+                    </div>
+                    <Button variant="outline" className="w-full gap-2 border-blue-200 bg-blue-50/30 text-slate-600 font-medium">
+                      <Linkedin className="h-4 w-4 text-[#0077B5]" /> Import LinkedIn Profile Data
+                    </Button>
+                    <div className="relative border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center text-center space-y-2 bg-slate-50/30 group">
+                      <Upload className="h-6 w-6 text-slate-400" />
+                      <p className="text-xs text-slate-400">Drag & Drop your resume here or click to select a file (.doc or .pdf).</p>
+                      <MousePointer2 className="absolute -bottom-4 -right-4 h-10 w-10 text-blue-600 fill-blue-600 rotate-[20deg]" />
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Step 2 Card */}
+              <div className="sticky top-40 z-20">
+                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-emerald-500/20 shadow-xl shadow-emerald-500/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
+                  <div className="flex-1 space-y-6">
+                    <div className="text-emerald-600 font-semibold text-lg">Step 2</div>
+                    <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+                      Click the &quot;Analyzer&quot; tab to check your resume score
+                    </h3>
+                    <p className="text-slate-500">
+                      Open the Analyzer tab to see your resume score, personalized findings, and recommendations—automatically generated by the resume checker AI.
+                      <br /><br />
+                      No setup. No extra steps. Just instant insight.
+                    </p>
+                  </div>
+                  <div className="flex-1 w-full max-w-md flex items-center justify-center gap-6 lg:gap-10">
+                    <FileText className="h-10 w-10 text-slate-300" />
+                    <Lightbulb className="h-10 w-10 text-slate-300" />
+                    <div className="relative">
+                       <div className="w-24 h-24 rounded-full bg-[#004D40] flex items-center justify-center text-white shadow-2xl">
+                          <PieChart className="h-10 w-10" />
+                       </div>
+                       <MousePointer2 className="absolute -bottom-6 -right-2 h-10 w-10 text-blue-600 fill-blue-600 rotate-[20deg]" />
+                    </div>
+                    <ArrowLeftRight className="h-10 w-10 text-slate-300" />
+                    <Paintbrush className="h-10 w-10 text-slate-300" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 3 Placeholder for scroll depth */}
+              <div className="h-48"></div>
             </div>
           </div>
         </section>
