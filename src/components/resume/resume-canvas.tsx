@@ -72,7 +72,7 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
     <div 
       className="resume-a4 print:m-0 print:shadow-none" 
       style={{ 
-        fontFamily: font?.family || 'var(--font-inter), sans-serif',
+        fontFamily: font?.family || '"Inter", sans-serif',
         borderTop: `10px solid ${theme.primary}`,
         fontSize: `${config.fontSize}px`,
         lineHeight: config.lineHeight,
@@ -90,6 +90,13 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
         .resume-a4 {
           padding: 60px !important;
           color: #334155;
+          background: white;
+          width: 210mm;
+          min-height: 297mm;
+          margin: auto;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+          position: relative;
+          overflow: hidden;
         }
         .resume-body {
           font-size: 1em;
@@ -98,6 +105,8 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
           .resume-a4 {
             border-top: none !important;
             padding: 40px !important;
+            box-shadow: none !important;
+            margin: 0 !important;
           }
         }
       `}</style>

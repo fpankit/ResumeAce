@@ -12,7 +12,8 @@ import {
   Check, 
   Sparkles,
   Loader2,
-  Settings
+  Settings,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,28 +25,7 @@ import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { generateResumeContent } from '@/ai/flows/generate-resume-content';
 import { useToast } from '@/hooks/use-toast';
-
-// Templates
-import Classic from '@/components/resume-templates/Classic';
-import Modern from '@/components/resume-templates/Modern';
-import ATSMinimal from '@/components/resume-templates/ATSMinimal';
-import TwoColumn from '@/components/resume-templates/TwoColumn';
-import Tech from '@/components/resume-templates/Tech';
-import Executive from '@/components/resume-templates/Executive';
-import Compact from '@/components/resume-templates/Compact';
-import Academic from '@/components/resume-templates/Academic';
-import Management from '@/components/resume-templates/Management';
-import Creative from '@/components/resume-templates/Creative';
-import BoldHeader from '@/components/resume-templates/BoldHeader';
-import ElegantSerif from '@/components/resume-templates/ElegantSerif';
-import Timeline from '@/components/resume-templates/Timeline';
-import Corporate from '@/components/resume-templates/Corporate';
-import SoftGray from '@/components/resume-templates/SoftGray';
-import BlueAccent from '@/components/resume-templates/BlueAccent';
-import Monochrome from '@/components/resume-templates/Monochrome';
-import Fresher from '@/components/resume-templates/Fresher';
-import Senior from '@/components/resume-templates/Senior';
-import Hybrid from '@/components/resume-templates/Hybrid';
+import { ResumeCanvas } from '@/components/resume/resume-canvas';
 
 const THEMES = [
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB' },
@@ -64,26 +44,26 @@ const FONTS = [
 ];
 
 const TEMPLATES = [
-  { id: 'classic', name: 'Classic Single Column', category: 'Standard', component: Classic },
-  { id: 'modern', name: 'Modern Professional', category: 'Modern', component: Modern },
-  { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS', component: ATSMinimal },
-  { id: 'two-column', name: 'Two Column Sidebar', category: 'Modern', component: TwoColumn },
-  { id: 'tech', name: 'Tech Developer Style', category: 'Tech', component: Tech },
-  { id: 'executive', name: 'Executive Clean', category: 'Executive', component: Executive },
-  { id: 'academic', name: 'Academic CV', category: 'Academic', component: Academic },
-  { id: 'management', name: 'Management Resume', category: 'Executive', component: Management },
-  { id: 'creative', name: 'Creative Minimal', category: 'Creative', component: Creative },
-  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern', component: BoldHeader },
-  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant', component: ElegantSerif },
-  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern', component: Timeline },
-  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive', component: Corporate },
-  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern', component: SoftGray },
-  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern', component: BlueAccent },
-  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS', component: Monochrome },
-  { id: 'compact', name: 'Compact Dense', category: 'Standard', component: Compact },
-  { id: 'fresher', name: 'Compact Fresher', category: 'Compact', component: Fresher },
-  { id: 'senior', name: 'Senior Professional', category: 'Executive', component: Senior },
-  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern', component: Hybrid },
+  { id: 'classic', name: 'Classic Single Column', category: 'Standard' },
+  { id: 'modern', name: 'Modern Professional', category: 'Modern' },
+  { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS' },
+  { id: 'two-column', name: 'Two Column Sidebar', category: 'Modern' },
+  { id: 'tech', name: 'Tech Developer Style', category: 'Tech' },
+  { id: 'executive', name: 'Executive Clean', category: 'Executive' },
+  { id: 'academic', name: 'Academic CV', category: 'Academic' },
+  { id: 'management', name: 'Management Resume', category: 'Executive' },
+  { id: 'creative', name: 'Creative Minimal', category: 'Creative' },
+  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern' },
+  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant' },
+  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern' },
+  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive' },
+  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern' },
+  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern' },
+  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS' },
+  { id: 'compact', name: 'Compact Dense', category: 'Standard' },
+  { id: 'fresher', name: 'Compact Fresher', category: 'Compact' },
+  { id: 'senior', name: 'Senior Professional', category: 'Executive' },
+  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern' },
 ];
 
 const BullIcon = ({ className }: { className?: string }) => (
@@ -113,6 +93,7 @@ export default function ResumeBuilderPage() {
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
   const [lineHeight, setLineHeight] = useState(1.5);
   const [fontSize, setFontSize] = useState(13);
+  const [sectionSpacing, setSectionSpacing] = useState(24);
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   
@@ -146,11 +127,6 @@ export default function ResumeBuilderPage() {
       { id: '1', degree: 'B.S. Computer Science', school: 'MIT', period: '2012-2016' }
     ]
   });
-
-  const SelectedTemplate = useMemo(() => {
-    const template = TEMPLATES.find(t => t.id === selectedTemplateId) || TEMPLATES[0];
-    return template.component;
-  }, [selectedTemplateId]);
 
   const handlePersonalUpdate = (field: string, value: string) => {
     setData(prev => ({
@@ -355,16 +331,19 @@ export default function ResumeBuilderPage() {
         </aside>
 
         <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center">
-          <div 
-            className="resume-a4 shadow-2xl bg-white min-h-[1123px] w-[794px] mx-auto transition-all duration-500 overflow-hidden p-[60px]" 
-            style={{ fontFamily: selectedFont.family }}
-          >
-            <SelectedTemplate 
-              data={data} 
-              theme={selectedTheme} 
-              style={{ fontSize, lineHeight }} 
-            />
-          </div>
+          <ResumeCanvas 
+            templateId={selectedTemplateId}
+            theme={selectedTheme}
+            font={selectedFont}
+            data={{...data, skills: data.skills}}
+            sections={{
+              summary: true,
+              skills: true,
+              experience: true,
+              education: true,
+            }}
+            style={{ fontSize, lineHeight, sectionSpacing }}
+          />
         </main>
       </div>
     </div>
