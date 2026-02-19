@@ -134,10 +134,15 @@ export default function StudentDashboard() {
         description: "Your results have been updated.",
       });
     } catch (error: any) {
+      let errorMessage = error.message;
+      if (errorMessage.includes("RESOURCE_EXHAUSTED") || errorMessage.includes("429")) {
+        errorMessage = "AI Quota exceeded. Please wait a minute and try again.";
+      }
+      
       toast({
         variant: "destructive",
         title: "Analysis failed",
-        description: error.message,
+        description: errorMessage,
       });
     } finally {
       setAnalyzing(false);
@@ -288,7 +293,6 @@ export default function StudentDashboard() {
                   {result && (
                     <div className="animate-in fade-in slide-in-from-right-4 duration-700">
                       <Card className="border-none shadow-2xl overflow-hidden bg-white rounded-3xl">
-                        {/* High Fidelity Header matching screenshot */}
                         <div className="bg-[#1e293b] p-10 text-white relative">
                           <div className="flex justify-between items-start">
                             <div className="space-y-1">
