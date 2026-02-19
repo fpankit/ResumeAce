@@ -1,25 +1,19 @@
+
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { 
   Download, 
-  Palette, 
   Type as TypeIcon, 
   Layout, 
-  Settings, 
   User, 
   Plus, 
   Trash2, 
   Check, 
   Sparkles,
   Loader2,
-  Briefcase,
-  Mail,
-  Phone,
-  MapPin,
-  ChevronRight,
-  Monitor
+  Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +25,13 @@ import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { generateResumeContent } from '@/ai/flows/generate-resume-content';
 import { useToast } from '@/hooks/use-toast';
+
+// Templates
+import Classic from '@/components/resume-templates/Classic';
+import Modern from '@/components/resume-templates/Modern';
+import ATSMinimal from '@/components/resume-templates/ATSMinimal';
+import TwoColumn from '@/components/resume-templates/TwoColumn';
+import Tech from '@/components/resume-templates/Tech';
 
 const THEMES = [
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB' },
@@ -49,26 +50,26 @@ const FONTS = [
 ];
 
 const TEMPLATES = [
-  { id: 'classic', name: 'Classic Single Column', category: 'Standard' },
-  { id: 'modern', name: 'Modern Professional', category: 'Modern' },
-  { id: 'executive', name: 'Executive Clean', category: 'Executive' },
-  { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS' },
-  { id: 'two-column', name: 'Two Column Sidebar', category: 'Standard' },
-  { id: 'compact', name: 'Compact Dense', category: 'Standard' },
-  { id: 'academic', name: 'Academic CV', category: 'Academic' },
-  { id: 'tech', name: 'Tech Developer Style', category: 'Modern' },
-  { id: 'management', name: 'Management Resume', category: 'Executive' },
-  { id: 'creative', name: 'Creative Minimal', category: 'Creative' },
-  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern' },
-  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant' },
-  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern' },
-  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive' },
-  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern' },
-  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern' },
-  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS' },
-  { id: 'fresher', name: 'Compact Fresher', category: 'Compact' },
-  { id: 'senior', name: 'Senior Professional', category: 'Executive' },
-  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern' },
+  { id: 'classic', name: 'Classic Single Column', category: 'Standard', component: Classic },
+  { id: 'modern', name: 'Modern Professional', category: 'Modern', component: Modern },
+  { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS', component: ATSMinimal },
+  { id: 'two-column', name: 'Two Column Sidebar', category: 'Modern', component: TwoColumn },
+  { id: 'tech', name: 'Tech Developer Style', category: 'Tech', component: Tech },
+  { id: 'executive', name: 'Executive Clean', category: 'Executive', component: Classic },
+  { id: 'academic', name: 'Academic CV', category: 'Academic', component: Modern },
+  { id: 'management', name: 'Management Resume', category: 'Executive', component: Classic },
+  { id: 'creative', name: 'Creative Minimal', category: 'Creative', component: TwoColumn },
+  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern', component: Tech },
+  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant', component: Classic },
+  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern', component: Tech },
+  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive', component: Classic },
+  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern', component: Modern },
+  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern', component: TwoColumn },
+  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS', component: ATSMinimal },
+  { id: 'compact', name: 'Compact Dense', category: 'Standard', component: Classic },
+  { id: 'fresher', name: 'Compact Fresher', category: 'Compact', component: Modern },
+  { id: 'senior', name: 'Senior Professional', category: 'Executive', component: Classic },
+  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern', component: Modern },
 ];
 
 const BullIcon = ({ className }: { className?: string }) => (
@@ -91,165 +92,9 @@ const Logo = () => (
   </div>
 );
 
-const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
-  const { personal, summary, experience } = data;
-  const layoutStyle = {
-    fontFamily: font.family,
-    fontSize: `${style.fontSize}px`,
-    lineHeight: style.lineHeight,
-    padding: '60px',
-    color: '#334155'
-  };
-
-  const SectionHeader = ({ title }: { title: string }) => (
-    <div className="mb-4 border-b pb-1" style={{ borderColor: theme.primary }}>
-      <h2 className="text-xs font-black uppercase tracking-widest" style={{ color: theme.primary }}>{title}</h2>
-    </div>
-  );
-
-  const renderContent = () => {
-    switch (templateId) {
-      case 'two-column':
-        return (
-          <div className="flex gap-10 h-full">
-            <div className="w-1/3 space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-3xl font-black leading-none" style={{ color: theme.primary }}>{personal.fullName}</h1>
-                <p className="text-xs font-bold uppercase tracking-widest opacity-60">{personal.jobTitle}</p>
-              </div>
-              <div className="space-y-3 text-[10px] font-medium opacity-60">
-                <div className="flex items-center gap-2"><Mail className="h-3 w-3" /> {personal.email}</div>
-                <div className="flex items-center gap-2"><Phone className="h-3 w-3" /> {personal.phone}</div>
-                <div className="flex items-center gap-2"><MapPin className="h-3 w-3" /> {personal.location}</div>
-              </div>
-            </div>
-            <div className="flex-1 space-y-10">
-              <section>
-                <SectionHeader title="Profile" />
-                <p className="text-sm leading-relaxed">{summary}</p>
-              </section>
-              <section>
-                <SectionHeader title="Experience" />
-                {experience.map((exp: any, i: number) => (
-                  <div key={i} className="mb-6">
-                    <div className="flex justify-between font-bold">
-                      <span className="text-sm">{exp.title}</span>
-                      <span className="text-[10px] opacity-40 uppercase">{exp.period}</span>
-                    </div>
-                    <div className="text-[11px] font-black uppercase mb-2" style={{ color: theme.accent }}>{exp.company}</div>
-                    <p className="text-xs leading-relaxed opacity-70 whitespace-pre-wrap">{exp.description}</p>
-                  </div>
-                ))}
-              </section>
-            </div>
-          </div>
-        );
-
-      case 'bold-header':
-        return (
-          <div className="space-y-10">
-            <div className="bg-slate-900 text-white p-10 -m-[60px] mb-10">
-              <h1 className="text-4xl font-black uppercase tracking-tighter">{personal.fullName}</h1>
-              <p className="text-lg font-bold text-[#EF593E] uppercase tracking-widest">{personal.jobTitle}</p>
-              <div className="flex gap-6 mt-4 text-[10px] font-bold opacity-60 uppercase">
-                <span>{personal.email}</span>
-                <span>{personal.phone}</span>
-                <span>{personal.location}</span>
-              </div>
-            </div>
-            <section className="space-y-4">
-              <SectionHeader title="Summary" />
-              <p className="text-sm leading-relaxed">{summary}</p>
-            </section>
-            <section className="space-y-8">
-              <SectionHeader title="Experience" />
-              {experience.map((exp: any, i: number) => (
-                <div key={i} className="space-y-1">
-                  <div className="flex justify-between items-baseline">
-                    <h3 className="font-black text-slate-900 text-sm">{exp.title}</h3>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">{exp.period}</span>
-                  </div>
-                  <p className="text-[11px] font-bold uppercase" style={{ color: theme.primary }}>{exp.company}</p>
-                  <p className="text-xs leading-relaxed text-slate-600 mt-2 whitespace-pre-wrap">{exp.description}</p>
-                </div>
-              ))}
-            </section>
-          </div>
-        );
-
-      case 'ats-minimal':
-      case 'monochrome':
-      case 'monochrome-minimal':
-        return (
-          <div className="space-y-6 font-mono text-[11px] leading-tight text-black">
-            <div className="text-center space-y-1 mb-8">
-              <h1 className="text-xl font-bold uppercase">{personal.fullName}</h1>
-              <p>{personal.location} | {personal.phone} | {personal.email}</p>
-            </div>
-            <section>
-              <h2 className="font-bold border-b border-black uppercase mb-1">Summary</h2>
-              <p>{summary}</p>
-            </section>
-            <section>
-              <h2 className="font-bold border-b border-black uppercase mb-1">Experience</h2>
-              {experience.map((exp: any, i: number) => (
-                <div key={i} className="mb-4">
-                  <div className="flex justify-between font-bold">
-                    <span>{exp.company}</span>
-                    <span>{exp.period}</span>
-                  </div>
-                  <p className="italic">{exp.title}</p>
-                  <p className="whitespace-pre-wrap mt-1 leading-normal">• {exp.description.replace(/\n/g, '\n• ')}</p>
-                </div>
-              ))}
-            </section>
-          </div>
-        );
-
-      default:
-        return (
-          <div className="space-y-10">
-            <header className="text-center space-y-2 border-b-2 pb-8" style={{ borderColor: theme.primary }}>
-              <h1 className="text-4xl font-black uppercase tracking-tighter" style={{ color: theme.primary }}>{personal.fullName}</h1>
-              <p className="text-sm font-bold opacity-40 uppercase tracking-[0.2em]">{personal.jobTitle}</p>
-              <div className="flex justify-center gap-6 text-[9px] font-black uppercase tracking-widest text-slate-400 mt-4">
-                <span>{personal.email}</span>
-                <span>{personal.phone}</span>
-                <span>{personal.location}</span>
-              </div>
-            </header>
-            <section className="space-y-4">
-              <SectionHeader title="Professional Summary" />
-              <p className="text-sm leading-relaxed text-slate-600 italic">{summary}</p>
-            </section>
-            <section className="space-y-8">
-              <SectionHeader title="Work Experience" />
-              {experience.map((exp: any, i: number) => (
-                <div key={i} className="space-y-2">
-                  <div className="flex justify-between items-baseline">
-                    <h3 className="text-sm font-black text-slate-900">{exp.title}</h3>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">{exp.period}</span>
-                  </div>
-                  <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: theme.accent }}>{exp.company}</p>
-                  <p className="text-xs leading-relaxed text-slate-600 whitespace-pre-wrap">{exp.description}</p>
-                </div>
-              ))}
-            </section>
-          </div>
-        );
-    }
-  };
-
-  return (
-    <div className="resume-a4 shadow-2xl bg-white min-h-[1123px] w-[794px] mx-auto transition-all duration-500 overflow-hidden" style={layoutStyle}>
-      {renderContent()}
-    </div>
-  );
-};
-
 export default function ResumeBuilderPage() {
   const [activeTab, setActiveTab] = useState('templates');
-  const [selectedTemplate, setSelectedTemplate] = useState('classic');
+  const [selectedTemplateId, setSelectedTemplateId] = useState('classic');
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
   const [lineHeight, setLineHeight] = useState(1.5);
@@ -282,8 +127,16 @@ export default function ResumeBuilderPage() {
         description: 'Developed and maintained core features of the flagship SaaS product, serving over 500k monthly active users.'
       }
     ],
-    skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS']
+    skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS'],
+    education: [
+      { id: '1', degree: 'B.S. Computer Science', school: 'MIT', period: '2012-2016' }
+    ]
   });
+
+  const SelectedTemplate = useMemo(() => {
+    const template = TEMPLATES.find(t => t.id === selectedTemplateId) || TEMPLATES[0];
+    return template.component;
+  }, [selectedTemplateId]);
 
   const handlePersonalUpdate = (field: string, value: string) => {
     setData(prev => ({
@@ -371,7 +224,7 @@ export default function ResumeBuilderPage() {
             </TabsList>
 
             <ScrollArea className="flex-1">
-              <div className="p-8">
+              <div className="p-8 pb-32">
                 <TabsContent value="templates" className="mt-0 space-y-10">
                   <section className="space-y-6">
                     <div className="flex items-center justify-between">
@@ -380,10 +233,10 @@ export default function ResumeBuilderPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       {TEMPLATES.map(template => (
-                        <div key={template.id} className="group cursor-pointer space-y-3" onClick={() => setSelectedTemplate(template.id)}>
+                        <div key={template.id} className="group cursor-pointer space-y-3" onClick={() => setSelectedTemplateId(template.id)}>
                           <div className={cn(
                             "relative aspect-[3/4] bg-slate-50 rounded-2xl border-2 transition-all duration-300 overflow-hidden flex items-center justify-center",
-                            selectedTemplate === template.id 
+                            selectedTemplateId === template.id 
                               ? "border-[#EF593E] ring-4 ring-orange-50 shadow-xl" 
                               : "border-slate-100 hover:border-slate-300 shadow-sm"
                           )}>
@@ -392,7 +245,7 @@ export default function ResumeBuilderPage() {
                               <div className="h-10 w-full bg-slate-300 rounded" />
                               <div className="h-2 w-full bg-slate-200 rounded" />
                             </div>
-                            {selectedTemplate === template.id && (
+                            {selectedTemplateId === template.id && (
                               <div className="absolute inset-0 bg-white/40 flex items-center justify-center">
                                 <div className="w-10 h-10 rounded-full bg-[#EF593E] flex items-center justify-center text-white shadow-xl animate-in zoom-in-50 duration-300">
                                   <Check className="h-5 w-5" />
@@ -427,6 +280,10 @@ export default function ResumeBuilderPage() {
                       <div className="space-y-2">
                         <Label className="text-[10px] font-black uppercase text-slate-400">Font Size ({fontSize}px)</Label>
                         <Slider value={[fontSize]} min={10} max={18} step={1} onValueChange={([v]) => setFontSize(v)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black uppercase text-slate-400">Line Height ({lineHeight})</Label>
+                        <Slider value={[lineHeight]} min={1} max={2.5} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
                       </div>
                     </div>
                   </section>
@@ -484,7 +341,16 @@ export default function ResumeBuilderPage() {
         </aside>
 
         <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center">
-          <ResumePreview templateId={selectedTemplate} theme={selectedTheme} font={selectedFont} data={data} style={{ lineHeight, fontSize }} />
+          <div 
+            className="resume-a4 shadow-2xl bg-white min-h-[1123px] w-[794px] mx-auto transition-all duration-500 overflow-hidden p-[60px]" 
+            style={{ fontFamily: selectedFont.family }}
+          >
+            <SelectedTemplate 
+              data={data} 
+              theme={selectedTheme} 
+              style={{ fontSize, lineHeight }} 
+            />
+          </div>
         </main>
       </div>
     </div>
