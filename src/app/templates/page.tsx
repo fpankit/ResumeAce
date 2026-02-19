@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Download, 
@@ -12,7 +12,6 @@ import {
   Check, 
   Sparkles,
   Loader2,
-  Settings,
   ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -87,7 +86,7 @@ const Logo = () => (
 );
 
 export default function ResumeBuilderPage() {
-  const [activeTab, setActiveTab] = useState('templates');
+  const [activeTab, setActiveTab] = useState('content');
   const [selectedTemplateId, setSelectedTemplateId] = useState('classic');
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
@@ -113,13 +112,6 @@ export default function ResumeBuilderPage() {
         company: 'TechGlobal Solutions',
         period: 'Jan 2020 - Present',
         description: 'Led the migration of a legacy monolithic architecture to a microservices-based system.\nArchitected and implemented a real-time data processing pipeline using Kafka and Spark.'
-      },
-      {
-        id: '2',
-        title: 'Software Developer',
-        company: 'InnoStream Inc.',
-        period: 'Jun 2016 - Dec 2019',
-        description: 'Developed and maintained core features of the flagship SaaS product, serving over 500k monthly active users.'
       }
     ],
     skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS'],
@@ -195,27 +187,30 @@ export default function ResumeBuilderPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
-          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6">
+          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6 shadow-lg shadow-orange-100">
             <Download className="h-4 w-4" /> Download PDF
           </Button>
         </div>
       </header>
 
-      <div className="flex flex-1 pt-16 h-full">
-        <aside className="w-[500px] bg-white border-r flex flex-col relative z-20">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-            <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 sticky top-0 z-10">
-              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
+      <div className="flex flex-1 pt-16 h-full overflow-hidden">
+        {/* Left Side: Editor (Scrollable) */}
+        <aside className="w-[500px] bg-white border-r flex flex-col h-full shrink-0">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
+            <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 shrink-0">
+              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest transition-all">
                 <Layout className="h-4 w-4 mr-2" /> Templates & Styles
               </TabsTrigger>
-              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
+              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest transition-all">
                 <TypeIcon className="h-4 w-4 mr-2" /> Text Content
               </TabsTrigger>
             </TabsList>
 
-            <ScrollArea className="flex-1">
-              <div className="p-8 pb-32">
-                <TabsContent value="templates" className="mt-0 space-y-10">
+            <ScrollArea className="flex-1 w-full">
+              <div className="p-10 space-y-12">
+                
+                {/* Templates Tab */}
+                <TabsContent value="templates" className="m-0 space-y-12">
                   <section className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Select Template</h3>
@@ -251,7 +246,7 @@ export default function ResumeBuilderPage() {
                       ))}
                     </div>
                   </section>
-                  <section className="space-y-6 pt-10 border-t">
+                  <section className="space-y-8 pt-10 border-t">
                     <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography & Theme</h3>
                     <div className="space-y-8">
                       <div className="grid grid-cols-5 gap-3">
@@ -260,18 +255,18 @@ export default function ResumeBuilderPage() {
                             key={theme.id} 
                             onClick={() => setSelectedTheme(theme)}
                             className={cn(
-                              "w-full aspect-square rounded-full border-4 transition-all",
+                              "w-full aspect-square rounded-full border-4 transition-all shadow-sm",
                               selectedTheme.id === theme.id ? "border-[#EF593E]" : "border-transparent"
                             )}
                             style={{ backgroundColor: theme.primary }}
                           />
                         ))}
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-4">
                         <Label className="text-[10px] font-black uppercase text-slate-400">Font Size ({fontSize}px)</Label>
                         <Slider value={[fontSize]} min={10} max={18} step={1} onValueChange={([v]) => setFontSize(v)} />
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-4">
                         <Label className="text-[10px] font-black uppercase text-slate-400">Line Height ({lineHeight})</Label>
                         <Slider value={[lineHeight]} min={1} max={2.5} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
                       </div>
@@ -279,71 +274,120 @@ export default function ResumeBuilderPage() {
                   </section>
                 </TabsContent>
 
-                <TabsContent value="content" className="mt-0 space-y-12">
-                  <section className="space-y-6">
+                {/* Content Tab */}
+                <TabsContent value="content" className="m-0 space-y-12">
+                  <section className="space-y-8">
                     <div className="flex items-center gap-3">
-                      <User className="h-4 w-4 text-[#EF593E]" />
-                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Personal Details</h3>
+                      <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+                        <User className="h-4 w-4 text-[#EF593E]" />
+                      </div>
+                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-[0.2em]">Personal Details</h3>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Full Name</Label>
-                        <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl border-slate-100" />
+                        <Label className="text-[10px] font-black uppercase text-slate-400 opacity-60">Full Name</Label>
+                        <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl border-slate-100 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Job Title</Label>
-                        <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl border-slate-100" />
+                        <Label className="text-[10px] font-black uppercase text-slate-400 opacity-60">Job Title</Label>
+                        <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl border-slate-100 h-11" />
                       </div>
                     </div>
                   </section>
-                  <section className="space-y-6 pt-10 border-t">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Summary</h3>
-                      <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('summary')} disabled={isGenerating} className="text-[10px] font-black uppercase text-[#EF593E] h-8 hover:bg-orange-50">
-                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />} AI Magic
-                      </Button>
-                    </div>
-                    <Textarea value={data.summary} onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))} className="min-h-[120px] rounded-xl text-sm leading-relaxed" />
-                  </section>
+
                   <section className="space-y-8 pt-10 border-t">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Experience</h3>
-                      <Button onClick={addExperience} variant="ghost" className="h-8 text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50"><Plus className="h-3 w-3 mr-1" /> Add Entry</Button>
+                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-[0.2em]">Summary</h3>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => handleAiGenerate('summary')} 
+                        disabled={isGenerating} 
+                        className="text-[10px] font-black uppercase text-[#EF593E] h-8 hover:bg-orange-50 gap-2"
+                      >
+                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} 
+                        AI Magic
+                      </Button>
                     </div>
-                    {data.experience.map((exp, i) => (
-                      <div key={exp.id} className="p-6 rounded-2xl bg-slate-50/50 border space-y-4 group relative hover:border-orange-200 transition-all">
-                        <Button onClick={() => removeExperience(i)} variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-500 hover:bg-red-50"><Trash2 className="h-3.5 w-3.5" /></Button>
-                        <div className="grid grid-cols-2 gap-3">
-                          <Input placeholder="Title" value={exp.title} onChange={(e) => handleExperienceUpdate(i, 'title', e.target.value)} className="h-9 text-xs" />
-                          <Input placeholder="Company" value={exp.company} onChange={(e) => handleExperienceUpdate(i, 'company', e.target.value)} className="h-9 text-xs" />
+                    <Textarea 
+                      value={data.summary} 
+                      onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))} 
+                      className="min-h-[140px] rounded-2xl text-sm leading-relaxed border-slate-100 shadow-sm" 
+                    />
+                  </section>
+
+                  <section className="space-y-8 pt-10 border-t">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-[0.2em]">Experience</h3>
+                      <Button 
+                        onClick={addExperience} 
+                        variant="ghost" 
+                        className="h-8 text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50 gap-1.5"
+                      >
+                        <Plus className="h-4 w-4" /> Add Entry
+                      </Button>
+                    </div>
+                    <div className="space-y-6">
+                      {data.experience.map((exp, i) => (
+                        <div key={exp.id} className="p-8 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-6 group relative hover:border-orange-200 transition-all">
+                          <Button 
+                            onClick={() => removeExperience(i)} 
+                            variant="ghost" 
+                            size="icon" 
+                            className="absolute top-4 right-4 h-8 w-8 opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <div className="grid grid-cols-2 gap-4">
+                            <Input placeholder="Title" value={exp.title} onChange={(e) => handleExperienceUpdate(i, 'title', e.target.value)} className="h-10 text-xs rounded-xl bg-white border-slate-200" />
+                            <Input placeholder="Company" value={exp.company} onChange={(e) => handleExperienceUpdate(i, 'company', e.target.value)} className="h-10 text-xs rounded-xl bg-white border-slate-200" />
+                          </div>
+                          <div className="relative">
+                            <Textarea 
+                              placeholder="Achievements..." 
+                              value={exp.description} 
+                              onChange={(e) => handleExperienceUpdate(i, 'description', e.target.value)} 
+                              className="min-h-[120px] text-xs leading-relaxed rounded-xl bg-white border-slate-200" 
+                            />
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              onClick={() => handleAiGenerate('experience', i)} 
+                              disabled={isGenerating} 
+                              className="absolute bottom-2 right-2 h-7 px-3 text-[9px] font-black uppercase text-[#EF593E] bg-white/90 backdrop-blur shadow-sm hover:bg-white transition-all rounded-lg"
+                            >
+                              AI Refine
+                            </Button>
+                          </div>
                         </div>
-                        <div className="relative">
-                          <Textarea placeholder="Achievements..." value={exp.description} onChange={(e) => handleExperienceUpdate(i, 'description', e.target.value)} className="min-h-[100px] text-xs leading-relaxed" />
-                          <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('experience', i)} disabled={isGenerating} className="absolute bottom-2 right-2 h-7 px-2 text-[9px] font-black uppercase text-[#EF593E] bg-white/80 backdrop-blur shadow-sm hover:bg-white transition-all">AI Refine</Button>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </section>
                 </TabsContent>
+
               </div>
+              <div className="h-20 shrink-0" /> {/* Bottom Spacer */}
             </ScrollArea>
           </Tabs>
         </aside>
 
-        <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center">
-          <ResumeCanvas 
-            templateId={selectedTemplateId}
-            theme={selectedTheme}
-            font={selectedFont}
-            data={{...data, skills: data.skills}}
-            sections={{
-              summary: true,
-              skills: true,
-              experience: true,
-              education: true,
-            }}
-            style={{ fontSize, lineHeight, sectionSpacing }}
-          />
+        {/* Right Side: Preview (Scrollable) */}
+        <main className="flex-1 bg-[#F1F5F9] overflow-auto p-12 lg:p-20 flex flex-col items-center">
+          <div className="scale-[0.85] lg:scale-100 origin-top transition-transform duration-500">
+            <ResumeCanvas 
+              templateId={selectedTemplateId}
+              theme={selectedTheme}
+              font={selectedFont}
+              data={{...data, skills: data.skills}}
+              sections={{
+                summary: true,
+                skills: true,
+                experience: true,
+                education: true,
+              }}
+              style={{ fontSize, lineHeight, sectionSpacing }}
+            />
+          </div>
         </main>
       </div>
     </div>
