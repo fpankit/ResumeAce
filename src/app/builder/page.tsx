@@ -190,10 +190,15 @@ export default function ResumeBuilder() {
         description: "Content has been updated with professional refinements.",
       });
     } catch (e: any) {
+      let errorMessage = e.message || "Failed to connect to AI service.";
+      if (errorMessage.includes("RESOURCE_EXHAUSTED") || errorMessage.includes("429")) {
+        errorMessage = "AI Quota exceeded. Please wait a minute and try again.";
+      }
+      
       toast({
         variant: "destructive",
-        title: "AI Generation Failed",
-        description: e.message || "Failed to connect to AI service.",
+        title: "AI Magic Failed",
+        description: errorMessage,
       });
     } finally {
       setIsGenerating(false);
