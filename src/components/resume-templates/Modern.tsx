@@ -4,10 +4,11 @@ import { TemplateProps } from '@/types/resume';
 
 export default function Modern({ data, theme, style, sections }: TemplateProps) {
   const s = { fontSize: `${style.fontSize}px`, lineHeight: style.lineHeight };
+  const spacing = { marginBottom: `${style.sectionSpacing}px` };
   
   return (
     <div className="space-y-10" style={s}>
-      <header className="flex justify-between items-start">
+      <header className="flex justify-between items-start" style={spacing}>
         <div className="space-y-1">
           <h1 className="text-5xl font-black tracking-tighter leading-none" style={{ color: theme.primary }}>{data.personal.fullName}</h1>
           <p className="text-xl font-bold opacity-40 uppercase tracking-tighter">{data.personal.jobTitle}</p>
@@ -23,7 +24,7 @@ export default function Modern({ data, theme, style, sections }: TemplateProps) 
       <div className="grid grid-cols-3 gap-10">
         <div className="col-span-1 space-y-8">
           {sections.skills && data.skills.length > 0 && (
-            <section>
+            <section style={spacing}>
               <h2 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4" style={{ color: theme.accent }}>Expertise</h2>
               <div className="space-y-4">
                 {data.skills.map(group => (
@@ -43,11 +44,11 @@ export default function Modern({ data, theme, style, sections }: TemplateProps) 
           )}
 
           {sections.education && data.education.length > 0 && (
-            <section>
+            <section style={spacing}>
               <h2 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4" style={{ color: theme.accent }}>Education</h2>
               {data.education.map(edu => (
                 <div key={edu.id} className="mb-3">
-                  <p className="font-bold text-slate-800 leading-tight">{edu.degree}</p>
+                  <p className="font-bold text-slate-800 leading-tight text-[11px]">{edu.degree}</p>
                   <p className="text-[10px] text-slate-500">{edu.school}</p>
                   <p className="text-[9px] font-bold opacity-40 uppercase mt-1">{edu.startDate} - {edu.endDate}</p>
                 </div>
@@ -58,7 +59,7 @@ export default function Modern({ data, theme, style, sections }: TemplateProps) 
 
         <div className="col-span-2 space-y-8">
           {sections.summary && data.summary.content && (
-            <section>
+            <section style={spacing}>
               <h2 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 border-l-4 pl-3" style={{ color: theme.primary, borderColor: theme.primary }}>Profile</h2>
               <p className="text-slate-600 italic leading-relaxed text-sm">
                 {data.summary.content}
@@ -67,7 +68,7 @@ export default function Modern({ data, theme, style, sections }: TemplateProps) 
           )}
 
           {sections.experience && data.experience.length > 0 && (
-            <section>
+            <section style={spacing}>
               <h2 className="text-[10px] font-black uppercase tracking-[0.2em] mb-6 border-l-4 pl-3" style={{ color: theme.primary, borderColor: theme.primary }}>Experience</h2>
               {data.experience.map(exp => (
                 <div key={exp.id} className="mb-8 last:mb-0">
@@ -81,7 +82,7 @@ export default function Modern({ data, theme, style, sections }: TemplateProps) 
                     <span style={{ color: theme.accent }}>{exp.company}</span>
                     <span className="opacity-40">{exp.location}</span>
                   </div>
-                  <p className="text-slate-600 text-sm whitespace-pre-wrap leading-relaxed mb-2">• {exp.description.replace(/\n/g, '\n• ')}</p>
+                  <div className="text-slate-600 text-sm whitespace-pre-wrap leading-relaxed mb-2">• {exp.description.replace(/\n/g, '\n• ')}</div>
                   {exp.technologies && (
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Stack: {exp.technologies}</p>
                   )}
