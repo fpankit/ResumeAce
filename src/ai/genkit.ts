@@ -8,6 +8,6 @@ export const ai = genkit({
       // API key is typically handled via GOOGLE_GENAI_API_KEY environment variable.
     })
   ],
-  // Updated to Gemini 2.0 Flash for high-speed, high-fidelity analysis and content generation.
-  model: 'googleai/gemini-2.0-flash',
+  // Switched to Gemini 1.5 Flash to ensure stable quota and high performance.
+  model: 'googleai/gemini-1.5-flash',
 });
