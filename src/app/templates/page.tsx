@@ -45,28 +45,28 @@ const templates = [
   {
     id: "classic",
     name: "Classic",
-    image: PlaceHolderImages.find(img => img.id === "template-classic")?.imageUrl || "",
+    image: PlaceHolderImages.find(img => img.id === "template-classic")?.imageUrl || null,
     formats: ["PDF", "DOCX"],
     colors: []
   },
   {
     id: "traditional",
     name: "Traditional",
-    image: PlaceHolderImages.find(img => img.id === "template-traditional")?.imageUrl || "",
+    image: PlaceHolderImages.find(img => img.id === "template-traditional")?.imageUrl || null,
     formats: ["PDF", "DOCX"],
     colors: []
   },
   {
     id: "professional",
     name: "Professional",
-    image: PlaceHolderImages.find(img => img.id === "template-professional")?.imageUrl || "",
+    image: PlaceHolderImages.find(img => img.id === "template-professional")?.imageUrl || null,
     formats: ["PDF", "DOCX"],
     colors: ["#164e63", "#1e293b", "#312e81", "#4c1d95"]
   },
   {
     id: "prime-ats",
     name: "Prime ATS",
-    image: PlaceHolderImages.find(img => img.id === "template-ats")?.imageUrl || "",
+    image: PlaceHolderImages.find(img => img.id === "template-ats")?.imageUrl || null,
     formats: ["PDF", "DOCX"],
     colors: ["#2563eb", "#db2777", "#ea580c", "#16a34a", "#1e293b"]
   }
@@ -93,7 +93,7 @@ export default function TemplatesPage() {
 
       <main className="flex-1 container mx-auto py-8 px-4">
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {categories.map((cat) => (
+          {categories.map((cat) => (cat &&
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -113,13 +113,19 @@ export default function TemplatesPage() {
           {templates.map((template) => (
             <div key={template.id} className="group space-y-4">
               <div className="relative aspect-[3/4] bg-white rounded-xl shadow-md overflow-hidden border border-slate-200 group-hover:shadow-2xl group-hover:border-[#EF593E]/20 transition-all duration-300">
-                <Image
-                  src={template.image}
-                  alt={template.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  data-ai-hint={template.id}
-                />
+                {template.image ? (
+                  <Image
+                    src={template.image}
+                    alt={template.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    data-ai-hint={template.id}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
+                    No Preview
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Link href="/dashboard/student">
                     <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold rounded-full px-8 py-6 h-auto">

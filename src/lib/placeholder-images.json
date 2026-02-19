@@ -11,6 +11,30 @@
       "description": "Minimalist stack of resumes",
       "imageUrl": "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "resume stack"
+    },
+    {
+      "id": "template-classic",
+      "description": "Classic resume template preview",
+      "imageUrl": "https://images.unsplash.com/photo-1762708596703-c2780730a6ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyZXN1bWUlMjBjbGFzc2ljfGVufDB8fHx8MTc3MTQ2MzI4Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "resume classic"
+    },
+    {
+      "id": "template-traditional",
+      "description": "Traditional resume template preview",
+      "imageUrl": "https://images.unsplash.com/photo-1627965191113-b2e12c829365?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZXN1bWUlMjB0cmFkaXRpb25hbHxlbnwwfHx8fDE3NzE0NjMyODJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "resume traditional"
+    },
+    {
+      "id": "template-professional",
+      "description": "Professional modern resume template preview",
+      "imageUrl": "https://images.unsplash.com/photo-1763718432504-7716caff6e99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyZXN1bWUlMjBwcm9mZXNzaW9uYWx8ZW58MHx8fHwxNzcxNDYzMjgyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "resume professional"
+    },
+    {
+      "id": "template-ats",
+      "description": "ATS optimized resume template preview",
+      "imageUrl": "https://picsum.photos/seed/ats/600/800",
+      "imageHint": "resume ats"
     }
   ]
 }
