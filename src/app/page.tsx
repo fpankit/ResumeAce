@@ -293,7 +293,7 @@ export default function Home() {
             </div>
 
             {/* Step 3 Card */}
-            <div className="sticky top-40 z-30 bg-white border border-slate-100 rounded-[32px] p-8 lg:p-16 flex flex-col lg:flex-row items-center gap-12 shadow-xl transition-all hover:border-[#EF593E] group">
+            <div className="sticky top-40 z-30 bg-white border border-slate-100 rounded-[32px] p-8 lg:p-16 flex flex-col lg:flex-row items-center gap-12 shadow-lg transition-all hover:border-[#EF593E] group mb-8">
               <div className="flex-1 space-y-6">
                 <span className="text-xs font-black uppercase tracking-[0.2em] text-[#EF593E]">Step 3</span>
                 <h3 className="text-3xl font-black text-slate-900 leading-tight">Review your resume score and see what needs fixing</h3>
@@ -322,6 +322,36 @@ export default function Home() {
                    <div className="absolute bottom-[-10px] right-[-10px] rotate-12">
                      <MousePointer2 className="h-6 w-6 text-[#EF593E] fill-[#EF593E]" />
                    </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 4 Card */}
+            <div className="sticky top-48 z-40 bg-white border border-slate-100 rounded-[32px] p-8 lg:p-16 flex flex-col lg:flex-row items-center gap-12 shadow-xl transition-all hover:border-[#EF593E] group">
+              <div className="flex-1 space-y-6">
+                <span className="text-xs font-black uppercase tracking-[0.2em] text-[#EF593E]">Step 4</span>
+                <h3 className="text-3xl font-black text-slate-900 leading-tight">Make updates. Watch your ATS resume score improve.</h3>
+                <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                  Edit your resume directly in the builder. Your resume score updates in real time—so you can track your progress instantly.
+                </p>
+              </div>
+              <div className="w-full lg:w-[400px] flex items-center justify-center">
+                <div className="relative w-48 h-24 overflow-hidden">
+                  <svg viewBox="0 0 100 50" className="w-full h-full">
+                    <path d="M10 50 A40 40 0 0 1 90 50" fill="none" stroke="#f1f5f9" strokeWidth="12" strokeLinecap="round" />
+                    <path d="M10 50 A40 40 0 0 1 75 18" fill="none" stroke="url(#gaugeGradient)" strokeWidth="12" strokeLinecap="round" />
+                    <defs>
+                      <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#EF593E" />
+                        <stop offset="50%" stopColor="#FBBF24" />
+                        <stop offset="100%" stopColor="#10B981" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-end pb-1">
+                    <span className="text-3xl font-black text-slate-900 tracking-tighter">80%</span>
+                    <span className="text-[7px] font-bold uppercase text-slate-500 tracking-tighter">Good Match Score</span>
+                  </div>
                 </div>
               </div>
             </div>
