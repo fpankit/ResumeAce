@@ -24,7 +24,7 @@ export default function TwoColumn({ data, theme, style, sections }: TemplateProp
             <div className="space-y-3 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
               <div className="flex items-center gap-2"><Mail className="h-3 w-3 shrink-0" /> <span className="truncate">{data.personal.email}</span></div>
               <div className="flex items-center gap-2"><Phone className="h-3 w-3 shrink-0" /> {data.personal.phone}</div>
-              <div className="flex items-center gap-2"><MapPin className="h-3 w-3 shrink-0" /> {data.personal.location.city}</div>
+              <div className="flex items-center gap-2"><MapPin className="h-3 w-3 shrink-0" /> {data.personal.location?.city}</div>
               {data.personal.linkedin && <div className="flex items-center gap-2"><Linkedin className="h-3 w-3 shrink-0" /> <span className="truncate">{data.personal.linkedin}</span></div>}
               {data.personal.github && <div className="flex items-center gap-2"><Github className="h-3 w-3 shrink-0" /> <span className="truncate">{data.personal.github}</span></div>}
             </div>
@@ -90,8 +90,9 @@ export default function TwoColumn({ data, theme, style, sections }: TemplateProp
                   <span style={{ color: theme.accent }}>{exp.company}</span>
                   <span className="opacity-40">{exp.location}</span>
                 </div>
-                <div className="text-xs text-slate-500 whitespace-pre-wrap leading-relaxed">
+                <div className="text-xs text-slate-500 whitespace-pre-wrap leading-relaxed space-y-1">
                   {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
+                  {(exp.achievements || '').split('\n').map((line, i) => line && <p key={i} className="font-semibold italic">→ {line}</p>)}
                 </div>
                 {exp.technologies && (
                   <p className="text-[9px] font-bold text-slate-400 uppercase mt-2 tracking-tight">Technologies: {exp.technologies}</p>

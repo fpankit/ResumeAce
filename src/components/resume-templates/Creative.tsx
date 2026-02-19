@@ -58,12 +58,13 @@ export default function Creative({ data, theme, style, sections }: TemplateProps
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors">{exp.title}</h3>
                     <span className="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded">
-                      {exp.startDate} - {exp.current ? 'Now' : exp.endDate}
+                      {exp.startMonth} {exp.startYear} - {exp.current ? 'Now' : `${exp.endMonth} ${exp.endYear}`}
                     </span>
                   </div>
                   <p className="text-xs font-black uppercase opacity-40 mb-4">{exp.company}</p>
-                  <div className="text-slate-500 whitespace-pre-wrap leading-relaxed">
-                    • {exp.description.replace(/\n/g, '\n• ')}
+                  <div className="text-slate-500 whitespace-pre-wrap leading-relaxed space-y-1">
+                    {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
+                    {(exp.achievements || '').split('\n').map((line, i) => line && <p key={i} className="font-semibold italic">→ {line}</p>)}
                   </div>
                 </div>
               ))}

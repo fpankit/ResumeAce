@@ -1,4 +1,3 @@
-
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
@@ -18,7 +17,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
           <span>•</span>
           <span>{data.personal.phone}</span>
           <span>•</span>
-          <span>{data.personal.location.city}, {data.personal.location.country}</span>
+          <span>{data.personal.location?.city}, {data.personal.location?.country}</span>
           {data.personal.linkedin && (
             <>
               <span>•</span>
