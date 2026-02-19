@@ -1,5 +1,7 @@
+
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { 
   ChevronDown, 
@@ -12,21 +14,17 @@ import {
   FileText,
   Lightbulb,
   ArrowLeftRight,
-  Paintbrush,
-  Plus,
   Check,
-  Type,
-  Bold,
-  Italic,
-  Underline,
-  Strikethrough,
+  Wand2,
   List as ListIcon,
-  ListOrdered,
-  Link as LinkIcon,
-  Wand2
+  Loader2,
+  Search
 } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
+import { useUser } from "@/firebase";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const BullIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -80,6 +78,97 @@ const ResumeIllustration = ({ className }: { className?: string }) => (
 );
 
 export default function Home() {
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanStep, setScanStep] = useState(0);
+
+  const scanSteps = [
+    "Uploading Document...",
+    "Parsing Resume Structure...",
+    "Extracting Skills & Experience...",
+    "Comparing against ATS Algorithms...",
+    "Identifying Missing Keywords...",
+    "Generating AI Insights..."
+  ];
+
+  useEffect(() => {
+    if (isScanning) {
+      const interval = setInterval(() => {
+        setScanStep((prev) => (prev < scanSteps.length - 1 ? prev + 1 : prev));
+      }, 800);
+      
+      const timeout = setTimeout(() => {
+        router.push("/dashboard/student");
+      }, 5000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [isScanning, router, scanSteps.length]);
+
+  const handleUploadClick = () => {
+    if (user) {
+      setIsScanning(true);
+    } else {
+      router.push("/login?tab=signup");
+    }
+  };
+
+  if (isScanning) {
+    return (
+      <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-full max-w-md space-y-8 animate-in fade-in zoom-in duration-500">
+          <div className="relative mx-auto w-48 h-64 bg-slate-50 border-2 border-slate-200 rounded-xl overflow-hidden shadow-2xl">
+            {/* Animated Laser Line */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-primary/80 shadow-[0_0_15px_rgba(239,89,62,0.8)] z-10 animate-[scan_2s_linear_infinite]" />
+            
+            {/* Simulated Content */}
+            <div className="p-4 space-y-3 opacity-20">
+              <div className="w-20 h-2 bg-slate-300 rounded" />
+              <div className="w-full h-2 bg-slate-200 rounded" />
+              <div className="w-full h-2 bg-slate-200 rounded" />
+              <div className="w-2/3 h-2 bg-slate-200 rounded" />
+              <div className="pt-4 space-y-2">
+                <div className="w-full h-2 bg-slate-200 rounded" />
+                <div className="w-full h-2 bg-slate-200 rounded" />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-center gap-3 text-[#EF593E]">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <h2 className="text-2xl font-black uppercase tracking-tight">ATS Analysis in Progress</h2>
+            </div>
+            <p className="text-slate-500 font-medium h-6">{scanSteps[scanStep]}</p>
+            
+            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+              <div 
+                className="bg-primary h-full transition-all duration-500 ease-out" 
+                style={{ width: `${((scanStep + 1) / scanSteps.length) * 100}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="pt-8 opacity-40">
+            <Logo />
+          </div>
+        </div>
+
+        <style jsx global>{`
+          @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <header className="px-6 h-20 flex items-center bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -102,10 +191,18 @@ export default function Home() {
           </button>
         </nav>
         <div className="ml-auto flex items-center gap-6">
-          <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-[#EF593E] transition-colors">
-            Sign in
-          </Link>
-          <Link href="/login?tab=signup">
+          {!isUserLoading && (
+            user ? (
+              <Link href="/dashboard/student" className="text-sm font-bold text-[#EF593E] uppercase tracking-tight">
+                Dashboard
+              </Link>
+            ) : (
+              <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-[#EF593E] transition-colors">
+                Sign in
+              </Link>
+            )
+          )}
+          <Link href={user ? "/dashboard/student" : "/login?tab=signup"}>
             <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-6 h-11 rounded-md shadow-lg shadow-[#EF593E]/20">
               Create my resume
             </Button>
@@ -132,11 +229,12 @@ export default function Home() {
                     Drop your resume here or choose a file<br />
                     <span className="text-xs text-slate-400 font-normal">PDF & DOCX only (max 2MB)</span>
                   </p>
-                  <Link href="/login">
-                    <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-8 h-12 gap-2 text-base shadow-xl shadow-[#EF593E]/20">
-                      Upload my resume <Upload className="h-5 w-5" />
-                    </Button>
-                  </Link>
+                  <Button 
+                    className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-8 h-12 gap-2 text-base shadow-xl shadow-[#EF593E]/20"
+                    onClick={handleUploadClick}
+                  >
+                    Upload my resume <Upload className="h-5 w-5" />
+                  </Button>
                 </div>
               </div>
               <div className="relative hidden lg:block overflow-visible">
@@ -157,10 +255,12 @@ export default function Home() {
           </div>
         </section>
 
+        {/* How it works section */}
         <section className="py-16 bg-white overflow-visible">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl font-black text-center text-slate-900 mb-16 uppercase tracking-tight">How to use the resume checker</h2>
             <div className="relative space-y-16">
+              {/* Step 1 */}
               <div className="sticky top-28 z-10">
                 <div className="bg-white rounded-3xl p-8 lg:p-12 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[350px] flex flex-col lg:flex-row gap-10 items-center">
                   <div className="flex-1 space-y-4">
@@ -190,6 +290,7 @@ export default function Home() {
                 </div>
               </div>
               
+              {/* Step 2 */}
               <div className="sticky top-36 z-20">
                 <div className="bg-white rounded-3xl p-8 lg:p-12 border-2 border-accent/20 shadow-xl shadow-accent/5 min-h-[350px] flex flex-col lg:flex-row gap-10 items-center">
                   <div className="flex-1 space-y-4">
@@ -215,6 +316,7 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Step 3 */}
               <div className="sticky top-44 z-30">
                 <div className="bg-white rounded-3xl p-8 lg:p-12 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[350px] flex flex-col lg:flex-row gap-10 items-center">
                   <div className="flex-1 space-y-4">
@@ -250,35 +352,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
-              <div className="sticky top-52 z-40">
-                <div className="bg-white rounded-3xl p-8 lg:p-12 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[350px] flex flex-col lg:flex-row gap-10 items-center">
-                  <div className="flex-1 space-y-4">
-                    <div className="text-[#EF593E] font-bold text-base uppercase tracking-wider">Step 4</div>
-                    <h3 className="text-2xl lg:text-3xl font-black text-slate-900 leading-tight">
-                      Make updates. Watch your ATS resume score improve.
-                    </h3>
-                    <p className="text-sm lg:text-base text-slate-500">
-                      Edit your resume directly in the builder. Your resume score updates in real time—so you can track your progress instantly.
-                    </p>
-                  </div>
-                  <div className="flex-1 w-full max-w-sm flex flex-col items-center justify-center relative scale-90">
-                    <div className="relative">
-                      <svg viewBox="0 0 100 60" className="w-56 h-auto overflow-visible">
-                        <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#F1F5F9" strokeWidth="10" strokeLinecap="round" />
-                        <path d="M 10 50 A 40 40 0 0 1 35 15" fill="none" stroke="#F43F5E" strokeWidth="10" strokeLinecap="round" />
-                        <path d="M 35 15 A 40 40 0 0 1 65 15" fill="none" stroke="#FACC15" strokeWidth="10" strokeLinecap="round" />
-                        <path d="M 65 15 A 40 40 0 0 1 90 50" fill="none" stroke="#0D9488" strokeWidth="10" strokeLinecap="round" />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-end pb-3">
-                        <span className="text-4xl font-black text-slate-800 tracking-tight">80%</span>
-                        <span className="text-xs font-bold text-slate-700">Good Match</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="h-32"></div>
             </div>
           </div>
         </section>
@@ -301,128 +374,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        <section className="py-16 bg-white">
-           <div className="container mx-auto px-6 space-y-12">
-              <h2 className="text-2xl font-black text-center text-slate-900 mb-12 uppercase tracking-tight">Quick ways to improve your ATS score</h2>
-              <div className="grid gap-8 lg:gap-12">
-                 {/* Job Match Card */}
-                 <div className="bg-[#F8FAFC] rounded-[32px] p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-10 overflow-hidden">
-                    <div className="flex-1 space-y-3">
-                       <h3 className="text-2xl lg:text-3xl font-black text-slate-900 leading-tight">Job-match your resume</h3>
-                       <p className="text-slate-500 text-base">Quickly fine-tune your resume to match the job description.</p>
-                    </div>
-                    <div className="flex-1 relative w-full flex justify-center scale-90">
-                       <div className="relative w-full max-w-[300px] bg-white rounded-2xl shadow-2xl p-5 border border-slate-100">
-                          <div className="flex items-center gap-2 mb-4">
-                             <div className="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center">
-                                <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
-                             </div>
-                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI Assistant</span>
-                          </div>
-                          <h4 className="text-base font-bold text-slate-800 mb-3 uppercase tracking-tighter">Boost your score</h4>
-                          <div className="space-y-2">
-                             <div className="flex items-center justify-between p-2.5 rounded-xl bg-green-50/50 border border-green-100">
-                                <span className="text-[11px] font-bold text-slate-600">Add job title</span>
-                                <span className="text-[11px] font-black text-green-500">+2%</span>
-                             </div>
-                             <div className="flex items-center justify-between p-2.5 rounded-xl bg-green-50/50 border border-green-100">
-                                <span className="text-[11px] font-bold text-slate-600">Add employment history</span>
-                                <span className="text-[11px] font-black text-green-500">+15%</span>
-                             </div>
-                          </div>
-                          <div className="absolute -top-8 -right-6 bg-white rounded-xl shadow-2xl p-3 border border-slate-100 flex flex-col items-center">
-                             <div className="text-2xl font-black text-green-500">81%</div>
-                             <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest text-center leading-tight">Resume Score</div>
-                          </div>
-                       </div>
-                    </div>
-                 </div>
-
-                 {/* Keyword Card */}
-                 <div className="bg-[#F8FAFC] rounded-[32px] p-8 lg:p-12 flex flex-col lg:flex-row-reverse items-center gap-10 overflow-hidden">
-                    <div className="flex-1 space-y-3">
-                       <h3 className="text-2xl lg:text-3xl font-black text-slate-900 leading-tight">Check those keywords...</h3>
-                       <p className="text-slate-500 text-base">Keywords unlock doors. Always use keywords from the job listing.</p>
-                    </div>
-                    <div className="flex-1 relative w-full scale-90">
-                       <div className="bg-white rounded-2xl shadow-2xl p-6 w-full border border-slate-100 relative">
-                          <h4 className="text-lg font-bold text-slate-800 mb-6 text-center uppercase tracking-tighter">Check keywords</h4>
-                          <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                             <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 bg-blue-500/10 rounded-sm flex items-center justify-center">
-                                   <div className="w-2 h-2 bg-blue-500 rounded-sm" />
-                                </div>
-                                <span className="text-xs font-bold text-slate-700">Product Manager</span>
-                             </div>
-                             <span className="text-[10px] font-bold text-slate-400">12/12 <span className="uppercase tracking-widest text-[8px] ml-1">Keywords</span></span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-                             {[
-                                "compliance", "management", "analysis",
-                                "assessment", "expertise", "deployment"
-                             ].map((kw, i) => (
-                                <div key={i} className="flex items-center justify-between p-1.5 rounded-lg bg-blue-50/20">
-                                   <span className="text-[11px] text-slate-600 font-medium">{kw}</span>
-                                   <div className="w-3 h-3 rounded-full bg-blue-100 flex items-center justify-center">
-                                      <Check className="h-2 w-2 text-blue-600" />
-                                   </div>
-                                </div>
-                             ))}
-                          </div>
-                       </div>
-                    </div>
-                 </div>
-
-                 {/* Template Card */}
-                 <div className="bg-[#F8FAFC] rounded-[32px] p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-10 overflow-hidden">
-                    <div className="flex-1 space-y-3">
-                       <h3 className="text-2xl lg:text-3xl font-black text-slate-900 leading-tight">Use a proven template</h3>
-                       <p className="text-slate-500 text-base">Good templates give employers what they want. In 8 seconds...</p>
-                    </div>
-                    <div className="flex-1 relative w-full h-[350px] scale-90">
-                       <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="relative w-full max-w-[350px]">
-                             <div className="absolute top-0 left-0 w-[180px] bg-white shadow-xl border border-slate-100 rounded p-3 rotate-[-12deg] translate-x-[-15%] opacity-40">
-                                <div className="text-[8px] font-bold text-slate-800 mb-0.5">Taylor Greene</div>
-                                <div className="text-[6px] text-slate-400 mb-2">Lead Technology Officer</div>
-                                <div className="space-y-1">
-                                   <div className="w-full h-0.5 bg-slate-50 rounded" />
-                                   <div className="w-full h-0.5 bg-slate-50 rounded" />
-                                </div>
-                             </div>
-                             <div className="absolute top-0 left-0 w-[180px] bg-white shadow-xl border border-slate-100 rounded p-3 rotate-[6deg] translate-x-[15%] z-10">
-                                <div className="text-[8px] font-bold text-slate-800 mb-0.5">Kane Jones</div>
-                                <div className="text-[6px] text-slate-400 mb-2">Sales Executive</div>
-                                <div className="space-y-1">
-                                   <div className="w-full h-0.5 bg-slate-50 rounded" />
-                                   <div className="w-full h-0.5 bg-slate-50 rounded" />
-                                </div>
-                             </div>
-                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[180px] bg-white shadow-2xl border border-slate-200 rounded p-3 z-20">
-                                <div className="flex flex-col items-center mb-2">
-                                   <div className="text-[10px] font-black text-slate-900 mb-0.5 uppercase tracking-tight">Ada Smith</div>
-                                   <div className="text-[6px] text-slate-500 uppercase tracking-widest">Product Manager</div>
-                                </div>
-                                <div className="space-y-2">
-                                   <div className="w-full h-1 bg-slate-100 rounded" />
-                                   <div className="w-full h-1 bg-slate-100 rounded" />
-                                </div>
-                             </div>
-                             <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white shadow-xl rounded-lg border border-slate-200 p-1.5 flex items-center gap-1 z-30">
-                                <div className="p-1.5 hover:bg-slate-50 rounded cursor-pointer text-blue-500 font-black text-[10px]">B</div>
-                                <div className="p-1.5 hover:bg-slate-50 rounded cursor-pointer text-slate-600 font-serif italic text-[10px]">I</div>
-                                <div className="p-1.5 hover:bg-slate-50 rounded cursor-pointer"><ListIcon className="w-3 h-3 text-slate-600" /></div>
-                                <div className="w-px h-4 bg-slate-200 mx-0.5" />
-                                <div className="p-1.5 hover:bg-slate-50 rounded cursor-pointer"><Wand2 className="w-3 h-3 text-blue-500" /></div>
-                             </div>
-                          </div>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </section>
       </main>
 
       <footer className="py-10 border-t border-slate-100 bg-white">
@@ -441,3 +392,4 @@ export default function Home() {
     </div>
   );
 }
+
