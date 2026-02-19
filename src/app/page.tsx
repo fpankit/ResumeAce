@@ -308,34 +308,76 @@ export default function Home() {
            <div className="container mx-auto px-6 space-y-16">
               <h2 className="text-3xl font-black text-center text-slate-900 mb-16 uppercase tracking-tight">Quick ways to improve your ATS score</h2>
               <div className="grid gap-12 lg:gap-24">
+                 {/* Job Match Card */}
                  <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row items-center gap-16 overflow-hidden">
-                    <div className="flex-1 space-y-6">
+                    <div className="flex-1 space-y-4">
+                       <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Job-match your resume</h3>
+                       <p className="text-slate-500 text-lg">Quickly fine-tune your resume to match the job description.</p>
+                    </div>
+                    <div className="flex-1 relative w-full flex justify-center">
+                       <div className="relative w-full max-w-[340px] bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 animate-in fade-in slide-in-from-right-4">
+                          <div className="flex items-center gap-2 mb-6">
+                             <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                                <Sparkles className="h-4 w-4 text-indigo-500" />
+                             </div>
+                             <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">AI Assistant</span>
+                          </div>
+                          <h4 className="text-lg font-bold text-slate-800 mb-4 uppercase tracking-tighter">Boost your score</h4>
+                          <div className="space-y-3">
+                             <div className="flex items-center justify-between p-3 rounded-xl bg-green-50/50 border border-green-100">
+                                <span className="text-sm font-bold text-slate-600">Add job title</span>
+                                <span className="text-xs font-black text-green-500">+2%</span>
+                             </div>
+                             <div className="flex items-center justify-between p-3 rounded-xl bg-green-50/50 border border-green-100">
+                                <span className="text-sm font-bold text-slate-600">Add employment history</span>
+                                <span className="text-xs font-black text-green-500">+15%</span>
+                             </div>
+                             <div className="absolute -bottom-6 -right-12 bg-white rounded-2xl shadow-xl p-4 border border-slate-100 flex items-center gap-3">
+                                <div className="text-xs font-black text-green-500">+2%</div>
+                                <span className="text-sm font-bold text-slate-800">Add skills</span>
+                             </div>
+                          </div>
+                          <div className="absolute -top-10 -right-8 bg-white rounded-2xl shadow-2xl p-4 border border-slate-100 flex flex-col items-center">
+                             <div className="text-3xl font-black text-green-500">81%</div>
+                             <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center leading-tight">Resume<br/>Score</div>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+
+                 {/* Keyword Card */}
+                 <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row-reverse items-center gap-16 overflow-hidden">
+                    <div className="flex-1 space-y-4">
                        <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Check those keywords...</h3>
                        <p className="text-slate-500 text-lg">Keywords unlock doors. Always use keywords from the job listing.</p>
                     </div>
                     <div className="flex-1 relative w-full">
-                       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full border border-slate-100 animate-in fade-in slide-in-from-right-4 duration-700 relative">
-                          <div className="flex items-center justify-between mb-8">
+                       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full border border-slate-100 animate-in fade-in slide-in-from-left-4 relative">
+                          <h4 className="text-xl font-bold text-slate-800 mb-8 text-center uppercase tracking-tighter">Check keywords</h4>
+                          <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
                              <div className="flex items-center gap-2">
                                 <div className="w-5 h-5 bg-blue-500/10 rounded-sm flex items-center justify-center">
                                    <div className="w-2.5 h-2.5 bg-blue-500 rounded-sm" />
                                 </div>
                                 <span className="text-sm font-bold text-slate-700">Product Manager at Apple</span>
+                                <ChevronDown className="h-4 w-4 text-slate-400" />
                              </div>
                              <div className="flex items-center gap-4">
-                                <button className="text-xs font-bold text-primary hover:underline">Clear all</button>
+                                <button className="text-xs font-bold text-primary hover:underline uppercase">Clear all</button>
                                 <span className="text-xs font-bold text-slate-400">12/12 <span className="uppercase tracking-widest text-[10px] ml-1">Keywords</span></span>
                              </div>
                           </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
                              {[
                                 "regulatory compliance", "performance management", "cost-benefit analysis",
                                 "risk assessment", "build staff expertise", "software deployment",
                                 "managing a complex program", "MySQL", "hypotheses testing", "cloud computing"
                              ].map((kw, i) => (
-                                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100/50">
+                                <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-blue-50/20">
                                    <span className="text-sm text-slate-600 font-medium">{kw}</span>
-                                   <Check className="h-4 w-4 text-primary" />
+                                   <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center">
+                                      <Check className="h-2.5 w-2.5 text-blue-600" />
+                                   </div>
                                 </div>
                              ))}
                           </div>
@@ -343,54 +385,57 @@ export default function Home() {
                     </div>
                  </div>
 
-                 <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row-reverse items-center gap-16 overflow-hidden">
-                    <div className="flex-1 space-y-6">
+                 {/* Template Card */}
+                 <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row items-center gap-16 overflow-hidden">
+                    <div className="flex-1 space-y-4">
                        <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Use a proven template</h3>
                        <p className="text-slate-500 text-lg">Good templates give employers what they want. In 8 seconds...</p>
                     </div>
-                    <div className="flex-1 relative w-full h-[400px]">
+                    <div className="flex-1 relative w-full h-[450px]">
                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="relative w-full max-w-[400px]">
-                             {/* Resume Template Stack */}
-                             <div className="absolute top-0 left-0 w-64 h-80 bg-white shadow-xl border border-slate-100 rounded-lg p-6 rotate-[-10deg] translate-x-[-20%] z-0">
-                                <div className="w-full h-4 bg-slate-100 rounded-full mb-4" />
+                          <div className="relative w-full max-w-[450px]">
+                             {/* Staggered Template Stack */}
+                             <div className="absolute top-0 left-0 w-[240px] bg-white shadow-xl border border-slate-100 rounded p-4 rotate-[-12deg] translate-x-[-15%] opacity-40">
+                                <div className="text-[10px] font-bold text-slate-800 mb-1">Taylor Greene</div>
+                                <div className="text-[8px] text-slate-400 mb-4">Lead Technology Officer</div>
                                 <div className="space-y-2">
-                                   <div className="w-3/4 h-2 bg-slate-50 rounded-full" />
-                                   <div className="w-full h-2 bg-slate-50 rounded-full" />
-                                   <div className="w-5/6 h-2 bg-slate-50 rounded-full" />
+                                   <div className="w-full h-1 bg-slate-50 rounded" />
+                                   <div className="w-full h-1 bg-slate-50 rounded" />
+                                   <div className="w-3/4 h-1 bg-slate-50 rounded" />
                                 </div>
                              </div>
-                             <div className="absolute top-0 left-0 w-64 h-80 bg-white shadow-xl border border-slate-100 rounded-lg p-6 rotate-[5deg] translate-x-[20%] z-10">
-                                <div className="w-1/2 h-6 bg-slate-100 rounded-full mb-6" />
+                             <div className="absolute top-0 left-0 w-[240px] bg-white shadow-xl border border-slate-100 rounded p-4 rotate-[6deg] translate-x-[15%] z-10">
+                                <div className="text-[10px] font-bold text-slate-800 mb-1">Kane Jones</div>
+                                <div className="text-[8px] text-slate-400 mb-4">Sales Executive</div>
+                                <div className="space-y-2">
+                                   <div className="w-full h-1 bg-slate-50 rounded" />
+                                   <div className="w-full h-1 bg-slate-50 rounded" />
+                                   <div className="w-3/4 h-1 bg-slate-50 rounded" />
+                                </div>
+                             </div>
+                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[240px] bg-white shadow-2xl border border-slate-200 rounded p-4 z-20">
+                                <div className="flex flex-col items-center mb-4">
+                                   <div className="text-[12px] font-black text-slate-900 mb-0.5 uppercase tracking-tight">Ada Smith</div>
+                                   <div className="text-[8px] text-slate-500 uppercase tracking-widest">Google Product Manager</div>
+                                </div>
                                 <div className="space-y-3">
-                                   <div className="w-full h-2 bg-slate-50 rounded-full" />
-                                   <div className="w-full h-2 bg-slate-50 rounded-full" />
-                                   <div className="w-4/5 h-2 bg-slate-50 rounded-full" />
-                                </div>
-                             </div>
-                             <div className="absolute top-0 left-0 w-64 h-80 bg-white shadow-2xl border border-slate-200 rounded-lg p-6 z-20 translate-x-[0%]">
-                                <div className="flex flex-col items-center mb-6">
-                                   <div className="w-24 h-4 bg-slate-200 rounded-full mb-2" />
-                                   <div className="w-32 h-2 bg-slate-100 rounded-full" />
-                                </div>
-                                <div className="space-y-4">
-                                   <div className="w-full h-12 bg-slate-50 rounded-lg" />
-                                   <div className="w-full h-12 bg-slate-50 rounded-lg" />
-                                   <div className="w-full h-12 bg-slate-50 rounded-lg" />
+                                   <div className="w-full h-1.5 bg-slate-100 rounded" />
+                                   <div className="w-full h-1.5 bg-slate-100 rounded" />
+                                   <div className="w-full h-1.5 bg-slate-100 rounded" />
                                 </div>
                              </div>
                              {/* Formatting Toolbar */}
-                             <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white shadow-2xl rounded-xl border border-slate-200 p-2 flex items-center gap-1 z-30">
-                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Bold className="w-4 h-4 text-slate-600" /></div>
-                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Italic className="w-4 h-4 text-slate-600" /></div>
-                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Underline className="w-4 h-4 text-slate-600" /></div>
-                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Strikethrough className="w-4 h-4 text-slate-600" /></div>
+                             <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 bg-white shadow-2xl rounded-xl border border-slate-200 p-2 flex items-center gap-1 z-30">
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer text-blue-500 font-black">B</div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer text-slate-600 font-serif italic">I</div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer text-slate-600 underline">U</div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer text-slate-600 line-through">S</div>
                                 <div className="w-px h-6 bg-slate-200 mx-1" />
                                 <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><ListIcon className="w-4 h-4 text-slate-600" /></div>
                                 <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><ListOrdered className="w-4 h-4 text-slate-600" /></div>
                                 <div className="w-px h-6 bg-slate-200 mx-1" />
-                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><LinkIcon className="w-4 h-4 text-slate-600" /></div>
-                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Wand2 className="w-4 h-4 text-primary" /></div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><LinkIcon className="w-4 h-4 text-blue-500" /></div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Wand2 className="w-4 h-4 text-blue-500" /></div>
                              </div>
                           </div>
                        </div>
