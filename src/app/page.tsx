@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(img => img.id === "hero-resumes");
@@ -222,6 +220,71 @@ export default function Home() {
                       
                       {/* Mouse Pointer */}
                       <MousePointer2 className="absolute -bottom-4 -right-2 h-10 w-10 text-blue-600 fill-blue-600 rotate-[20deg] z-20" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 4 Card */}
+              <div className="sticky top-64 z-40">
+                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-rose-500/20 shadow-xl shadow-rose-500/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
+                  <div className="flex-1 space-y-6">
+                    <div className="text-rose-500 font-semibold text-lg">Step 4</div>
+                    <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+                      Make updates. Watch your ATS resume score improve.
+                    </h3>
+                    <p className="text-slate-500">
+                      Edit your resume directly in the builder. Your resume score updates in real time—so you can track your progress instantly.
+                      <br /><br />
+                      Start improving your resume in minutes. Apply with confidence. Land the interview.
+                    </p>
+                  </div>
+                  <div className="flex-1 w-full max-w-md flex flex-col items-center justify-center relative">
+                    <div className="relative">
+                      {/* Gauge SVG */}
+                      <svg viewBox="0 0 100 60" className="w-64 h-auto overflow-visible">
+                        {/* Background Path */}
+                        <path 
+                          d="M 10 50 A 40 40 0 0 1 90 50" 
+                          fill="none" 
+                          stroke="#F1F5F9" 
+                          strokeWidth="10" 
+                          strokeLinecap="round" 
+                        />
+                        {/* Colored Segments */}
+                        <path 
+                          d="M 10 50 A 40 40 0 0 1 35 15" 
+                          fill="none" 
+                          stroke="#F43F5E" 
+                          strokeWidth="10" 
+                          strokeLinecap="round" 
+                        />
+                        <path 
+                          d="M 35 15 A 40 40 0 0 1 65 15" 
+                          fill="none" 
+                          stroke="#FACC15" 
+                          strokeWidth="10" 
+                          strokeLinecap="round" 
+                        />
+                        <path 
+                          d="M 65 15 A 40 40 0 0 1 90 50" 
+                          fill="none" 
+                          stroke="#065F46" 
+                          strokeWidth="10" 
+                          strokeLinecap="round" 
+                        />
+                        {/* Indicator */}
+                        <circle cx="78" cy="22" r="2.5" fill="#0D9488" className="animate-pulse" />
+                      </svg>
+                      {/* Center Text */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-end pb-4">
+                        <span className="text-6xl font-bold text-slate-800 tracking-tight">80%</span>
+                        <span className="text-lg font-bold text-slate-700">Good Match Score</span>
+                      </div>
+                      {/* Decorative Stars */}
+                      <div className="absolute top-0 right-4">
+                        <Sparkles className="h-6 w-6 text-teal-600" />
+                      </div>
                     </div>
                   </div>
                 </div>
