@@ -1,0 +1,41 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "resume-stack",
+      "description": "Stack of professional resume templates",
+      "imageUrl": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "resume documents"
+    },
+    {
+      "id": "hero-resumes",
+      "description": "Minimalist stack of resumes",
+      "imageUrl": "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "resume stack"
+    },
+    {
+      "id": "template-classic",
+      "description": "Classic resume template preview",
+      "imageUrl": "https://picsum.photos/seed/classic/600/800",
+      "imageHint": "resume classic"
+    },
+    {
+      "id": "template-traditional",
+      "description": "Traditional resume template preview",
+      "imageUrl": "https://picsum.photos/seed/traditional/600/800",
+      "imageHint": "resume traditional"
+    },
+    {
+      "id": "template-professional",
+      "description": "Professional modern resume template preview",
+      "imageUrl": "https://picsum.photos/seed/professional/600/800",
+      "imageHint": "resume professional"
+    },
+    {
+      "id": "template-ats",
+      "description": "ATS optimized resume template preview",
+      "imageUrl": "https://picsum.photos/seed/ats/600/800",
+      "imageHint": "resume ats"
+    }
+  ]
+}

@@ -130,6 +130,10 @@ export default function Home() {
     }
   };
 
+  const handleCreateResumeClick = () => {
+    router.push("/templates");
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setIsScanning(true);
@@ -192,7 +196,7 @@ export default function Home() {
           )}
           <Button 
             className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-6 h-11 rounded-md shadow-lg shadow-[#EF593E]/20"
-            onClick={handleUploadClick}
+            onClick={handleCreateResumeClick}
           >
             Create my resume
           </Button>
