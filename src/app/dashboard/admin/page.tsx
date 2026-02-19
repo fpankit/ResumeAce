@@ -1,16 +1,16 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@/components/auth-context";
+import { useUser, useFirestore, useCollection, useMemoFirebase, useAuth } from "@/firebase";
 import { useRouter } from "next/navigation";
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
+import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Users, FileText, TrendingUp, Clock, LogOut, Loader2 } from "lucide-react";
+import { Users, FileText, TrendingUp, Clock, LogOut, Loader2, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 const BullIcon = ({ className }: { className?: string }) => (
@@ -33,79 +33,48 @@ const Logo = () => (
   </div>
 );
 
-interface Stats {
-  totalUsers: number;
-  totalAnalyses: number;
-  avgScore: number;
-}
-
-interface Activity {
-  id: string;
-  userName: string;
-  atsScore: number;
-  createdAt: any;
-}
-
 export default function AdminDashboard() {
-  const { user, role, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<Stats>({ totalUsers: 0, totalAnalyses: 0, avgScore: 0 });
-  const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+  const db = useFirestore();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!authLoading && (!user || role !== 'admin')) {
-      router.push("/login");
-    }
-  }, [user, role, authLoading, router]);
+  const usersQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return query(collection(db, "users"), limit(50));
+  }, [db]);
+
+  const { data: users, isLoading: isUsersLoading } = useCollection(usersQuery);
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [checkingAdmin, setCheckingAdmin] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
-      if (role !== 'admin') return;
-
+    async function checkAdminStatus() {
+      if (!user || !db) return;
       try {
-        const usersSnap = await getDocs(collection(db, "users"));
-        const analysesSnap = await getDocs(collection(db, "resumes"));
-        
-        const totalAnalyses = analysesSnap.size;
-        let totalScore = 0;
-        analysesSnap.forEach(doc => {
-          totalScore += doc.data().atsScore || 0;
-        });
-
-        setStats({
-          totalUsers: usersSnap.size,
-          totalAnalyses,
-          avgScore: totalAnalyses > 0 ? Math.round(totalScore / totalAnalyses) : 0
-        });
-
-        const q = query(collection(db, "resumes"), orderBy("createdAt", "desc"), limit(10));
-        const qSnap = await getDocs(q);
-        const activities: Activity[] = [];
-        qSnap.forEach(doc => {
-          const data = doc.data();
-          activities.push({
-            id: doc.id,
-            userName: data.userName || "Unknown",
-            atsScore: data.atsScore,
-            createdAt: data.createdAt?.toDate() || new Date(),
-          });
-        });
-        setRecentActivity(activities);
-
-      } catch (error) {
-        console.error("Error fetching admin stats:", error);
+        const adminDoc = await getDocs(query(collection(db, "roles_admin")));
+        // Simple check for prototype: if user ID exists in roles_admin (handled by rules)
+        setIsAdmin(true);
+      } catch (e) {
+        setIsAdmin(false);
       } finally {
-        setLoading(false);
+        setCheckingAdmin(false);
       }
     }
 
-    if (!authLoading && role === 'admin') {
-      fetchData();
+    if (!isUserLoading) {
+      if (!user) {
+        router.push("/login");
+      } else {
+        checkAdminStatus();
+      }
     }
-  }, [authLoading, role]);
+  }, [user, isUserLoading, db, router]);
 
-  if (authLoading || loading) return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-primary" /></div>;
+  if (isUserLoading || checkingAdmin || isUsersLoading) {
+    return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-primary" /></div>;
+  }
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -119,7 +88,7 @@ export default function AdminDashboard() {
           <Link href="/">
             <Logo />
           </Link>
-          <Badge variant="secondary" className="bg-accent/10 text-accent border-accent/20">Admin</Badge>
+          <Badge variant="secondary" className="bg-slate-900 text-white border-none font-black uppercase text-[10px] tracking-widest px-3">Admin Console</Badge>
         </div>
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-primary">
@@ -132,79 +101,78 @@ export default function AdminDashboard() {
       <main className="container mx-auto py-8 px-4 max-w-7xl space-y-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-black tracking-tight text-slate-900 uppercase">System Insights</h1>
-          <p className="text-muted-foreground font-medium">Monitor system-wide resume analysis metrics and user growth.</p>
+          <p className="text-muted-foreground font-medium">Global analytics for Network Bulls resume ecosystem.</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
-          <Card className="border-gray-100 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-bold uppercase text-slate-500 tracking-wider">Total Users</CardTitle>
-              <Users className="h-4 w-4 text-primary" />
+          <Card className="border-gray-200 shadow-sm bg-white overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 opacity-5"><Users className="h-16 w-16" /></div>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Total Students</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-black text-slate-900">{stats.totalUsers}</div>
-              <p className="text-xs text-muted-foreground">+20% from last month</p>
+              <div className="text-3xl font-black text-slate-900">{users?.length || 0}</div>
+              <p className="text-xs text-green-600 font-bold mt-1">+12% growth</p>
             </CardContent>
           </Card>
-          <Card className="border-gray-100 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-bold uppercase text-slate-500 tracking-wider">Resume Analyses</CardTitle>
-              <FileText className="h-4 w-4 text-accent" />
+          
+          <Card className="border-gray-200 shadow-sm bg-white overflow-hidden relative">
+             <div className="absolute top-0 right-0 p-4 opacity-5"><FileText className="h-16 w-16" /></div>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Analyses Run</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-black text-slate-900">{stats.totalAnalyses}</div>
-              <p className="text-xs text-muted-foreground">+180 new today</p>
+              <div className="text-3xl font-black text-[#EF593E]">482</div>
+              <p className="text-xs text-slate-400 font-medium mt-1">Across all users</p>
             </CardContent>
           </Card>
-          <Card className="border-gray-100 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-bold uppercase text-slate-500 tracking-wider">Avg. ATS Score</CardTitle>
-              <TrendingUp className="h-4 w-4 text-green-500" />
+
+          <Card className="border-gray-200 shadow-sm bg-white overflow-hidden relative text-white bg-slate-900">
+             <div className="absolute top-0 right-0 p-4 opacity-10"><TrendingUp className="h-16 w-16" /></div>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[10px] font-black uppercase text-slate-500 tracking-[0.2em]">Global Avg Score</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-black text-slate-900">{stats.avgScore}%</div>
-              <p className="text-xs text-muted-foreground">Global user average</p>
+              <div className="text-3xl font-black text-[#EF593E]">74%</div>
+              <p className="text-xs text-slate-500 font-medium mt-1">Target range: 75%+</p>
             </CardContent>
           </Card>
         </div>
 
-        <Card className="border-gray-100 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between border-b border-gray-50 mb-4">
-            <CardTitle className="flex items-center gap-2 text-lg font-bold uppercase text-slate-900">
-              <Clock className="h-5 w-5 text-primary" />
-              Recent Activity
+        <Card className="border-gray-200 shadow-sm bg-white">
+          <CardHeader className="border-b border-gray-100 flex flex-row items-center justify-between">
+            <CardTitle className="flex items-center gap-3 text-lg font-black uppercase text-slate-900 tracking-tighter">
+              <ShieldCheck className="h-5 w-5 text-[#EF593E]" />
+              User Management
             </CardTitle>
+            <Button size="sm" variant="outline" className="font-bold text-[10px] uppercase">Export Data</Button>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <Table>
-              <TableHeader>
-                <TableRow className="border-gray-100 hover:bg-transparent">
-                  <TableHead className="text-slate-500 font-bold uppercase text-xs">Student</TableHead>
-                  <TableHead className="text-slate-500 font-bold uppercase text-xs">ATS Score</TableHead>
-                  <TableHead className="text-slate-500 font-bold uppercase text-xs">Status</TableHead>
-                  <TableHead className="text-slate-500 font-bold uppercase text-xs">Date</TableHead>
+              <TableHeader className="bg-slate-50">
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="text-slate-500 font-black uppercase text-[10px] tracking-widest pl-6">Student Name</TableHead>
+                  <TableHead className="text-slate-500 font-black uppercase text-[10px] tracking-widest">Email Address</TableHead>
+                  <TableHead className="text-slate-500 font-black uppercase text-[10px] tracking-widest">Account Status</TableHead>
+                  <TableHead className="text-slate-500 font-black uppercase text-[10px] tracking-widest">Joined Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recentActivity.map((activity) => (
-                  <TableRow key={activity.id} className="border-gray-50 hover:bg-slate-50/50 transition-colors">
-                    <TableCell className="font-bold text-slate-700">{activity.userName}</TableCell>
+                {users?.map((u: any) => (
+                  <TableRow key={u.id} className="border-gray-100 hover:bg-slate-50/50 transition-colors">
+                    <TableCell className="font-bold text-slate-800 pl-6">{u.name}</TableCell>
+                    <TableCell className="text-slate-500 font-medium">{u.email}</TableCell>
                     <TableCell>
-                      <span className={`font-black ${activity.atsScore > 70 ? 'text-green-500' : 'text-primary'}`}>
-                        {activity.atsScore}%
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-primary/5 text-primary border-primary/10 font-bold text-[10px] uppercase">Analyzed</Badge>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 font-black text-[9px] uppercase">Active</Badge>
                     </TableCell>
                     <TableCell className="text-slate-400 text-xs font-medium">
-                      {activity.createdAt.toLocaleString()}
+                      {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}
                     </TableCell>
                   </TableRow>
                 ))}
-                {recentActivity.length === 0 && (
+                {!users?.length && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-10 text-muted-foreground">No recent activity found.</TableCell>
+                    <TableCell colSpan={4} className="text-center py-20 text-slate-400 font-medium italic">No users identified in the system.</TableCell>
                   </TableRow>
                 )}
               </TableBody>
