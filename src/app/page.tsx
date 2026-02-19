@@ -12,7 +12,9 @@ import {
   FileText,
   Lightbulb,
   ArrowLeftRight,
-  Paintbrush
+  Paintbrush,
+  Plus,
+  Check
 } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -123,7 +125,7 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        {/* Hero Section - Removed overflow-hidden and made relative for Sparkles to move freely */}
+        {/* Hero Section */}
         <section className="relative hero-gradient overflow-visible">
           <div className="container mx-auto px-6 py-20 lg:py-32">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -312,7 +314,7 @@ export default function Home() {
         {/* Feature Teaser */}
         <section className="bg-slate-50 py-24">
           <div className="container mx-auto px-6 text-center space-y-12">
-            <h2 className="text-3xl font-black text-slate-900 uppercase">A resume checker for every job</h2>
+            <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">A resume checker for every job</h2>
             
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -328,6 +330,86 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </section>
+
+        {/* Quick ways to improve your ATS score */}
+        <section className="py-24 bg-white">
+           <div className="container mx-auto px-6 space-y-16">
+              <h2 className="text-3xl font-black text-center text-slate-900 mb-16 uppercase tracking-tight">Quick ways to improve your ATS score</h2>
+
+              <div className="grid gap-12 lg:gap-24">
+                 {/* Card 1: Job-match your resume */}
+                 <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row items-center gap-16 overflow-hidden">
+                    <div className="flex-1 relative">
+                       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-[340px] w-full border border-slate-100 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
+                          <div className="flex items-center gap-2 mb-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                             <Sparkles className="h-3 w-3 text-primary" /> AI Assistant
+                          </div>
+                          <div className="space-y-4">
+                             <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Boost your score</div>
+                             <div className="flex items-center gap-3 bg-green-50/50 p-3 rounded-lg border border-green-100/50">
+                                <span className="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px] font-bold">+2%</span>
+                                <span className="text-xs font-medium text-slate-600">Add job title</span>
+                             </div>
+                             <div className="flex items-center gap-3 bg-green-50/50 p-3 rounded-lg border border-green-100/50">
+                                <span className="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px] font-bold">+15%</span>
+                                <span className="text-xs font-medium text-slate-600">Add employment history</span>
+                             </div>
+                             <div className="flex items-center justify-end">
+                                <div className="bg-white shadow-lg border border-slate-100 p-2 px-3 rounded-full flex items-center gap-2 -mr-8 mt-2 animate-bounce">
+                                   <span className="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px] font-bold">+2%</span>
+                                   <span className="text-xs font-bold text-slate-700">Add skills</span>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                       {/* Floating Score */}
+                       <div className="absolute -top-10 right-0 bg-white shadow-2xl rounded-xl p-4 flex items-center gap-3 border border-slate-50 z-20 translate-x-4">
+                          <div className="w-12 h-12 rounded-lg bg-green-500 flex items-center justify-center text-white font-black text-lg">81%</div>
+                          <div className="flex flex-col">
+                             <span className="text-sm font-bold text-slate-900">Resume</span>
+                             <span className="text-xs text-slate-500">Score</span>
+                          </div>
+                       </div>
+                    </div>
+                    <div className="flex-1 space-y-6">
+                       <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Job-match your resume</h3>
+                       <p className="text-slate-500 text-lg">Quickly fine-tune your resume to match the job description.</p>
+                    </div>
+                 </div>
+
+                 {/* Card 2: Check those keywords... */}
+                 <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row-reverse items-center gap-16 overflow-hidden">
+                    <div className="flex-1 relative w-full">
+                       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full border border-slate-100 animate-in fade-in slide-in-from-right-4 duration-700">
+                          <div className="flex items-center justify-between mb-8">
+                             <h4 className="text-xl font-bold text-slate-900">Check keywords</h4>
+                             <div className="flex items-center gap-4">
+                                <button className="text-xs font-bold text-primary hover:underline">Clear all</button>
+                                <span className="text-xs font-bold text-slate-400">12/12 <span className="uppercase tracking-widest text-[10px] ml-1">Keywords</span></span>
+                             </div>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             {[
+                                "regulatory compliance", "performance management", "cost-benefit analysis",
+                                "risk assessment", "build staff expertise", "software deployment",
+                                "managing a complex program", "MySQL", "hypotheses testing", "cloud computing"
+                             ].map((kw, i) => (
+                                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100/50">
+                                   <span className="text-sm text-slate-600 font-medium">{kw}</span>
+                                   <Check className="h-4 w-4 text-primary" />
+                                </div>
+                             ))}
+                          </div>
+                       </div>
+                    </div>
+                    <div className="flex-1 space-y-6">
+                       <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Check those keywords...</h3>
+                       <p className="text-slate-500 text-lg">Keywords unlock doors. Always use keywords from the job listing.</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
         </section>
       </main>
 
