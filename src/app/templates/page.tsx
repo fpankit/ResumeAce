@@ -84,6 +84,31 @@ export default function ResumeBuilder() {
     setResumeData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleExperienceChange = (index: number, field: string, value: string) => {
+    setResumeData(prev => {
+      const newExperience = [...prev.experience];
+      newExperience[index] = { ...newExperience[index], [field]: value };
+      return { ...prev, experience: newExperience };
+    });
+  };
+
+  const addExperience = () => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: [
+        ...prev.experience,
+        { company: "", title: "", period: "", description: "" }
+      ]
+    }));
+  };
+
+  const removeExperience = (index: number) => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: prev.experience.filter((_, i) => i !== index)
+    }));
+  };
+
   return (
     <div className="h-screen flex flex-col bg-slate-50 overflow-hidden">
       {/* Top Navigation */}
@@ -233,18 +258,46 @@ export default function ResumeBuilder() {
                   <section className="space-y-4">
                     <div className="flex justify-between items-center">
                       <h3 className="text-sm font-black uppercase text-slate-900 tracking-tight">Employment History</h3>
-                      <Button variant="ghost" size="sm" className="text-[#EF593E] font-bold text-[10px] uppercase h-8 px-2">
+                      <Button onClick={addExperience} variant="ghost" size="sm" className="text-[#EF593E] font-bold text-[10px] uppercase h-8 px-2">
                         <Plus className="h-3 w-3 mr-1" /> Add Job
                       </Button>
                     </div>
                     {resumeData.experience.map((exp, i) => (
-                      <div key={i} className="p-4 border rounded-xl space-y-4 bg-slate-50/50">
+                      <div key={i} className="p-4 border rounded-xl space-y-4 bg-slate-50/50 relative group">
+                        <Button 
+                          onClick={() => removeExperience(i)}
+                          variant="ghost" 
+                          size="icon" 
+                          className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-white border shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="h-3 w-3 text-red-500" />
+                        </Button>
                         <div className="grid grid-cols-2 gap-4">
-                          <Input placeholder="Job Title" value={exp.title} className="h-8 text-xs" />
-                          <Input placeholder="Employer" value={exp.company} className="h-8 text-xs" />
+                          <Input 
+                            placeholder="Job Title" 
+                            value={exp.title} 
+                            onChange={(e) => handleExperienceChange(i, 'title', e.target.value)}
+                            className="h-8 text-xs" 
+                          />
+                          <Input 
+                            placeholder="Employer" 
+                            value={exp.company} 
+                            onChange={(e) => handleExperienceChange(i, 'company', e.target.value)}
+                            className="h-8 text-xs" 
+                          />
                         </div>
-                        <Input placeholder="Date Range" value={exp.period} className="h-8 text-xs" />
-                        <Textarea placeholder="Description" value={exp.description} className="min-h-[80px] text-xs resize-none" />
+                        <Input 
+                          placeholder="Date Range" 
+                          value={exp.period} 
+                          onChange={(e) => handleExperienceChange(i, 'period', e.target.value)}
+                          className="h-8 text-xs" 
+                        />
+                        <Textarea 
+                          placeholder="Description" 
+                          value={exp.description} 
+                          onChange={(e) => handleExperienceChange(i, 'description', e.target.value)}
+                          className="min-h-[80px] text-xs resize-none" 
+                        />
                       </div>
                     ))}
                   </section>
