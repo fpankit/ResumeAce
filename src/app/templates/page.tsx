@@ -108,7 +108,6 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
   );
 
   const renderContent = () => {
-    // Variety logic for 20 templates
     switch (templateId) {
       case 'two-column':
         return (
@@ -180,6 +179,7 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
 
       case 'ats-minimal':
       case 'monochrome':
+      case 'monochrome-minimal':
         return (
           <div className="space-y-6 font-mono text-[11px] leading-tight text-black">
             <div className="text-center space-y-1 mb-8">
@@ -247,7 +247,7 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
   );
 };
 
-export default function ResumeBuilder() {
+export default function ResumeBuilderPage() {
   const [activeTab, setActiveTab] = useState('templates');
   const [selectedTemplate, setSelectedTemplate] = useState('classic');
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
@@ -477,7 +477,7 @@ export default function ResumeBuilder() {
                       </div>
                     ))}
                   </section>
-                </div>
+                </TabsContent>
               </div>
             </ScrollArea>
           </Tabs>
