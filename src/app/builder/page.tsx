@@ -81,6 +81,7 @@ export default function ResumeBuilder() {
   const { toast } = useToast();
   
   const [sections, setSections] = useState({
+    personal: true,
     summary: true,
     skills: true,
     experience: true,
@@ -98,28 +99,25 @@ export default function ResumeBuilder() {
       jobTitle: 'Senior Software Architect',
       email: 'john.doe@example.com',
       phone: '+1 (555) 000-1111',
-      location: 'New York, NY',
+      location: { city: 'New York', country: 'USA' },
       linkedin: 'linkedin.com/in/johndoe',
       website: 'johndoe.dev'
     },
-    summary: 'Strategic and results-driven Senior Software Architect with 10+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.',
-    skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS', 'Kubernetes', 'GraphQL', 'System Design'],
+    summary: { content: 'Strategic and results-driven Senior Software Architect with 10+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.' },
+    skills: [
+      { id: '1', category: 'Programming Languages', items: [{ id: '1a', name: 'TypeScript', level: 90 }] }
+    ],
     experience: [
       {
         id: '1',
         title: 'Senior Software Architect',
         company: 'TechGlobal Solutions',
         location: 'New York, NY',
-        period: 'Jan 2020 - Present',
-        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system, resulting in a 40% improvement in scalability and deployment speed.\nArchitected and implemented a real-time data processing pipeline using Kafka and Spark.'
-      },
-      {
-        id: '2',
-        title: 'Full Stack Developer',
-        company: 'InnoStream Inc.',
-        location: 'Boston, MA',
-        period: 'Jun 2016 - Dec 2019',
-        description: 'Developed and maintained core features of the flagship SaaS product, serving over 500k monthly active users.\nCollaborated with UI/UX designers to implement responsive and accessible interfaces.'
+        startMonth: 'Jan',
+        startYear: '2020',
+        current: true,
+        responsibilities: 'Led the migration of a legacy monolithic architecture to a microservices-based system, resulting in a 40% improvement in scalability and deployment speed.',
+        achievements: 'Architected and implemented a real-time data processing pipeline using Kafka and Spark.'
       }
     ],
     education: [
@@ -128,37 +126,16 @@ export default function ResumeBuilder() {
         degree: 'Master of Science in Computer Science',
         school: 'Stanford University',
         location: 'Stanford, CA',
-        period: '2014 - 2016'
+        startYear: '2014',
+        endYear: '2016'
       }
     ],
-    projects: [
-      {
-        id: '1',
-        name: 'OpenSource CRM',
-        description: 'A privacy-first customer relationship management tool built with Next.js and PostgreSQL.',
-        link: 'github.com/johndoe/crm'
-      }
-    ],
-    certifications: [
-      'AWS Certified Solutions Architect – Professional',
-      'Certified Kubernetes Administrator (CKA)'
-    ],
-    achievements: [
-      'Winner of Global Hackathon 2021',
-      'Featured speaker at JSConf 2022'
-    ],
-    languages: ['English (Native)', 'Spanish (Professional)', 'German (Elementary)'],
-    interests: ['Blockchain Technology', 'Digital Art', 'Mountain Biking']
+    projects: [],
+    certifications: [],
+    achievements: [],
+    languages: [],
+    interests: []
   });
-
-  const updateField = (section: string, field: string, value: any) => {
-    setData(prev => ({
-      ...prev,
-      [section]: typeof value === 'object' && !Array.isArray(value) 
-        ? { ...(prev as any)[section], [field]: value }
-        : { ...(prev as any)[section], [field]: value }
-    }));
-  };
 
   const handlePersonalUpdate = (field: string, value: string) => {
     setData(prev => ({
@@ -170,7 +147,7 @@ export default function ResumeBuilder() {
   const handleAiGenerate = async (type: 'summary' | 'experience', index?: number) => {
     setIsGenerating(true);
     try {
-      const keywords = type === 'summary' ? data.skills.join(', ') : data.experience[index!].description;
+      const keywords = type === 'summary' ? data.personal.jobTitle : data.experience[index!].responsibilities;
       const res = await generateResumeContent({
         type,
         jobTitle: data.personal.jobTitle,
@@ -178,10 +155,10 @@ export default function ResumeBuilder() {
       });
       
       if (type === 'summary') {
-        setData(prev => ({ ...prev, summary: res.generatedText }));
+        setData(prev => ({ ...prev, summary: { content: res.generatedText } }));
       } else {
         const newExp = [...data.experience];
-        newExp[index!] = { ...newExp[index!], description: res.generatedText };
+        newExp[index!] = { ...newExp[index!], responsibilities: res.generatedText };
         setData(prev => ({ ...prev, experience: newExp }));
       }
       
@@ -190,16 +167,7 @@ export default function ResumeBuilder() {
         description: "Content has been updated with professional refinements.",
       });
     } catch (e: any) {
-      let errorMessage = e.message || "Failed to connect to AI service.";
-      if (errorMessage.includes("RESOURCE_EXHAUSTED") || errorMessage.includes("429")) {
-        errorMessage = "AI Quota exceeded. Please wait a minute and try again.";
-      }
-      
-      toast({
-        variant: "destructive",
-        title: "AI Magic Failed",
-        description: errorMessage,
-      });
+      toast({ variant: "destructive", title: "AI Magic Failed", description: e.message });
     } finally {
       setIsGenerating(false);
     }
@@ -208,9 +176,9 @@ export default function ResumeBuilder() {
   const handleDownload = () => window.print();
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans no-print">
+    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50 no-print">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-[#EF593E] rounded-lg flex items-center justify-center text-white font-black text-xl shadow-lg shadow-orange-100">B</div>
           <h1 className="text-lg font-black text-slate-900 tracking-tight">Network Bulls <span className="text-[#EF593E]">Pro</span></h1>
@@ -226,9 +194,9 @@ export default function ResumeBuilder() {
       </header>
 
       {/* Main Container */}
-      <div className="flex flex-1 pt-16 h-full">
+      <div className="flex flex-1 pt-16 h-full print:overflow-visible print:h-auto">
         {/* Left Panel */}
-        <aside className="w-[500px] bg-white border-r flex flex-col relative z-20">
+        <aside className="w-[500px] bg-white border-r flex flex-col relative z-20 no-print">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 sticky top-0 z-10">
               <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest">
@@ -257,12 +225,6 @@ export default function ResumeBuilder() {
                               ? "border-[#EF593E] ring-4 ring-orange-50 shadow-xl" 
                               : "border-slate-100 hover:border-slate-300 shadow-sm"
                           )}>
-                            <div className="absolute inset-4 space-y-2 opacity-20">
-                              <div className="h-4 w-1/2 bg-slate-400 rounded" />
-                              <div className="h-10 w-full bg-slate-300 rounded" />
-                              <div className="h-2 w-full bg-slate-200 rounded" />
-                              <div className="h-2 w-3/4 bg-slate-200 rounded" />
-                            </div>
                             {selectedTemplate === template.id && (
                               <div className="absolute inset-0 bg-white/40 flex items-center justify-center animate-in zoom-in-50 duration-300">
                                 <div className="w-10 h-10 rounded-full bg-[#EF593E] flex items-center justify-center text-white shadow-xl">
@@ -279,33 +241,6 @@ export default function ResumeBuilder() {
                       ))}
                     </div>
                   </section>
-
-                  <section className="space-y-6 pt-10 border-t">
-                    <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography & Layout</h3>
-                    <div className="space-y-8">
-                      <div className="space-y-4">
-                        <div className="flex justify-between text-[10px] font-bold uppercase">
-                          <span className="text-slate-500">Line Height</span>
-                          <span className="text-[#EF593E]">{lineHeight}x</span>
-                        </div>
-                        <Slider value={[lineHeight]} min={1} max={2.5} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
-                      </div>
-                      <div className="space-y-4">
-                        <div className="flex justify-between text-[10px] font-bold uppercase">
-                          <span className="text-slate-500">Body Font Size</span>
-                          <span className="text-[#EF593E]">{fontSize}px</span>
-                        </div>
-                        <Slider value={[fontSize]} min={10} max={20} step={1} onValueChange={([v]) => setFontSize(v)} />
-                      </div>
-                      <div className="space-y-4">
-                        <div className="flex justify-between text-[10px] font-bold uppercase">
-                          <span className="text-slate-500">Section Spacing</span>
-                          <span className="text-[#EF593E]">{sectionSpacing}px</span>
-                        </div>
-                        <Slider value={[sectionSpacing]} min={8} max={48} step={4} onValueChange={([v]) => setSectionSpacing(v)} />
-                      </div>
-                    </div>
-                  </section>
                 </TabsContent>
 
                 {/* Content Tab */}
@@ -318,94 +253,12 @@ export default function ResumeBuilder() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-[10px] font-black uppercase text-slate-400">Full Name</Label>
-                        <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl border-slate-100" />
+                        <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl" />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-[10px] font-black uppercase text-slate-400">Job Title</Label>
-                        <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl border-slate-100" />
+                        <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl" />
                       </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Email</Label>
-                        <Input value={data.personal.email} onChange={(e) => handlePersonalUpdate('email', e.target.value)} className="rounded-xl border-slate-100" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Phone</Label>
-                        <Input value={data.personal.phone} onChange={(e) => handlePersonalUpdate('phone', e.target.value)} className="rounded-xl border-slate-100" />
-                      </div>
-                    </div>
-                  </section>
-
-                  <section className="space-y-6 pt-10 border-t">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Sparkles className="h-4 w-4 text-[#EF593E]" />
-                        <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Professional Summary</h3>
-                      </div>
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
-                        className="text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50 gap-2 h-8"
-                        onClick={() => handleAiGenerate('summary')}
-                        disabled={isGenerating}
-                      >
-                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
-                        AI Magic
-                      </Button>
-                    </div>
-                    <Textarea 
-                      value={data.summary} 
-                      onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))}
-                      className="min-h-[120px] rounded-xl border-slate-100 leading-relaxed text-sm"
-                    />
-                  </section>
-
-                  <section className="space-y-8 pt-10 border-t">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Work History</h3>
-                      <Button variant="ghost" className="h-8 text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50">
-                        <Plus className="h-3 w-3 mr-1" /> Add Entry
-                      </Button>
-                    </div>
-                    <div className="space-y-6">
-                      {data.experience.map((exp, i) => (
-                        <div key={exp.id} className="p-6 rounded-2xl bg-slate-50/50 border border-slate-100 space-y-4 group transition-all hover:border-orange-200">
-                          <div className="grid grid-cols-2 gap-3">
-                            <Input placeholder="Job Title" value={exp.title} onChange={(e) => {
-                              const newExp = [...data.experience];
-                              newExp[i].title = e.target.value;
-                              setData(prev => ({ ...prev, experience: newExp }));
-                            }} className="h-9 text-xs" />
-                            <Input placeholder="Company" value={exp.company} onChange={(e) => {
-                              const newExp = [...data.experience];
-                              newExp[i].company = e.target.value;
-                              setData(prev => ({ ...prev, experience: newExp }));
-                            }} className="h-9 text-xs" />
-                          </div>
-                          <div className="relative">
-                            <Textarea 
-                              placeholder="Describe achievements..." 
-                              value={exp.description} 
-                              onChange={(e) => {
-                                const newExp = [...data.experience];
-                                newExp[i].description = e.target.value;
-                                setData(prev => ({ ...prev, experience: newExp }));
-                              }}
-                              className="min-h-[100px] text-xs leading-relaxed" 
-                            />
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="absolute bottom-2 right-2 h-7 px-2 text-[9px] font-black uppercase text-[#EF593E] hover:bg-white bg-white/50 backdrop-blur shadow-sm"
-                              onClick={() => handleAiGenerate('experience', i)}
-                              disabled={isGenerating}
-                            >
-                              AI Refine
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
                     </div>
                   </section>
                 </TabsContent>
@@ -415,13 +268,13 @@ export default function ResumeBuilder() {
         </aside>
 
         {/* Center Pane */}
-        <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center">
-          <div className="relative group mb-12">
+        <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center print:bg-white print:p-0 print:overflow-visible">
+          <div className="relative group mb-12 print:m-0 print:shadow-none print:transform-none">
             <ResumeCanvas 
               templateId={selectedTemplate}
               theme={selectedTheme}
               font={selectedFont}
-              data={data}
+              data={data as any}
               sections={sections}
               style={{
                 lineHeight,

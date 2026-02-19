@@ -355,7 +355,7 @@ export default function ResumeBuilderPage() {
         </div>
       </header>
 
-      <div className="flex flex-1 pt-16 h-full overflow-hidden">
+      <div className="flex flex-1 pt-16 h-full overflow-hidden print:overflow-visible print:h-auto">
         {/* Editor Sidebar */}
         <aside className="w-[500px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10 no-print">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
@@ -936,8 +936,8 @@ export default function ResumeBuilderPage() {
         </aside>
 
         {/* Preview Panel */}
-        <main className="flex-1 bg-[#F1F5F9] overflow-auto p-12 lg:p-20 flex flex-col items-center">
-          <div className="origin-top transition-transform duration-500 hover:scale-[1.01] shadow-2xl">
+        <main className="flex-1 bg-[#F1F5F9] overflow-auto p-12 lg:p-20 flex flex-col items-center print:bg-white print:p-0 print:overflow-visible">
+          <div className="origin-top transition-transform duration-500 hover:scale-[1.01] shadow-2xl print:shadow-none print:transform-none">
             <ResumeCanvas 
               templateId={selectedTemplateId}
               theme={selectedTheme}
