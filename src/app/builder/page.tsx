@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -78,6 +79,7 @@ export default function ResumeBuilder() {
   const [fontSize, setFontSize] = useState(14);
   const [sectionSpacing, setSectionSpacing] = useState(24);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const { toast } = useToast();
   
   const [sections, setSections] = useState({
@@ -173,7 +175,42 @@ export default function ResumeBuilder() {
     }
   };
 
-  const handleDownload = () => window.print();
+  const handleExportPDF = async () => {
+    const element = document.getElementById('resume-canvas-area');
+    if (!element) return;
+
+    setIsExporting(true);
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const jsPDF = (await import('jspdf')).jsPDF;
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${data.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`);
+      
+      toast({ title: "Download Complete", description: "Your resume has been saved as a high-fidelity PDF." });
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Download Failed", description: error.message });
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
@@ -187,8 +224,13 @@ export default function ResumeBuilder() {
           <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
           <Button variant="ghost" className="text-slate-500 font-bold">Settings</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
-          <Button onClick={handleDownload} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 shadow-lg shadow-orange-100 rounded-lg px-6">
-            <Download className="h-4 w-4" /> Download PDF
+          <Button 
+            onClick={handleExportPDF} 
+            disabled={isExporting}
+            className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 shadow-lg shadow-orange-100 rounded-lg px-6"
+          >
+            {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />} 
+            {isExporting ? 'Generating...' : 'Download PDF'}
           </Button>
         </div>
       </header>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useMemo } from 'react';
@@ -71,6 +72,7 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
 
   return (
     <div 
+      id="resume-canvas-area"
       className="resume-a4 print:m-0 print:shadow-none" 
       style={{ 
         fontFamily: font?.family || '"Inter", sans-serif',

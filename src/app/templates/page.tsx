@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -131,6 +132,7 @@ export default function ResumeBuilderPage() {
   const [fontSize, setFontSize] = useState(11);
   const [sectionSpacing, setSectionSpacing] = useState(20);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const { toast } = useToast();
   
   const [data, setData] = useState<ResumeData>({
@@ -338,8 +340,44 @@ export default function ResumeBuilderPage() {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleExportPDF = async () => {
+    const element = document.getElementById('resume-canvas-area');
+    if (!element) {
+      toast({ variant: "destructive", title: "Export Failed", description: "Could not find resume canvas." });
+      return;
+    }
+
+    setIsExporting(true);
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const jsPDF = (await import('jspdf')).jsPDF;
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${data.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`);
+      
+      toast({ title: "Export Complete", description: "Your professional PDF has been saved." });
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Export Failed", description: error.message });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -349,8 +387,13 @@ export default function ResumeBuilderPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-slate-500 font-black uppercase text-[10px] tracking-widest hover:text-[#EF593E]">Resume Editor Pro</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
-          <Button onClick={handlePrint} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-black uppercase text-[10px] tracking-widest gap-2 rounded-lg px-6 h-10 shadow-lg shadow-orange-100 transition-all active:scale-95">
-            <Download className="h-4 w-4" /> Export Professional PDF
+          <Button 
+            onClick={handleExportPDF} 
+            disabled={isExporting}
+            className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-black uppercase text-[10px] tracking-widest gap-2 rounded-lg px-6 h-10 shadow-lg shadow-orange-100 transition-all active:scale-95"
+          >
+            {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />} 
+            {isExporting ? 'Generating PDF...' : 'Export Professional PDF'}
           </Button>
         </div>
       </header>
@@ -950,7 +993,14 @@ export default function ResumeBuilderPage() {
           
           <div className="fixed bottom-10 right-10 flex gap-4 no-print">
             <Button size="icon" className="w-14 h-14 rounded-full bg-slate-900 text-white shadow-xl hover:bg-slate-800 transition-all"><Maximize2 className="h-6 w-6" /></Button>
-            <Button size="icon" onClick={handlePrint} className="w-14 h-14 rounded-full bg-[#EF593E] text-white shadow-xl hover:bg-[#D44D35] transition-all"><Download className="h-6 w-6" /></Button>
+            <Button 
+              size="icon" 
+              onClick={handleExportPDF} 
+              disabled={isExporting}
+              className="w-14 h-14 rounded-full bg-[#EF593E] text-white shadow-xl hover:bg-[#D44D35] transition-all"
+            >
+              {isExporting ? <Loader2 className="h-6 w-6 animate-spin" /> : <Download className="h-6 w-6" />}
+            </Button>
           </div>
         </main>
       </div>
