@@ -15,13 +15,10 @@ import {
   Check, 
   Sparkles,
   Loader2,
-  ChevronLeft,
-  ChevronRight,
   Briefcase,
   Mail,
   Phone,
   MapPin,
-  Globe,
   Maximize2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -95,7 +92,7 @@ const Logo = () => (
 );
 
 const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
-  const { personal, summary, experience, skills } = data;
+  const { personal, summary, experience } = data;
   const layoutStyle = {
     fontFamily: font.family,
     fontSize: `${style.fontSize}px`,
@@ -113,7 +110,6 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
   const renderContent = () => {
     switch (templateId) {
       case 'two-column':
-      case 'twocolumn':
         return (
           <div className="flex gap-10 h-full">
             <div className="w-1/3 space-y-8">
@@ -129,7 +125,7 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
             </div>
             <div className="flex-1 space-y-10">
               <section>
-                <SectionHeader title="Professional Profile" />
+                <SectionHeader title="Profile" />
                 <p className="text-sm leading-relaxed">{summary}</p>
               </section>
               <section>
@@ -267,22 +263,16 @@ export default function ResumeBuilder() {
       phone: '+1 (555) 000-1111',
       location: 'New York, NY',
     },
-    summary: 'Strategic and results-driven Senior Software Engineer with 8+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.',
+    summary: 'Strategic and results-driven Senior Software Engineer with 8+ years of experience in designing and implementing scalable cloud architectures.',
     experience: [
       {
         title: 'Senior Software Engineer',
         company: 'TechGlobal Solutions',
         period: 'Jan 2020 - Present',
-        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system, resulting in a 40% improvement in scalability.\nArchitected and implemented a real-time data processing pipeline using Kafka.'
-      },
-      {
-        title: 'Full Stack Developer',
-        company: 'InnoStream Inc.',
-        period: 'Jun 2016 - Dec 2019',
-        description: 'Developed and maintained core features of the flagship SaaS product.\nCollaborated with UI/UX designers to implement responsive and accessible interfaces.'
+        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system.'
       }
     ],
-    skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS', 'Kubernetes']
+    skills: ['React', 'Next.js', 'Node.js', 'TypeScript']
   });
 
   const handlePersonalUpdate = (field: string, value: string) => {
@@ -328,16 +318,9 @@ export default function ResumeBuilder() {
         handleExperienceUpdate(index!, 'description', res.generatedText);
       }
       
-      toast({
-        title: "AI Generation Successful",
-        description: "Content has been updated with professional refinements.",
-      });
+      toast({ title: "AI Generation Successful" });
     } catch (e: any) {
-      toast({
-        variant: "destructive",
-        title: "AI Generation Failed",
-        description: e.message || "Failed to connect to AI service.",
-      });
+      toast({ variant: "destructive", title: "AI Generation Failed", description: e.message });
     } finally {
       setIsGenerating(false);
     }
@@ -346,13 +329,9 @@ export default function ResumeBuilder() {
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden no-print">
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
-        <div className="flex items-center gap-3">
-          <Link href="/"><Logo /></Link>
-        </div>
+        <Link href="/"><Logo /></Link>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
-          <div className="h-6 w-[1px] bg-slate-200 mx-2" />
-          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 shadow-lg shadow-orange-100 rounded-lg px-6">
+          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6">
             <Download className="h-4 w-4" /> Download PDF
           </Button>
         </div>
@@ -363,7 +342,7 @@ export default function ResumeBuilder() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 sticky top-0 z-10">
               <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
-                <Layout className="h-4 w-4 mr-2" /> Design & Fonts
+                <Layout className="h-4 w-4 mr-2" /> Select Template
               </TabsTrigger>
               <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
                 <TypeIcon className="h-4 w-4 mr-2" /> Text Content
@@ -408,7 +387,6 @@ export default function ResumeBuilder() {
                       ))}
                     </div>
                   </section>
-
                   <section className="space-y-6 pt-10 border-t">
                     <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography & Theme</h3>
                     <div className="space-y-8">
@@ -425,40 +403,9 @@ export default function ResumeBuilder() {
                           />
                         ))}
                       </div>
-                      <div className="space-y-4">
-                        <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Font Family</Label>
-                        <div className="grid grid-cols-1 gap-2">
-                          {FONTS.map(font => (
-                            <Button 
-                              key={font.id} 
-                              variant="outline" 
-                              onClick={() => setSelectedFont(font)}
-                              className={cn(
-                                "justify-start font-bold h-10 rounded-xl",
-                                selectedFont.id === font.id ? "border-[#EF593E] bg-orange-50" : "border-slate-100"
-                              )}
-                              style={{ fontFamily: font.family }}
-                            >
-                              {font.name}
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="space-y-6">
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-[10px] font-black uppercase">
-                            <span className="text-slate-400">Font Size</span>
-                            <span className="text-[#EF593E]">{fontSize}px</span>
-                          </div>
-                          <Slider value={[fontSize]} min={10} max={18} step={1} onValueChange={([v]) => setFontSize(v)} />
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-[10px] font-black uppercase">
-                            <span className="text-slate-400">Line Height</span>
-                            <span className="text-[#EF593E]">{lineHeight}x</span>
-                          </div>
-                          <Slider value={[lineHeight]} min={1} max={2} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
-                        </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black uppercase text-slate-400">Font Size ({fontSize}px)</Label>
+                        <Slider value={[fontSize]} min={10} max={18} step={1} onValueChange={([v]) => setFontSize(v)} />
                       </div>
                     </div>
                   </section>
@@ -480,83 +427,31 @@ export default function ResumeBuilder() {
                         <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl border-slate-100" />
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Email</Label>
-                        <Input value={data.personal.email} onChange={(e) => handlePersonalUpdate('email', e.target.value)} className="rounded-xl border-slate-100" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Phone</Label>
-                        <Input value={data.personal.phone} onChange={(e) => handlePersonalUpdate('phone', e.target.value)} className="rounded-xl border-slate-100" />
-                      </div>
-                    </div>
                   </section>
-
                   <section className="space-y-6 pt-10 border-t">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Sparkles className="h-4 w-4 text-[#EF593E]" />
-                        <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Summary</h3>
-                      </div>
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
-                        className="text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50 h-8"
-                        onClick={() => handleAiGenerate('summary')}
-                        disabled={isGenerating}
-                      >
-                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />}
-                        AI Magic
+                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Summary</h3>
+                      <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('summary')} disabled={isGenerating} className="text-[10px] font-black uppercase text-[#EF593E] h-8">
+                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />} AI Magic
                       </Button>
                     </div>
-                    <Textarea 
-                      value={data.summary} 
-                      onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))}
-                      className="min-h-[120px] rounded-xl border-slate-100 leading-relaxed text-sm"
-                    />
+                    <Textarea value={data.summary} onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))} className="min-h-[120px] rounded-xl text-sm" />
                   </section>
-
                   <section className="space-y-8 pt-10 border-t">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Briefcase className="h-4 w-4 text-[#EF593E]" />
-                        <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">History</h3>
-                      </div>
-                      <Button onClick={addExperience} variant="ghost" className="h-8 text-[10px] font-black uppercase text-[#EF593E]">
-                        <Plus className="h-3 w-3 mr-1" /> Add
-                      </Button>
+                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Experience</h3>
+                      <Button onClick={addExperience} variant="ghost" className="h-8 text-[10px] font-black uppercase text-[#EF593E]"><Plus className="h-3 w-3 mr-1" /> Add</Button>
                     </div>
-                    <div className="space-y-6">
-                      {data.experience.map((exp, i) => (
-                        <div key={i} className="p-6 rounded-2xl bg-slate-50/50 border border-slate-100 space-y-4 group relative">
-                          <Button onClick={() => removeExperience(i)} variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                          </Button>
-                          <div className="grid grid-cols-2 gap-3">
-                            <Input placeholder="Title" value={exp.title} onChange={(e) => handleExperienceUpdate(i, 'title', e.target.value)} className="h-9 text-xs" />
-                            <Input placeholder="Company" value={exp.company} onChange={(e) => handleExperienceUpdate(i, 'company', e.target.value)} className="h-9 text-xs" />
-                          </div>
-                          <Input placeholder="Period" value={exp.period} onChange={(e) => handleExperienceUpdate(i, 'period', e.target.value)} className="h-9 text-xs" />
-                          <div className="relative">
-                            <Textarea 
-                              placeholder="Achievements..." 
-                              value={exp.description} 
-                              onChange={(e) => handleExperienceUpdate(i, 'description', e.target.value)}
-                              className="min-h-[100px] text-xs leading-relaxed" 
-                            />
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="absolute bottom-2 right-2 h-7 px-2 text-[9px] font-black uppercase text-[#EF593E] bg-white/80 backdrop-blur"
-                              onClick={() => handleAiGenerate('experience', i)}
-                              disabled={isGenerating}
-                            >
-                              AI Refine
-                            </Button>
-                          </div>
+                    {data.experience.map((exp, i) => (
+                      <div key={i} className="p-6 rounded-2xl bg-slate-50/50 border space-y-4 group relative">
+                        <Button onClick={() => removeExperience(i)} variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100"><Trash2 className="h-3.5 w-3.5 text-red-500" /></Button>
+                        <Input placeholder="Title" value={exp.title} onChange={(e) => handleExperienceUpdate(i, 'title', e.target.value)} className="h-9 text-xs" />
+                        <div className="relative">
+                          <Textarea placeholder="Achievements..." value={exp.description} onChange={(e) => handleExperienceUpdate(i, 'description', e.target.value)} className="min-h-[100px] text-xs" />
+                          <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('experience', i)} disabled={isGenerating} className="absolute bottom-2 right-2 h-7 px-2 text-[9px] font-black uppercase text-[#EF593E] bg-white/80">AI Refine</Button>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </section>
                 </TabsContent>
               </div>
@@ -565,22 +460,7 @@ export default function ResumeBuilder() {
         </aside>
 
         <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center">
-          <div className="relative group mb-12">
-            <ResumePreview 
-              templateId={selectedTemplate}
-              theme={selectedTheme}
-              font={selectedFont}
-              data={data}
-              style={{
-                lineHeight,
-                fontSize
-              }}
-            />
-            <div className="absolute -right-20 top-0 space-y-4 opacity-0 group-hover:opacity-100 transition-opacity no-print">
-              <Button size="icon" variant="secondary" className="rounded-full shadow-lg"><Maximize2 className="h-4 w-4" /></Button>
-              <Button size="icon" variant="secondary" className="rounded-full shadow-lg"><Settings className="h-4 w-4" /></Button>
-            </div>
-          </div>
+          <ResumePreview templateId={selectedTemplate} theme={selectedTheme} font={selectedFont} data={data} style={{ lineHeight, fontSize }} />
         </main>
       </div>
     </div>
