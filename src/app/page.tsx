@@ -16,8 +16,6 @@ import {
   Paintbrush
 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Input } from "@/components/ui/input";
 
 const BullIcon = ({ className }: { className?: string }) => (
@@ -44,9 +42,51 @@ const Logo = () => (
   </div>
 );
 
-export default function Home() {
-  const heroImage = PlaceHolderImages.find(img => img.id === "hero-resumes");
+const ResumeIllustration = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    {/* Back Paper */}
+    <rect x="120" y="100" width="480" height="600" rx="40" transform="rotate(-12 120 100)" fill="white" stroke="#F1F5F9" strokeWidth="8"/>
+    <rect x="180" y="180" width="120" height="120" rx="16" transform="rotate(-12 180 180)" fill="#F8FAFC"/>
+    <rect x="330" y="180" width="160" height="15" rx="7.5" transform="rotate(-12 330 180)" fill="#F1F5F9"/>
+    
+    {/* Front Paper */}
+    <rect x="250" y="150" width="480" height="600" rx="40" fill="white" stroke="#E2E8F0" strokeWidth="8" className="shadow-2xl"/>
+    
+    {/* Character Box */}
+    <rect x="310" y="210" width="120" height="120" rx="16" fill="#F8FAFC"/>
+    
+    {/* Headset Character */}
+    <circle cx="370" cy="270" r="40" fill="#6366F1" opacity="0.9"/>
+    {/* Headset arc */}
+    <path d="M340 270C340 240 400 240 400 270" stroke="#1E293B" strokeWidth="10" fill="none" strokeLinecap="round"/>
+    {/* Earpads */}
+    <rect x="330" y="260" width="14" height="24" rx="7" fill="#1E293B"/>
+    <rect x="396" y="260" width="14" height="24" rx="7" fill="#1E293B"/>
+    {/* Mic wire */}
+    <path d="M345 300C330 330 360 340 370 320" stroke="#1E293B" strokeWidth="2" fill="none"/>
+    {/* Face */}
+    <path d="M360 275C365 282 375 282 380 275" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    
+    {/* Header Lines */}
+    <rect x="460" y="240" width="180" height="20" rx="10" fill="#6366F1"/>
+    <rect x="460" y="275" width="240" height="20" rx="10" fill="#6366F1"/>
+    
+    {/* Body Content Items */}
+    <circle cx="340" cy="420" r="35" fill="#F1F5F9"/>
+    <rect x="400" y="405" width="240" height="12" rx="6" fill="#F1F5F9"/>
+    <rect x="400" y="430" width="180" height="12" rx="6" fill="#F1F5F9"/>
+    
+    <circle cx="340" cy="520" r="35" fill="#F1F5F9"/>
+    <rect x="400" y="505" width="240" height="12" rx="6" fill="#F1F5F9"/>
+    <rect x="400" y="530" width="180" height="12" rx="6" fill="#F1F5F9"/>
+    
+    <circle cx="340" cy="620" r="35" fill="#F1F5F9"/>
+    <rect x="400" y="605" width="240" height="12" rx="6" fill="#F1F5F9"/>
+    <rect x="400" y="630" width="180" height="12" rx="6" fill="#F1F5F9"/>
+  </svg>
+);
 
+export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Navigation */}
@@ -56,27 +96,27 @@ export default function Home() {
         </Link>
         
         <nav className="ml-12 hidden lg:flex gap-8 items-center text-sm font-medium text-slate-600">
-          <button className="flex items-center gap-1 hover:text-primary transition-colors">
+          <button className="flex items-center gap-1 hover:text-[#EF593E] transition-colors">
             Resume Templates <ChevronDown className="h-4 w-4 opacity-50" />
           </button>
-          <button className="flex items-center gap-1 hover:text-primary transition-colors">
+          <button className="flex items-center gap-1 hover:text-[#EF593E] transition-colors">
             Resume Examples <ChevronDown className="h-4 w-4 opacity-50" />
           </button>
-          <button className="flex items-center gap-1 hover:text-primary transition-colors">
+          <button className="flex items-center gap-1 hover:text-[#EF593E] transition-colors">
             Cover Letter <ChevronDown className="h-4 w-4 opacity-50" />
           </button>
-          <Link href="#" className="hover:text-primary transition-colors">FAQ</Link>
-          <button className="flex items-center gap-1 hover:text-primary transition-colors">
+          <Link href="#" className="hover:text-[#EF593E] transition-colors">FAQ</Link>
+          <button className="flex items-center gap-1 hover:text-[#EF593E] transition-colors">
             Resources <ChevronDown className="h-4 w-4 opacity-50" />
           </button>
         </nav>
 
         <div className="ml-auto flex items-center gap-6">
-          <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">
+          <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-[#EF593E] transition-colors">
             Sign in
           </Link>
           <Link href="/login?tab=signup">
-            <Button className="bg-primary hover:bg-primary/90 text-white font-semibold px-6 h-11 rounded-md shadow-lg shadow-primary/20">
+            <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-6 h-11 rounded-md shadow-lg shadow-[#EF593E]/20">
               Create my resume
             </Button>
           </Link>
@@ -85,7 +125,7 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="container mx-auto px-6 py-20 lg:py-32 hero-gradient">
+        <section className="container mx-auto px-6 py-20 lg:py-32 hero-gradient overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8 max-w-xl">
               <div className="space-y-4">
@@ -105,7 +145,7 @@ export default function Home() {
                   <span className="text-xs text-slate-400 font-normal">PDF & DOCX only (max 2MB)</span>
                 </p>
                 <Link href="/login">
-                  <Button className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 h-12 gap-2 text-base shadow-xl shadow-primary/20">
+                  <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-8 h-12 gap-2 text-base shadow-xl shadow-[#EF593E]/20">
                     Upload my resume <Upload className="h-5 w-5" />
                   </Button>
                 </Link>
@@ -114,23 +154,16 @@ export default function Home() {
 
             {/* Visual Side */}
             <div className="relative hidden lg:block">
-              <div className="relative z-10 animate-in fade-in zoom-in duration-1000">
-                <Image 
-                  src={heroImage?.imageUrl || "https://picsum.photos/seed/res/800/600"} 
-                  alt="Resume Stack"
-                  width={800}
-                  height={600}
-                  className="rounded-3xl shadow-2xl rotate-3 translate-x-12 hover:rotate-0 transition-all duration-500 border border-slate-100"
-                  data-ai-hint="resume stack"
-                />
+              <div className="relative z-10 animate-in fade-in zoom-in duration-1000 scale-110">
+                <ResumeIllustration className="w-full h-auto drop-shadow-2xl" />
                 <div className="absolute -top-4 -right-4 text-[#EF593E] animate-bounce">
-                  <Sparkles className="h-8 w-8" />
+                  <Sparkles className="h-10 w-10" />
                 </div>
-                <div className="absolute bottom-12 right-0 bg-white p-3 rounded-lg shadow-xl flex items-center gap-2 border border-orange-100">
-                  <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                    <CheckCircle2 className="h-4 w-4 text-white" />
+                <div className="absolute bottom-12 right-12 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-3 border border-orange-100">
+                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                    <CheckCircle2 className="h-5 w-5 text-white" />
                   </div>
-                  <span className="text-sm font-semibold text-slate-700">ATS Optimized</span>
+                  <span className="text-base font-bold text-slate-800">ATS Optimized</span>
                 </div>
               </div>
             </div>
@@ -145,9 +178,9 @@ export default function Home() {
             <div className="relative space-y-24">
               {/* Step 1 Card */}
               <div className="sticky top-28 z-10">
-                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-primary/20 shadow-xl shadow-primary/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
+                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
                   <div className="flex-1 space-y-6">
-                    <div className="text-primary font-bold text-lg uppercase tracking-wider">Step 1</div>
+                    <div className="text-[#EF593E] font-bold text-lg uppercase tracking-wider">Step 1</div>
                     <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
                       Import your existing resume into the resume builder
                     </h3>
@@ -161,13 +194,13 @@ export default function Home() {
                     <div className="bg-white border border-slate-200 rounded-lg p-3">
                       <Input disabled placeholder="www.linkedin.com/in/yourprofileurl" className="bg-slate-50/50 border-none shadow-none text-xs" />
                     </div>
-                    <Button variant="outline" className="w-full gap-2 border-primary/20 bg-primary/5 text-slate-600 font-bold">
+                    <Button variant="outline" className="w-full gap-2 border-[#EF593E]/20 bg-[#EF593E]/5 text-slate-600 font-bold">
                       <Linkedin className="h-4 w-4 text-[#0077B5]" /> Import LinkedIn Profile Data
                     </Button>
                     <div className="relative border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center text-center space-y-2 bg-slate-50/30 group">
                       <Upload className="h-6 w-6 text-slate-400" />
                       <p className="text-xs text-slate-400">Drag & Drop your resume here or click to select a file (.doc or .pdf).</p>
-                      <MousePointer2 className="absolute -bottom-4 -right-4 h-10 w-10 text-primary fill-primary rotate-[20deg]" />
+                      <MousePointer2 className="absolute -bottom-4 -right-4 h-10 w-10 text-[#EF593E] fill-[#EF593E] rotate-[20deg]" />
                     </div>
                   </div>
                 </div>
@@ -194,7 +227,7 @@ export default function Home() {
                        <div className="w-24 h-24 rounded-full bg-accent flex items-center justify-center text-white shadow-2xl">
                           <PieChart className="h-10 w-10" />
                        </div>
-                       <MousePointer2 className="absolute -bottom-6 -right-2 h-10 w-10 text-primary fill-primary rotate-[20deg]" />
+                       <MousePointer2 className="absolute -bottom-6 -right-2 h-10 w-10 text-[#EF593E] fill-[#EF593E] rotate-[20deg]" />
                     </div>
                     <ArrowLeftRight className="h-10 w-10 text-slate-300" />
                     <Paintbrush className="h-10 w-10 text-slate-300" />
@@ -204,9 +237,9 @@ export default function Home() {
 
               {/* Step 3 Card */}
               <div className="sticky top-52 z-30">
-                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-primary/20 shadow-xl shadow-primary/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
+                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
                   <div className="flex-1 space-y-6">
-                    <div className="text-primary font-bold text-lg uppercase tracking-wider">Step 3</div>
+                    <div className="text-[#EF593E] font-bold text-lg uppercase tracking-wider">Step 3</div>
                     <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
                       Review your resume score and see what needs fixing
                     </h3>
@@ -215,16 +248,16 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="flex-1 w-full max-w-md relative flex items-center justify-center">
-                    <div className="bg-white border-2 border-primary rounded-xl p-8 shadow-lg max-w-[320px] w-full space-y-4 relative">
-                      <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider">
-                         <div className="w-2 h-2 rounded-full bg-primary" /> RESUME STRUCTURE
+                    <div className="bg-white border-2 border-[#EF593E] rounded-xl p-8 shadow-lg max-w-[320px] w-full space-y-4 relative">
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-[#EF593E] uppercase tracking-wider">
+                         <div className="w-2 h-2 rounded-full bg-[#EF593E]" /> RESUME STRUCTURE
                       </div>
                       <div className="space-y-1">
                         <div className="text-sm font-semibold text-slate-400 leading-tight">Number of Achievements in</div>
                         <div className="text-sm font-semibold text-slate-400 leading-tight">Work Experience #2</div>
                       </div>
                       <div className="flex justify-end pt-2">
-                         <Button className="bg-primary hover:bg-primary/90 text-white font-bold px-6 rounded-full h-10 text-sm">
+                         <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold px-6 rounded-full h-10 text-sm">
                            Show Me
                          </Button>
                       </div>
@@ -234,7 +267,7 @@ export default function Home() {
                             <span className="text-[10px] font-bold text-slate-500 text-center leading-tight">Overall Score</span>
                          </div>
                       </div>
-                      <MousePointer2 className="absolute -bottom-4 -right-2 h-10 w-10 text-primary fill-primary rotate-[20deg] z-20" />
+                      <MousePointer2 className="absolute -bottom-4 -right-2 h-10 w-10 text-[#EF593E] fill-[#EF593E] rotate-[20deg] z-20" />
                     </div>
                   </div>
                 </div>
@@ -242,9 +275,9 @@ export default function Home() {
 
               {/* Step 4 Card */}
               <div className="sticky top-64 z-40">
-                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-primary/20 shadow-xl shadow-primary/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
+                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
                   <div className="flex-1 space-y-6">
-                    <div className="text-primary font-bold text-lg uppercase tracking-wider">Step 4</div>
+                    <div className="text-[#EF593E] font-bold text-lg uppercase tracking-wider">Step 4</div>
                     <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
                       Make updates. Watch your ATS resume score improve.
                     </h3>
@@ -304,9 +337,9 @@ export default function Home() {
             <p className="text-xs text-slate-400 mt-2">© 2024 Network Bulls AI. Part of the CareerAce network.</p>
           </div>
           <div className="flex gap-8 text-sm font-bold text-slate-500">
-            <Link href="#" className="hover:text-primary uppercase tracking-tighter">Privacy Policy</Link>
-            <Link href="#" className="hover:text-primary uppercase tracking-tighter">Terms of Service</Link>
-            <Link href="#" className="hover:text-primary uppercase tracking-tighter">Contact Us</Link>
+            <Link href="#" className="hover:text-[#EF593E] uppercase tracking-tighter">Privacy Policy</Link>
+            <Link href="#" className="hover:text-[#EF593E] uppercase tracking-tighter">Terms of Service</Link>
+            <Link href="#" className="hover:text-[#EF593E] uppercase tracking-tighter">Contact Us</Link>
           </div>
         </div>
       </footer>
