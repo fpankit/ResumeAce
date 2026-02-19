@@ -1,14 +1,12 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { 
-  ChevronDown, 
   Upload, 
   Sparkles, 
   CheckCircle2, 
-  Linkedin,
-  MousePointer2,
   PieChart,
   FileText,
   Lightbulb,
@@ -16,11 +14,10 @@ import {
   Loader2,
   Check,
   Zap,
-  Layout,
-  Target
+  MousePointer2,
+  Brush
 } from "lucide-react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -58,44 +55,21 @@ const Logo = ({ size = "md" }: { size?: "sm" | "md" | "lg" }) => {
   );
 };
 
-const GaugeIllustration = ({ score = 80 }: { score?: number }) => (
-  <div className="relative w-40 h-40 flex items-center justify-center">
-    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 filter drop-shadow-[0_0_8px_rgba(239,89,62,0.4)]">
-      <circle cx="50" cy="50" r="45" fill="none" stroke="#F1F5F9" strokeWidth="10" />
-      <circle 
-        cx="50" cy="50" r="45" fill="none" stroke="#EF593E" strokeWidth="10" 
-        strokeDasharray="283" 
-        strokeDashoffset={283 - (283 * score) / 100}
-        strokeLinecap="round"
-        className="transition-all duration-1000 ease-out"
-      />
-    </svg>
-    <div className="absolute inset-0 flex flex-col items-center justify-center">
-      <span className="text-3xl font-black text-[#EF593E] leading-none">{score}%</span>
-      <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Match</span>
-    </div>
-  </div>
-);
-
 const HeroIllustration = () => (
   <div className="relative w-full max-w-[500px] mx-auto filter drop-shadow-[0_0_20px_rgba(239,89,62,0.15)]">
     <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-      {/* Background Shapes */}
       <circle cx="400" cy="300" r="250" fill="#EF593E" fillOpacity="0.03" />
       <rect x="250" y="100" width="300" height="400" rx="30" fill="white" stroke="#F1F5F9" strokeWidth="4" transform="rotate(-5 400 300)" />
       
-      {/* Headset Character Avatar */}
       <g transform="translate(340, 180)">
         <circle cx="60" cy="60" r="60" fill="#F8FAFC" />
         <circle cx="60" cy="45" r="30" fill="#EF593E" fillOpacity="0.9" />
         <path d="M30 90C30 73 90 73 90 90" stroke="#1E293B" strokeWidth="6" fill="none" strokeLinecap="round" />
-        {/* Headset */}
         <path d="M35 45C35 25 85 25 85 45" stroke="#1E293B" strokeWidth="4" fill="none" />
         <rect x="25" y="40" width="12" height="20" rx="4" fill="#1E293B" />
         <rect x="83" y="40" width="12" height="20" rx="4" fill="#1E293B" />
       </g>
 
-      {/* Floating Resume Cards */}
       <g className="filter drop-shadow-xl">
         <rect x="460" y="240" width="160" height="20" rx="10" fill="#EF593E" />
         <rect x="460" y="275" width="220" height="20" rx="10" fill="#EF593E" />
@@ -259,29 +233,78 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How it works section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-6 text-center">
-            <h2 className="text-2xl font-black text-slate-900 mb-12 uppercase tracking-tight">How to use the resume checker</h2>
-            <div className="grid md:grid-cols-4 gap-8">
-              {[
-                { step: 1, title: "Upload Resume", desc: "Upload your existing resume in PDF or DOCX format." },
-                { step: 2, title: "AI Analysis", desc: "Our AI scans your content against industry ATS standards." },
-                { step: 3, title: "Get Results", desc: "Receive a score and actionable improvement tips." },
-                { step: 4, title: "80% Good Match", desc: "Optimize until you reach a winning score.", visual: <GaugeIllustration /> }
-              ].map((s) => (
-                <div key={s.step} className="space-y-4 group p-6 rounded-2xl transition-all hover:border-[#EF593E] border border-transparent hover:shadow-xl hover:shadow-[#EF593E]/5">
-                  <div className="w-12 h-12 rounded-full bg-[#EF593E]/10 flex items-center justify-center text-[#EF593E] font-black mx-auto transition-colors group-hover:bg-[#EF593E] group-hover:text-white">{s.step}</div>
-                  <h3 className="font-bold text-lg text-slate-900">{s.title}</h3>
-                  <p className="text-slate-500 text-sm">{s.desc}</p>
-                  {s.visual && <div className="flex justify-center pt-2">{s.visual}</div>}
+        {/* How it works section - Replaced with high-fidelity stacked cards */}
+        <section className="py-24 bg-slate-50/30">
+          <div className="container mx-auto px-6 max-w-5xl space-y-8">
+            <div className="text-center mb-16">
+               <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">How to use the resume checker</h2>
+            </div>
+            
+            {/* Step 2 Card */}
+            <div className="bg-white border border-slate-100 rounded-[32px] p-8 lg:p-16 flex flex-col lg:flex-row items-center gap-12 shadow-sm transition-all hover:border-[#EF593E] group">
+              <div className="flex-1 space-y-6">
+                <span className="text-xs font-black uppercase tracking-[0.2em] text-[#EF593E]">Step 2</span>
+                <h3 className="text-3xl font-black text-slate-900 leading-tight">Click the "Analyzer" tab to check your resume score</h3>
+                <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                  Open the Analyzer tab to see your resume score, personalized findings, and recommendations—automatically generated by the Network Bulls AI.
+                </p>
+                <p className="text-slate-400 text-xs font-bold">No setup. No extra steps. Just instant insight.</p>
+              </div>
+              <div className="w-full lg:w-[350px] h-[180px] bg-slate-50 rounded-2xl relative flex items-center justify-center border border-slate-100 overflow-hidden">
+                <div className="flex items-center gap-6 text-slate-300">
+                  <FileText className="h-6 w-6" />
+                  <Lightbulb className="h-6 w-6" />
+                  <div className="relative">
+                    <div className="w-14 h-14 rounded-full bg-[#334155] flex items-center justify-center text-white shadow-xl relative z-10">
+                      <PieChart className="h-7 w-7" />
+                    </div>
+                    <div className="absolute top-10 right-0 z-20 translate-x-1 translate-y-2">
+                       <MousePointer2 className="h-8 w-8 text-[#EF593E] fill-[#EF593E]" />
+                    </div>
+                  </div>
+                  <ArrowLeftRight className="h-6 w-6" />
+                  <Brush className="h-6 w-6" />
                 </div>
-              ))}
+              </div>
+            </div>
+
+            {/* Step 3 Card */}
+            <div className="bg-white border border-slate-100 rounded-[32px] p-8 lg:p-16 flex flex-col lg:flex-row items-center gap-12 shadow-sm transition-all hover:border-[#EF593E] group">
+              <div className="flex-1 space-y-6">
+                <span className="text-xs font-black uppercase tracking-[0.2em] text-[#EF593E]">Step 3</span>
+                <h3 className="text-3xl font-black text-slate-900 leading-tight">Review your resume score and see what needs fixing</h3>
+                <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                  Check the list of issues flagged by the ATS checker. Click any issue for a quick explanation, and use "Show Me" to jump to the exact section on your resume.
+                </p>
+              </div>
+              <div className="w-full lg:w-[400px] h-[220px] relative flex items-center justify-center">
+                {/* Score Circle Overlay */}
+                <div className="absolute left-0 z-20 -translate-x-4">
+                  <div className="w-24 h-24 rounded-full bg-white border-[6px] border-[#334155] shadow-2xl flex flex-col items-center justify-center">
+                    <span className="text-2xl font-black text-slate-900">75</span>
+                    <span className="text-[7px] font-bold uppercase text-slate-400 tracking-tighter">Overall Score</span>
+                  </div>
+                </div>
+                {/* Issue Card */}
+                <div className="w-[300px] bg-white border-2 border-orange-100 rounded-2xl p-6 shadow-xl relative">
+                   <div className="flex items-center gap-2 mb-3">
+                     <div className="w-2 h-2 rounded-full bg-[#EF593E]" />
+                     <span className="text-[10px] font-black uppercase text-[#EF593E] tracking-widest">Resume Structure</span>
+                   </div>
+                   <p className="text-xs font-bold text-slate-600 mb-6 leading-relaxed">Number of Achievements in<br />Work Experience #2</p>
+                   <div className="flex justify-end">
+                      <Button size="sm" className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-black uppercase text-[10px] h-8 px-4 rounded-full shadow-lg shadow-[#EF593E]/20">Show Me</Button>
+                   </div>
+                   <div className="absolute bottom-[-10px] right-[-10px] rotate-12">
+                     <MousePointer2 className="h-6 w-6 text-[#EF593E] fill-[#EF593E]" />
+                   </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Improved Feature Sections */}
+        {/* Quick ways to improve section */}
         <section className="py-12 bg-slate-50/50">
           <div className="container mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-12">
@@ -343,7 +366,6 @@ export default function Home() {
                         <div className="h-1 w-full bg-slate-100 rounded" />
                         <div className="h-1 w-full bg-slate-100 rounded" />
                      </div>
-                     {/* Floating Toolbar */}
                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white shadow-lg border border-slate-100 rounded-lg px-2 py-1 flex gap-1 animate-in slide-in-from-bottom-2 duration-700">
                         <div className="w-3 h-3 rounded bg-slate-100" />
                         <div className="w-3 h-3 rounded bg-[#EF593E]" />
