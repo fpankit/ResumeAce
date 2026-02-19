@@ -94,7 +94,6 @@ const Logo = () => (
   </div>
 );
 
-// --- Resume Renderer ---
 const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
   const { personal, summary, experience, skills } = data;
   const layoutStyle = {
@@ -123,9 +122,9 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
                 <p className="text-xs font-bold uppercase tracking-widest opacity-60">{personal.jobTitle}</p>
               </div>
               <div className="space-y-3 text-[10px] font-medium opacity-60">
-                <div>{personal.email}</div>
-                <div>{personal.phone}</div>
-                <div>{personal.location}</div>
+                <div className="flex items-center gap-2"><Mail className="h-3 w-3" /> {personal.email}</div>
+                <div className="flex items-center gap-2"><Phone className="h-3 w-3" /> {personal.phone}</div>
+                <div className="flex items-center gap-2"><MapPin className="h-3 w-3" /> {personal.location}</div>
               </div>
             </div>
             <div className="flex-1 space-y-10">
@@ -151,7 +150,6 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
         );
 
       case 'bold-header':
-      case 'professional':
         return (
           <div className="space-y-10">
             <div className="bg-slate-900 text-white p-10 -m-[60px] mb-10">
@@ -184,7 +182,6 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
         );
 
       case 'ats-minimal':
-      case 'ats':
         return (
           <div className="space-y-6 font-mono text-[11px] leading-tight text-black">
             <div className="text-center space-y-1 mb-8">
@@ -259,7 +256,6 @@ export default function ResumeBuilder() {
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
   const [lineHeight, setLineHeight] = useState(1.5);
   const [fontSize, setFontSize] = useState(13);
-  const [sectionSpacing, setSectionSpacing] = useState(24);
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   
@@ -349,14 +345,12 @@ export default function ResumeBuilder() {
 
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden no-print">
-      {/* Top Bar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
         <div className="flex items-center gap-3">
           <Link href="/"><Logo /></Link>
         </div>
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
-          <Button variant="ghost" className="text-slate-500 font-bold">History</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
           <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 shadow-lg shadow-orange-100 rounded-lg px-6">
             <Download className="h-4 w-4" /> Download PDF
@@ -364,23 +358,20 @@ export default function ResumeBuilder() {
         </div>
       </header>
 
-      {/* Main Container */}
       <div className="flex flex-1 pt-16 h-full">
-        {/* Left Panel */}
         <aside className="w-[500px] bg-white border-r flex flex-col relative z-20">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 sticky top-0 z-10">
-              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest">
+              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
                 <Layout className="h-4 w-4 mr-2" /> Design & Fonts
               </TabsTrigger>
-              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest">
+              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
                 <TypeIcon className="h-4 w-4 mr-2" /> Text Content
               </TabsTrigger>
             </TabsList>
 
             <ScrollArea className="flex-1">
               <div className="p-8">
-                {/* Templates Tab */}
                 <TabsContent value="templates" className="mt-0 space-y-10">
                   <section className="space-y-6">
                     <div className="flex items-center justify-between">
@@ -473,7 +464,6 @@ export default function ResumeBuilder() {
                   </section>
                 </TabsContent>
 
-                {/* Content Tab */}
                 <TabsContent value="content" className="mt-0 space-y-12">
                   <section className="space-y-6">
                     <div className="flex items-center gap-3">
@@ -568,13 +558,12 @@ export default function ResumeBuilder() {
                       ))}
                     </div>
                   </section>
-                </div>
+                </TabsContent>
               </div>
             </ScrollArea>
           </Tabs>
         </aside>
 
-        {/* Center Pane */}
         <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center">
           <div className="relative group mb-12">
             <ResumePreview 
@@ -584,8 +573,7 @@ export default function ResumeBuilder() {
               data={data}
               style={{
                 lineHeight,
-                fontSize,
-                sectionSpacing
+                fontSize
               }}
             />
             <div className="absolute -right-20 top-0 space-y-4 opacity-0 group-hover:opacity-100 transition-opacity no-print">
