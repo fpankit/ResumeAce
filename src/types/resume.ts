@@ -1,74 +1,108 @@
-
 export interface ResumeData {
   personal: {
     fullName: string;
+    middleName?: string;
     jobTitle: string;
     headline?: string;
     email: string;
     phone: string;
-    location: string;
+    location: {
+      street?: string;
+      city: string;
+      state?: string;
+      country: string;
+      zip?: string;
+    };
     linkedin?: string;
     github?: string;
     portfolio?: string;
+    twitter?: string;
+    stackoverflow?: string;
     dob?: string;
     nationality?: string;
+    maritalStatus?: string;
+    customContactLabel?: string;
+    customContactValue?: string;
   };
   summary: {
     content: string;
     asBullets: boolean;
+    jobTarget?: string;
+    coreStrengths: string[];
   };
   skills: {
     id: string;
-    category: string;
+    category: 'Programming Languages' | 'Frameworks & Libraries' | 'Databases' | 'Cloud & DevOps' | 'Tools' | 'Soft Skills' | 'Domain Skills' | 'Other';
     items: {
       id: string;
       name: string;
-      level: string; // Beginner, Intermediate, Advanced, Expert
+      level: number; // 0-100
       years?: string;
+      priority: 'Primary' | 'Secondary';
+      linkedCertification?: string;
     }[];
   }[];
   experience: {
     id: string;
     title: string;
     company: string;
+    website?: string;
     location: string;
-    employmentType: string;
-    startDate: string;
-    endDate: string;
+    industry?: string;
+    teamSize?: string;
+    reportingTo?: string;
+    employmentType: 'Full-time' | 'Part-time' | 'Contract' | 'Internship' | 'Freelance';
+    startMonth: string;
+    startYear: string;
+    endMonth?: string;
+    endYear?: string;
     current: boolean;
-    description: string;
-    metrics?: string;
-    technologies?: string;
+    responsibilities: string;
+    achievements: string;
+    technologies: string;
+    kpiMetrics?: string;
+    wasPromoted?: boolean;
+    reasonForLeaving?: string;
   }[];
   education: {
     id: string;
+    degreeType: string;
     degree: string;
     field: string;
+    specialization?: string;
     school: string;
+    schoolWebsite?: string;
     location: string;
-    startDate: string;
-    endDate: string;
+    startYear: string;
+    endYear: string;
     gpa?: string;
     honors?: string;
+    scholarships?: string;
+    thesisTitle?: string;
     coursework?: string;
+    activities?: string;
   }[];
   projects: {
     id: string;
     title: string;
+    role: string;
+    teamSize?: string;
+    duration?: string;
     description: string;
+    problemStatement?: string;
+    solutionApproach?: string;
     technologies: string;
     github?: string;
     live?: string;
-    duration?: string;
-    role?: string;
-    contributions: string;
+    impact?: string;
   }[];
   certifications: {
     id: string;
     name: string;
     org: string;
-    date: string;
-    id_number?: string;
+    issueDate: string;
+    expiryDate?: string;
+    credentialId?: string;
     url?: string;
   }[];
   achievements: {
@@ -76,6 +110,7 @@ export interface ResumeData {
     title: string;
     description: string;
     year: string;
+    category: 'Academic' | 'Professional' | 'Sports' | 'Other';
   }[];
   publications: {
     id: string;
@@ -83,11 +118,14 @@ export interface ResumeData {
     platform: string;
     year: string;
     link?: string;
+    doi?: string;
   }[];
   languages: {
     id: string;
     name: string;
-    level: string; // Basic, Conversational, Fluent, Native
+    reading: 'Basic' | 'Intermediate' | 'Advanced' | 'Native';
+    writing: 'Basic' | 'Intermediate' | 'Advanced' | 'Native';
+    speaking: 'Basic' | 'Intermediate' | 'Advanced' | 'Native';
   }[];
   interests: string[];
   customSections: {

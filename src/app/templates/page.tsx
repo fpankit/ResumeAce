@@ -1,35 +1,30 @@
-
 "use client";
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Download, 
-  Type as TypeIcon, 
-  Layout, 
   User, 
-  Plus, 
-  Trash2, 
   Check, 
   Sparkles,
   Loader2,
-  ChevronDown,
-  Eye,
-  EyeOff,
   Briefcase,
   GraduationCap,
   Code,
   Award,
-  BookOpen,
-  Languages,
-  Palette,
-  Settings,
-  MoreVertical,
-  Github,
-  Linkedin,
   Globe,
   PlusCircle,
-  FileText
+  FileText,
+  Trash2,
+  ChevronDown,
+  Layout,
+  Type as TypeIcon,
+  Settings,
+  Plus,
+  Linkedin,
+  Github,
+  Twitter,
+  ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -111,93 +106,111 @@ export default function ResumeBuilderPage() {
   const [selectedTemplateId, setSelectedTemplateId] = useState('classic');
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
-  const [lineHeight, setLineHeight] = useState(1.5);
-  const [fontSize, setFontSize] = useState(13);
-  const [sectionSpacing, setSectionSpacing] = useState(24);
+  const [lineHeight, setLineHeight] = useState(1.4);
+  const [fontSize, setFontSize] = useState(12);
+  const [sectionSpacing, setSectionSpacing] = useState(20);
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   
   const [data, setData] = useState<ResumeData>({
     personal: {
       fullName: 'Johnathan Doe',
-      jobTitle: 'Senior Software Engineer',
-      headline: 'Architecting scalable cloud solutions with 8+ years of expertise',
-      email: 'john.doe@example.com',
-      phone: '+1 (555) 000-1111',
-      location: 'New York, NY',
-      linkedin: 'linkedin.com/in/johndoe',
-      github: 'github.com/johndoe',
-      portfolio: 'johndoe.dev'
+      jobTitle: 'Principal Cloud Architect',
+      headline: 'Architecting high-availability systems for Fortune 500 companies',
+      email: 'j.doe@tech-pioneer.com',
+      phone: '+1 (555) 789-0123',
+      location: {
+        city: 'Seattle',
+        state: 'WA',
+        country: 'USA',
+        zip: '98101'
+      },
+      linkedin: 'linkedin.com/in/johndoe-arch',
+      github: 'github.com/johndoe-cloud',
+      portfolio: 'johndoe.cloud',
+      nationality: 'United States',
     },
     summary: {
-      content: 'Strategic and results-driven Senior Software Engineer with 8+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.',
-      asBullets: false
+      content: 'Principal Cloud Architect with over 12 years of experience in digital transformation. Expert at migrating legacy workloads to hybrid-cloud infrastructures with zero downtime. Proven track record of reducing operational costs by 35% while increasing system reliability to 99.99%.',
+      asBullets: false,
+      jobTarget: 'VP of Engineering / Principal Architect',
+      coreStrengths: ['Hybrid Cloud', 'SRE', 'Digital Transformation', 'Team Leadership']
     },
-    experience: [
-      {
-        id: '1',
-        title: 'Senior Software Engineer',
-        company: 'TechGlobal Solutions',
-        location: 'New York, NY',
-        employmentType: 'Full-time',
-        startDate: '2020-01-01',
-        endDate: '',
-        current: true,
-        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system.\nArchitected and implemented a real-time data processing pipeline using Kafka and Spark.',
-        metrics: 'Improved system scalability by 40% and reduced deployment time by 60%.',
-        technologies: 'Node.js, AWS, Kubernetes, Kafka, React'
-      }
-    ],
     skills: [
       {
         id: '1',
-        category: 'Technical Skills',
+        category: 'Programming Languages',
         items: [
-          { id: '1a', name: 'React', level: 'Expert', years: '6' },
-          { id: '1b', name: 'Next.js', level: 'Expert', years: '4' }
+          { id: '1a', name: 'Python', level: 95, years: '10', priority: 'Primary' },
+          { id: '1b', name: 'Go', level: 85, years: '5', priority: 'Primary' }
         ]
+      },
+      {
+        id: '2',
+        category: 'Cloud & DevOps',
+        items: [
+          { id: '2a', name: 'AWS', level: 98, years: '8', priority: 'Primary' },
+          { id: '2b', name: 'Kubernetes', level: 92, years: '6', priority: 'Primary' }
+        ]
+      }
+    ],
+    experience: [
+      {
+        id: '1',
+        title: 'Principal Cloud Architect',
+        company: 'CloudScale Enterprises',
+        location: 'Seattle, WA',
+        employmentType: 'Full-time',
+        startMonth: 'January',
+        startYear: '2020',
+        current: true,
+        responsibilities: 'Oversee cloud strategy for the entire organization.\nLead a team of 15 senior engineers.',
+        achievements: 'Migrated 400+ applications to AWS with zero downtime.\nDesigned a serverless data processing engine handling 5TB/day.',
+        technologies: 'AWS, Terraform, Go, Python',
+        kpiMetrics: 'Reduced AWS monthly spend by $1.2M through optimization.',
+        teamSize: '15'
       }
     ],
     education: [
       { 
         id: '1', 
-        degree: 'B.S. Computer Science', 
-        field: 'Software Engineering',
-        school: 'MIT', 
-        location: 'Cambridge, MA',
-        startDate: '2012', 
-        endDate: '2016',
-        gpa: '3.9/4.0',
-        honors: 'Cum Laude'
+        degreeType: 'Master of Science',
+        degree: 'M.S. in Computer Science', 
+        field: 'Distributed Systems',
+        school: 'University of Washington', 
+        location: 'Seattle, WA',
+        startYear: '2012', 
+        endYear: '2014',
+        gpa: '3.95/4.0',
+        honors: 'President\'s Medalist'
       }
     ],
     projects: [
       {
         id: '1',
-        title: 'CloudFlow Orchestrator',
-        description: 'An open-source automation engine for multi-cloud deployments.',
-        technologies: 'Go, Docker, Terraform',
-        github: 'github.com/johndoe/cloudflow',
-        role: 'Lead Maintainer',
-        contributions: 'Implemented the core scheduling logic and AWS provider.'
+        title: 'AutoOptimizer Bot',
+        role: 'Lead Architect',
+        description: 'AI-driven tool for automated cloud cost reduction.',
+        technologies: 'Python, OpenAI API, AWS SDK',
+        impact: 'Saved initial beta users over 20% on cloud bills within 24 hours.'
       }
     ],
     certifications: [
-      { id: '1', name: 'AWS Solutions Architect', org: 'Amazon Web Services', date: '2022' }
+      { id: '1', name: 'AWS Certified Solutions Architect – Professional', org: 'Amazon', issueDate: '2022' }
     ],
     achievements: [
-      { id: '1', title: 'Top Performer 2023', description: 'Awarded for exceptional delivery of the Q3 infrastructure project.', year: '2023' }
+      { id: '1', title: 'Speaker at AWS re:Invent', description: 'Presented on serverless scaling strategies.', year: '2023', category: 'Professional' }
     ],
     publications: [],
     languages: [
-      { id: '1', name: 'English', level: 'Native' },
-      { id: '2', name: 'Spanish', level: 'Conversational' }
+      { id: '1', name: 'English', reading: 'Native', writing: 'Native', speaking: 'Native' }
     ],
-    interests: ['Blockchain', 'Open Source', 'Mountaineering'],
+    interests: ['Blockchain Architecture', 'Aviation', 'Deep Sea Fishing'],
     customSections: []
   });
 
   const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean>>({
+    personal: true,
     summary: true,
     experience: true,
     skills: true,
@@ -210,54 +223,30 @@ export default function ResumeBuilderPage() {
     publications: false
   });
 
-  const handlePersonalUpdate = (field: keyof ResumeData['personal'], value: string) => {
-    setData(prev => ({
-      ...prev,
-      personal: { ...prev.personal, [field]: value }
-    }));
-  };
-
-  const handleAiGenerate = async (type: 'summary' | 'experience', index?: number) => {
-    setIsGenerating(true);
-    try {
-      const keywords = type === 'summary' ? data.skills.flatMap(s => s.items.map(i => i.name)).join(', ') : data.experience[index!].description;
-      const res = await generateResumeContent({
-        type,
-        jobTitle: data.personal.jobTitle,
-        keywords: keywords || 'Professional growth, technical leadership'
-      });
-      
-      if (type === 'summary') {
-        setData(prev => ({ ...prev, summary: { ...prev.summary, content: res.generatedText } }));
-      } else {
-        const newExp = [...data.experience];
-        newExp[index!] = { ...newExp[index!], description: res.generatedText };
-        setData(prev => ({ ...prev, experience: newExp }));
+  const handlePersonalUpdate = (field: string, value: any) => {
+    setData(prev => {
+      if (field.includes('.')) {
+        const [obj, key] = field.split('.');
+        return {
+          ...prev,
+          [obj]: { ...(prev as any)[obj], [key]: value }
+        };
       }
-      
-      toast({
-        title: "AI Optimization Successful",
-        description: "Content refined for ATS compatibility.",
-      });
-    } catch (e: any) {
-      toast({
-        variant: "destructive",
-        title: "AI Service Error",
-        description: "Could not generate content. Please try again later.",
-      });
-    } finally {
-      setIsGenerating(false);
-    }
+      return {
+        ...prev,
+        personal: { ...prev.personal, [field]: value }
+      };
+    });
   };
 
   const addArrayItem = (key: keyof Omit<ResumeData, 'personal' | 'summary' | 'interests'>) => {
     const newItem: any = { id: Math.random().toString(36).substr(2, 9) };
     if (key === 'experience') {
-      Object.assign(newItem, { title: '', company: '', location: '', employmentType: 'Full-time', startDate: '', endDate: '', current: false, description: '' });
-    } else if (key === 'education') {
-      Object.assign(newItem, { degree: '', field: '', school: '', location: '', startDate: '', endDate: '' });
+      Object.assign(newItem, { title: '', company: '', location: '', employmentType: 'Full-time', startMonth: 'Jan', startYear: '2024', current: false, responsibilities: '', achievements: '', technologies: '' });
     } else if (key === 'skills') {
-      Object.assign(newItem, { category: 'New Category', items: [] });
+      Object.assign(newItem, { category: 'Other', items: [] });
+    } else if (key === 'projects') {
+      Object.assign(newItem, { title: '', role: '', description: '', technologies: '', solutionApproach: '' });
     }
     setData(prev => ({ ...prev, [key]: [...(prev[key] as any[]), newItem] }));
   };
@@ -267,24 +256,24 @@ export default function ResumeBuilderPage() {
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
         <Link href="/"><Logo /></Link>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Resume Editor</Button>
+          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Resume Editor Pro</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
           <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6 shadow-lg shadow-orange-100 transition-all active:scale-95">
-            <Download className="h-4 w-4" /> Download PDF
+            <Download className="h-4 w-4" /> Download Professional PDF
           </Button>
         </div>
       </header>
 
       <div className="flex flex-1 pt-16 h-full overflow-hidden">
         {/* Editor Sidebar */}
-        <aside className="w-[550px] bg-white border-r flex flex-col h-full shrink-0">
+        <aside className="w-[600px] bg-white border-r flex flex-col h-full shrink-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 shrink-0">
-              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
-                <Layout className="h-4 w-4 mr-2" /> Design & Style
+              <TabsTrigger value="design" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
+                <Layout className="h-4 w-4 mr-2" /> Templates & Design
               </TabsTrigger>
               <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
-                <FileText className="h-4 w-4 mr-2" /> Content Editor
+                <FileText className="h-4 w-4 mr-2" /> Advanced Content
               </TabsTrigger>
             </TabsList>
 
@@ -292,11 +281,11 @@ export default function ResumeBuilderPage() {
               <div className="p-8 pb-32">
                 
                 {/* DESIGN TAB */}
-                <TabsContent value="templates" className="m-0 space-y-12">
+                <TabsContent value="design" className="m-0 space-y-12">
                   <section className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Templates</h3>
-                      <span className="text-[10px] font-bold text-slate-300">20 Styles</span>
+                      <span className="text-[10px] font-bold text-slate-300">20 Pro Layouts</span>
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       {TEMPLATES.map(template => (
@@ -328,21 +317,21 @@ export default function ResumeBuilderPage() {
                   </section>
 
                   <section className="space-y-8 pt-10 border-t">
-                    <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography & Theme</h3>
+                    <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Layout Controls</h3>
                     <div className="space-y-8">
                       <div className="grid grid-cols-5 gap-3">
                         {THEMES.map(theme => (
                           <button key={theme.id} onClick={() => setSelectedTheme(theme)} className={cn("w-full aspect-square rounded-xl border-4 transition-all shadow-sm", selectedTheme.id === theme.id ? "border-[#EF593E]" : "border-transparent")} style={{ backgroundColor: theme.primary }} />
                         ))}
                       </div>
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-2 gap-8">
                         <div className="space-y-4">
-                          <Label className="text-[10px] font-black uppercase text-slate-400">Font Size ({fontSize}px)</Label>
-                          <Slider value={[fontSize]} min={10} max={18} step={1} onValueChange={([v]) => setFontSize(v)} />
+                          <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Base Font Size ({fontSize}px)</Label>
+                          <Slider value={[fontSize]} min={9} max={16} step={1} onValueChange={([v]) => setFontSize(v)} />
                         </div>
                         <div className="space-y-4">
-                          <Label className="text-[10px] font-black uppercase text-slate-400">Line Height ({lineHeight})</Label>
-                          <Slider value={[lineHeight]} min={1} max={2.5} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
+                          <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Section Spacing ({sectionSpacing}px)</Label>
+                          <Slider value={[sectionSpacing]} min={10} max={40} step={2} onValueChange={([v]) => setSectionSpacing(v)} />
                         </div>
                       </div>
                     </div>
@@ -354,181 +343,270 @@ export default function ResumeBuilderPage() {
                   <Accordion type="multiple" defaultValue={['personal']} className="space-y-4">
                     
                     {/* PERSONAL DETAILS */}
-                    <AccordionItem value="personal" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
-                      <AccordionTrigger className="hover:no-underline py-4">
+                    <AccordionItem value="personal" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><User className="h-4 w-4 text-[#EF593E]" /></div>
-                          <span className="text-xs font-black uppercase tracking-widest">Personal Details</span>
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><User className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">1. Personal & Identity</span>
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent className="pt-2 pb-6 space-y-6">
-                        <div className="grid grid-cols-2 gap-4">
+                      <AccordionContent className="pt-2 pb-8 space-y-8">
+                        <div className="grid grid-cols-2 gap-6">
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Full Name</Label>
-                            <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl h-11" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">First & Last Name</Label>
+                            <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl h-11 bg-slate-50/50 border-slate-100" />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Headline / Tagline</Label>
-                            <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl h-11" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Job Title / Target</Label>
+                            <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl h-11 bg-slate-50/50 border-slate-100" />
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
+                        
+                        <div className="grid grid-cols-3 gap-6">
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-slate-400 uppercase">LinkedIn</Label>
-                            <Input value={data.personal.linkedin} onChange={(e) => handlePersonalUpdate('linkedin', e.target.value)} className="rounded-xl h-11" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Nationality</Label>
+                            <Input value={data.personal.nationality} onChange={(e) => handlePersonalUpdate('nationality', e.target.value)} className="rounded-xl h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-slate-400 uppercase">GitHub</Label>
-                            <Input value={data.personal.github} onChange={(e) => handlePersonalUpdate('github', e.target.value)} className="rounded-xl h-11" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">DOB</Label>
+                            <Input type="date" value={data.personal.dob} onChange={(e) => handlePersonalUpdate('dob', e.target.value)} className="rounded-xl h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Portfolio</Label>
-                            <Input value={data.personal.portfolio} onChange={(e) => handlePersonalUpdate('portfolio', e.target.value)} className="rounded-xl h-11" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Marital Status</Label>
+                            <Select value={data.personal.maritalStatus} onValueChange={(v) => handlePersonalUpdate('maritalStatus', v)}>
+                              <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
+                              <SelectContent>
+                                {['Single', 'Married', 'Prefer not to say'].map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 pt-4 border-t border-slate-100">
+                          <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Digital Presence & Links</h4>
+                          <div className="grid grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Linkedin className="h-3 w-3 text-blue-600" />
+                                <Label className="text-[10px] font-bold uppercase text-slate-500">LinkedIn URL</Label>
+                              </div>
+                              <Input value={data.personal.linkedin} onChange={(e) => handlePersonalUpdate('linkedin', e.target.value)} className="rounded-xl" placeholder="linkedin.com/in/..." />
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Github className="h-3 w-3 text-slate-900" />
+                                <Label className="text-[10px] font-bold uppercase text-slate-500">GitHub Profile</Label>
+                              </div>
+                              <Input value={data.personal.github} onChange={(e) => handlePersonalUpdate('github', e.target.value)} className="rounded-xl" placeholder="github.com/..." />
+                            </div>
                           </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
 
                     {/* PROFESSIONAL SUMMARY */}
-                    <AccordionItem value="summary" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
-                      <AccordionTrigger className="hover:no-underline py-4">
+                    <AccordionItem value="summary" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><Sparkles className="h-4 w-4 text-[#EF593E]" /></div>
-                          <span className="text-xs font-black uppercase tracking-widest">Professional Summary</span>
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><Sparkles className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">2. Professional Profile</span>
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent className="pt-2 pb-6 space-y-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <div className="flex items-center gap-2">
+                      <AccordionContent className="pt-2 pb-8 space-y-6">
+                        <div className="flex justify-between items-center bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                          <div className="flex items-center gap-4">
                             <Switch checked={data.summary.asBullets} onCheckedChange={(v) => setData(prev => ({ ...prev, summary: { ...prev.summary, asBullets: v } }))} />
-                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Use Bullets</Label>
+                            <Label className="text-[10px] font-black uppercase text-slate-500">Bullet Format</Label>
                           </div>
-                          <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('summary')} className="text-[10px] font-black uppercase text-[#EF593E] h-8 gap-2">
-                            {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-4 w-4" />} AI Improve
+                          <Button size="sm" className="bg-[#EF593E] hover:bg-[#D44D35] text-white text-[10px] font-black uppercase h-8 px-4 gap-2 rounded-lg">
+                            <Sparkles className="h-3.5 w-3.5" /> AI Enhance
                           </Button>
                         </div>
                         <div className="relative">
                           <Textarea 
                             value={data.summary.content} 
                             onChange={(e) => setData(prev => ({ ...prev, summary: { ...prev.summary, content: e.target.value } }))} 
-                            className="min-h-[160px] rounded-2xl text-sm leading-relaxed" 
+                            className="min-h-[160px] rounded-2xl text-sm leading-relaxed border-slate-100" 
+                            placeholder="Briefly explain your career path and key value proposition..."
                           />
-                          <div className="absolute bottom-3 right-4 text-[10px] font-bold text-slate-300">
-                            {data.summary.content.length} characters
+                          <div className="absolute bottom-3 right-4 text-[10px] font-black text-slate-300 tracking-widest">
+                            {data.summary.content.length} / 800 CHARS
                           </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
 
                     {/* WORK EXPERIENCE */}
-                    <AccordionItem value="experience" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
-                      <AccordionTrigger className="hover:no-underline py-4">
+                    <AccordionItem value="experience" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><Briefcase className="h-4 w-4 text-[#EF593E]" /></div>
-                          <span className="text-xs font-black uppercase tracking-widest">Work Experience</span>
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><Briefcase className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">3. Work History & Impact</span>
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent className="pt-2 pb-6 space-y-6">
+                      <AccordionContent className="pt-2 pb-8 space-y-8">
                         {data.experience.map((exp, i) => (
-                          <div key={exp.id} className="p-6 rounded-3xl bg-slate-50 border space-y-6 group relative">
+                          <div key={exp.id} className="p-8 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-8 group relative transition-all hover:border-orange-200">
                             <Button variant="ghost" size="icon" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => setData(prev => ({ ...prev, experience: prev.experience.filter(e => e.id !== exp.id) }))}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
-                            <div className="grid grid-cols-2 gap-4">
-                              <Input placeholder="Job Title" value={exp.title} onChange={(e) => {
-                                const newExp = [...data.experience];
-                                newExp[i].title = e.target.value;
-                                setData(prev => ({ ...prev, experience: newExp }));
-                              }} className="h-10 text-xs rounded-xl" />
-                              <Input placeholder="Company" value={exp.company} onChange={(e) => {
-                                const newExp = [...data.experience];
-                                newExp[i].company = e.target.value;
-                                setData(prev => ({ ...prev, experience: newExp }));
-                              }} className="h-10 text-xs rounded-xl" />
+                            
+                            <div className="grid grid-cols-2 gap-6">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Job Title</Label>
+                                <Input value={exp.title} onChange={(e) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].title = e.target.value;
+                                  setData(prev => ({ ...prev, experience: newExp }));
+                                }} className="h-11 rounded-xl" placeholder="e.g. Senior Software Engineer" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Company Name</Label>
+                                <Input value={exp.company} onChange={(e) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].company = e.target.value;
+                                  setData(prev => ({ ...prev, experience: newExp }));
+                                }} className="h-11 rounded-xl" placeholder="e.g. Google" />
+                              </div>
                             </div>
-                            <div className="grid grid-cols-3 gap-4">
-                              <Input placeholder="Location" value={exp.location} onChange={(e) => {
-                                const newExp = [...data.experience];
-                                newExp[i].location = e.target.value;
-                                setData(prev => ({ ...prev, experience: newExp }));
-                              }} className="h-10 text-xs rounded-xl" />
-                              <Select value={exp.employmentType} onValueChange={(v) => {
-                                const newExp = [...data.experience];
-                                newExp[i].employmentType = v;
-                                setData(prev => ({ ...prev, experience: newExp }));
-                              }}>
-                                <SelectTrigger className="h-10 text-xs rounded-xl"><SelectValue placeholder="Type" /></SelectTrigger>
-                                <SelectContent>
-                                  {['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance'].map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                                </SelectContent>
-                              </Select>
-                              <div className="flex items-center gap-2">
+
+                            <div className="grid grid-cols-3 gap-6">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Employment Type</Label>
+                                <Select value={exp.employmentType} onValueChange={(v) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].employmentType = v as any;
+                                  setData(prev => ({ ...prev, experience: newExp }));
+                                }}>
+                                  <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
+                                  <SelectContent>
+                                    {['Full-time', 'Contract', 'Internship', 'Freelance'].map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Industry</Label>
+                                <Input value={exp.industry} onChange={(e) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].industry = e.target.value;
+                                  setData(prev => ({ ...prev, experience: newExp }));
+                                }} className="h-11 rounded-xl" placeholder="e.g. Fintech" />
+                              </div>
+                              <div className="flex items-center gap-4 pt-8">
                                 <Switch checked={exp.current} onCheckedChange={(v) => {
                                   const newExp = [...data.experience];
                                   newExp[i].current = v;
                                   setData(prev => ({ ...prev, experience: newExp }));
                                 }} />
-                                <Label className="text-[10px] font-bold uppercase">Current</Label>
+                                <Label className="text-[10px] font-black uppercase text-slate-500">Currently Working</Label>
                               </div>
                             </div>
-                            <Textarea placeholder="Describe achievements..." value={exp.description} onChange={(e) => {
-                              const newExp = [...data.experience];
-                              newExp[i].description = e.target.value;
-                              setData(prev => ({ ...prev, experience: newExp }));
-                            }} className="min-h-[120px] text-xs rounded-xl" />
-                            <div className="flex justify-end">
-                               <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('experience', i)} className="text-[10px] font-black uppercase text-[#EF593E] h-8 gap-2">
-                                <Sparkles className="h-4 w-4" /> AI Refine
-                              </Button>
+
+                            <div className="space-y-4 pt-4 border-t border-slate-100">
+                              <div className="flex items-center justify-between">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Primary Responsibilities</Label>
+                                <Button variant="ghost" className="h-7 text-[10px] font-black uppercase text-[#EF593E] gap-2">
+                                  <Sparkles className="h-3 w-3" /> Auto-Refine
+                                </Button>
+                              </div>
+                              <Textarea placeholder="What were your daily tasks? (Bullet format supported)" value={exp.responsibilities} onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].responsibilities = e.target.value;
+                                setData(prev => ({ ...prev, experience: newExp }));
+                              }} className="min-h-[120px] rounded-xl text-sm" />
+                            </div>
+
+                            <div className="space-y-4">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Key KPI / Performance Metrics</Label>
+                              <Input placeholder="e.g. Increased revenue by 20%, Reduced churn by 5%..." value={exp.kpiMetrics} onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].kpiMetrics = e.target.value;
+                                setData(prev => ({ ...prev, experience: newExp }));
+                              }} className="h-11 rounded-xl bg-orange-50/20 border-orange-100" />
                             </div>
                           </div>
                         ))}
-                        <Button variant="outline" className="w-full h-12 rounded-2xl border-dashed border-2 font-bold uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E] hover:bg-orange-50 transition-all" onClick={() => addArrayItem('experience')}>
-                          <PlusCircle className="h-4 w-4" /> Add Experience Entry
+                        <Button variant="outline" className="w-full h-14 rounded-2xl border-dashed border-2 font-black uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E] transition-all" onClick={() => addArrayItem('experience')}>
+                          <PlusCircle className="h-5 w-5" /> Add New Career Milestone
                         </Button>
                       </AccordionContent>
                     </AccordionItem>
 
-                    {/* SKILLS */}
-                    <AccordionItem value="skills" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
-                      <AccordionTrigger className="hover:no-underline py-4">
+                    {/* SKILLS SECTION */}
+                    <AccordionItem value="skills" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><Code className="h-4 w-4 text-[#EF593E]" /></div>
-                          <span className="text-xs font-black uppercase tracking-widest">Skills & Expertise</span>
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><Code className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">4. Skills & Core Competencies</span>
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent className="pt-2 pb-6 space-y-6">
-                         {data.skills.map((skillGroup, i) => (
-                           <div key={skillGroup.id} className="p-6 rounded-3xl bg-slate-50 border space-y-4">
-                              <Input value={skillGroup.category} onChange={(e) => {
+                      <AccordionContent className="pt-2 pb-8 space-y-8">
+                        {data.skills.map((skillGroup, i) => (
+                          <div key={skillGroup.id} className="p-8 rounded-3xl bg-slate-50 border-slate-100 space-y-6">
+                            <div className="flex justify-between items-center border-b border-slate-200 pb-4">
+                              <Select value={skillGroup.category} onValueChange={(v) => {
                                 const newSkills = [...data.skills];
-                                newSkills[i].category = e.target.value;
+                                newSkills[i].category = v as any;
                                 setData(prev => ({ ...prev, skills: newSkills }));
-                              }} className="h-10 text-[10px] font-black uppercase tracking-widest border-none bg-transparent focus-visible:ring-0" />
-                              <div className="flex flex-wrap gap-2">
-                                {skillGroup.items.map((skill, j) => (
-                                  <div key={skill.id} className="group flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border shadow-sm">
-                                    <span className="text-xs font-bold text-slate-700">{skill.name}</span>
-                                    <Button variant="ghost" size="icon" className="h-4 w-4 text-red-300 opacity-0 group-hover:opacity-100" onClick={() => {
+                              }}>
+                                <SelectTrigger className="w-64 h-10 rounded-xl bg-white font-black text-[10px] uppercase tracking-widest border-none">
+                                  <SelectValue placeholder="Category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {['Programming Languages', 'Frameworks & Libraries', 'Databases', 'Cloud & DevOps', 'Tools', 'Soft Skills', 'Domain Skills'].map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                                </SelectContent>
+                              </Select>
+                              <Button variant="ghost" size="icon" className="text-red-400" onClick={() => setData(prev => ({ ...prev, skills: prev.skills.filter(s => s.id !== skillGroup.id) }))}>
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            <div className="space-y-4">
+                              {skillGroup.items.map((skill, j) => (
+                                <div key={skill.id} className="grid grid-cols-12 gap-6 items-center bg-white p-4 rounded-2xl border border-slate-100 group">
+                                  <div className="col-span-4">
+                                    <Input value={skill.name} onChange={(e) => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items[j].name = e.target.value;
+                                      setData(prev => ({ ...prev, skills: newSkills }));
+                                    }} className="h-9 text-xs rounded-lg" placeholder="Skill Name" />
+                                  </div>
+                                  <div className="col-span-5 flex items-center gap-4">
+                                    <Slider value={[skill.level]} max={100} step={1} onValueChange={([v]) => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items[j].level = v;
+                                      setData(prev => ({ ...prev, skills: newSkills }));
+                                    }} />
+                                    <span className="text-[9px] font-black text-slate-400 w-8">{skill.level}%</span>
+                                  </div>
+                                  <div className="col-span-2">
+                                    <Input value={skill.years} onChange={(e) => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items[j].years = e.target.value;
+                                      setData(prev => ({ ...prev, skills: newSkills }));
+                                    }} className="h-9 text-[10px] text-center" placeholder="Exp Yrs" />
+                                  </div>
+                                  <div className="col-span-1 flex justify-end">
+                                    <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100" onClick={() => {
                                       const newSkills = [...data.skills];
                                       newSkills[i].items = newSkills[i].items.filter(it => it.id !== skill.id);
                                       setData(prev => ({ ...prev, skills: newSkills }));
                                     }}><Trash2 className="h-3 w-3" /></Button>
                                   </div>
-                                ))}
-                                <Button variant="ghost" size="sm" className="h-8 rounded-xl text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-100" onClick={() => {
-                                  const name = prompt('Skill Name:');
-                                  if (name) {
-                                    const newSkills = [...data.skills];
-                                    newSkills[i].items.push({ id: Math.random().toString(), name, level: 'Advanced' });
-                                    setData(prev => ({ ...prev, skills: newSkills }));
-                                  }
-                                }}>+ Add</Button>
-                              </div>
-                           </div>
-                         ))}
-                         <Button variant="outline" className="w-full h-12 rounded-2xl border-dashed border-2 font-bold uppercase text-[10px] gap-2 text-slate-400" onClick={() => addArrayItem('skills')}>
-                          <PlusCircle className="h-4 w-4" /> Add Skill Category
+                                </div>
+                              ))}
+                              <Button variant="ghost" className="w-full h-10 rounded-xl text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50 border border-dashed border-orange-200" onClick={() => {
+                                const newSkills = [...data.skills];
+                                newSkills[i].items.push({ id: Math.random().toString(), name: '', level: 50, priority: 'Primary' });
+                                setData(prev => ({ ...prev, skills: newSkills }));
+                              }}>
+                                <Plus className="h-3 w-3 mr-2" /> Add Skill in {skillGroup.category}
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                        <Button variant="outline" className="w-full h-14 rounded-2xl border-dashed border-2 font-black uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E]" onClick={() => addArrayItem('skills')}>
+                          <PlusCircle className="h-5 w-5" /> Add New Competency Group
                         </Button>
                       </AccordionContent>
                     </AccordionItem>
