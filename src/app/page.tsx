@@ -184,8 +184,51 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Step 3 Placeholder for scroll depth */}
-              <div className="h-48"></div>
+              {/* Step 3 Card */}
+              <div className="sticky top-52 z-30">
+                <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-amber-500/20 shadow-xl shadow-amber-500/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
+                  <div className="flex-1 space-y-6">
+                    <div className="text-amber-600 font-semibold text-lg">Step 3</div>
+                    <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+                      Review your resume score and see what needs fixing
+                    </h3>
+                    <p className="text-slate-500">
+                      Check the list of issues flagged by the ATS checker. Click any issue for a quick explanation, and use “Show Me” to jump to the exact section on your resume.
+                    </p>
+                  </div>
+                  <div className="flex-1 w-full max-w-md relative flex items-center justify-center">
+                    {/* Mockup Card */}
+                    <div className="bg-white border-2 border-amber-400 rounded-xl p-8 shadow-lg max-w-[320px] w-full space-y-4 relative">
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-amber-500 uppercase tracking-wider">
+                         <div className="w-2 h-2 rounded-full bg-amber-500" /> RESUME STRUCTURE
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-sm font-semibold text-slate-400 leading-tight">Number of Achievements in</div>
+                        <div className="text-sm font-semibold text-slate-400 leading-tight">Work Experience #2</div>
+                      </div>
+                      <div className="flex justify-end pt-2">
+                         <Button className="bg-[#FFB800] hover:bg-[#E6A600] text-black font-bold px-6 rounded-full h-10 text-sm">
+                           Show Me
+                         </Button>
+                      </div>
+                      
+                      {/* Overlapping Score Circle */}
+                      <div className="absolute -left-16 top-1/2 -translate-y-1/2">
+                         <div className="w-32 h-32 rounded-full bg-white shadow-2xl flex flex-col items-center justify-center border-4 border-[#004D40] relative z-10">
+                            <span className="text-4xl font-bold text-slate-900">75</span>
+                            <span className="text-[10px] font-medium text-slate-500 text-center leading-tight">Overall Score</span>
+                         </div>
+                      </div>
+                      
+                      {/* Mouse Pointer */}
+                      <MousePointer2 className="absolute -bottom-4 -right-2 h-10 w-10 text-blue-600 fill-blue-600 rotate-[20deg] z-20" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Spacer for scroll depth */}
+              <div className="h-64"></div>
             </div>
           </div>
         </section>
