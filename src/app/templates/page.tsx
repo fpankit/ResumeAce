@@ -348,7 +348,7 @@ export default function ResumeBuilderPage() {
                       </div>
                     ))}
                   </section>
-                </div>
+                </TabsContent>
               </div>
             </ScrollArea>
           </Tabs>
