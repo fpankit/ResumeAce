@@ -1,7 +1,9 @@
+
 "use client";
 
 import React, { useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import { ResumeData } from '@/types/resume';
 
 // Templates
 import Classic from '@/components/resume-templates/Classic';
@@ -29,8 +31,8 @@ interface ResumeCanvasProps {
   templateId: string;
   theme: any;
   font: any;
-  data: any;
-  sections: any;
+  data: ResumeData;
+  sections: Record<string, boolean>;
   style?: {
     lineHeight: number;
     fontSize: number;
@@ -78,13 +80,12 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
         lineHeight: config.lineHeight,
       }}
     >
-      <div style={{ padding: '0px' }}>
-        <SelectedTemplate 
-          data={data} 
-          theme={theme} 
-          style={{ fontSize: config.fontSize, lineHeight: config.lineHeight }} 
-        />
-      </div>
+      <SelectedTemplate 
+        data={data} 
+        theme={theme} 
+        sections={sections}
+        style={{ fontSize: config.fontSize, lineHeight: config.lineHeight, sectionSpacing: config.sectionSpacing }} 
+      />
       
       <style jsx global>{`
         .resume-a4 {
@@ -94,12 +95,9 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
           width: 210mm;
           min-height: 297mm;
           margin: auto;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
           position: relative;
           overflow: hidden;
-        }
-        .resume-body {
-          font-size: 1em;
         }
         @media print {
           .resume-a4 {
@@ -107,6 +105,8 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
             padding: 40px !important;
             box-shadow: none !important;
             margin: 0 !important;
+            width: 100%;
+            height: auto;
           }
         }
       `}</style>

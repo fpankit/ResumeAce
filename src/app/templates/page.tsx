@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -12,7 +13,23 @@ import {
   Check, 
   Sparkles,
   Loader2,
-  ChevronRight
+  ChevronDown,
+  Eye,
+  EyeOff,
+  Briefcase,
+  GraduationCap,
+  Code,
+  Award,
+  BookOpen,
+  Languages,
+  Palette,
+  Settings,
+  MoreVertical,
+  Github,
+  Linkedin,
+  Globe,
+  PlusCircle,
+  FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,10 +38,14 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { generateResumeContent } from '@/ai/flows/generate-resume-content';
 import { useToast } from '@/hooks/use-toast';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
+import { ResumeData } from '@/types/resume';
 
 const THEMES = [
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB' },
@@ -96,63 +117,110 @@ export default function ResumeBuilderPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   
-  const [data, setData] = useState({
+  const [data, setData] = useState<ResumeData>({
     personal: {
       fullName: 'Johnathan Doe',
       jobTitle: 'Senior Software Engineer',
+      headline: 'Architecting scalable cloud solutions with 8+ years of expertise',
       email: 'john.doe@example.com',
       phone: '+1 (555) 000-1111',
       location: 'New York, NY',
+      linkedin: 'linkedin.com/in/johndoe',
+      github: 'github.com/johndoe',
+      portfolio: 'johndoe.dev'
     },
-    summary: 'Strategic and results-driven Senior Software Engineer with 8+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.',
+    summary: {
+      content: 'Strategic and results-driven Senior Software Engineer with 8+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.',
+      asBullets: false
+    },
     experience: [
       {
         id: '1',
         title: 'Senior Software Engineer',
         company: 'TechGlobal Solutions',
-        period: 'Jan 2020 - Present',
-        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system.\nArchitected and implemented a real-time data processing pipeline using Kafka and Spark.'
+        location: 'New York, NY',
+        employmentType: 'Full-time',
+        startDate: '2020-01-01',
+        endDate: '',
+        current: true,
+        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system.\nArchitected and implemented a real-time data processing pipeline using Kafka and Spark.',
+        metrics: 'Improved system scalability by 40% and reduced deployment time by 60%.',
+        technologies: 'Node.js, AWS, Kubernetes, Kafka, React'
       }
     ],
-    skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS'],
+    skills: [
+      {
+        id: '1',
+        category: 'Technical Skills',
+        items: [
+          { id: '1a', name: 'React', level: 'Expert', years: '6' },
+          { id: '1b', name: 'Next.js', level: 'Expert', years: '4' }
+        ]
+      }
+    ],
     education: [
-      { id: '1', degree: 'B.S. Computer Science', school: 'MIT', period: '2012-2016' }
-    ]
+      { 
+        id: '1', 
+        degree: 'B.S. Computer Science', 
+        field: 'Software Engineering',
+        school: 'MIT', 
+        location: 'Cambridge, MA',
+        startDate: '2012', 
+        endDate: '2016',
+        gpa: '3.9/4.0',
+        honors: 'Cum Laude'
+      }
+    ],
+    projects: [
+      {
+        id: '1',
+        title: 'CloudFlow Orchestrator',
+        description: 'An open-source automation engine for multi-cloud deployments.',
+        technologies: 'Go, Docker, Terraform',
+        github: 'github.com/johndoe/cloudflow',
+        role: 'Lead Maintainer',
+        contributions: 'Implemented the core scheduling logic and AWS provider.'
+      }
+    ],
+    certifications: [
+      { id: '1', name: 'AWS Solutions Architect', org: 'Amazon Web Services', date: '2022' }
+    ],
+    achievements: [
+      { id: '1', title: 'Top Performer 2023', description: 'Awarded for exceptional delivery of the Q3 infrastructure project.', year: '2023' }
+    ],
+    publications: [],
+    languages: [
+      { id: '1', name: 'English', level: 'Native' },
+      { id: '2', name: 'Spanish', level: 'Conversational' }
+    ],
+    interests: ['Blockchain', 'Open Source', 'Mountaineering'],
+    customSections: []
   });
 
-  const handlePersonalUpdate = (field: string, value: string) => {
+  const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean>>({
+    summary: true,
+    experience: true,
+    skills: true,
+    education: true,
+    projects: true,
+    certifications: true,
+    achievements: true,
+    languages: true,
+    interests: true,
+    publications: false
+  });
+
+  const handlePersonalUpdate = (field: keyof ResumeData['personal'], value: string) => {
     setData(prev => ({
       ...prev,
       personal: { ...prev.personal, [field]: value }
     }));
   };
 
-  const handleExperienceUpdate = (index: number, field: string, value: string) => {
-    setData(prev => {
-      const newExp = [...prev.experience];
-      newExp[index] = { ...newExp[index], [field]: value };
-      return { ...prev, experience: newExp };
-    });
-  };
-
-  const addExperience = () => {
-    setData(prev => ({
-      ...prev,
-      experience: [...prev.experience, { id: Math.random().toString(), title: '', company: '', period: '', description: '' }]
-    }));
-  };
-
-  const removeExperience = (index: number) => {
-    setData(prev => ({
-      ...prev,
-      experience: prev.experience.filter((_, i) => i !== index)
-    }));
-  };
-
   const handleAiGenerate = async (type: 'summary' | 'experience', index?: number) => {
     setIsGenerating(true);
     try {
-      const keywords = type === 'summary' ? data.skills.join(', ') : data.experience[index!].description;
+      const keywords = type === 'summary' ? data.skills.flatMap(s => s.items.map(i => i.name)).join(', ') : data.experience[index!].description;
       const res = await generateResumeContent({
         type,
         jobTitle: data.personal.jobTitle,
@@ -160,24 +228,38 @@ export default function ResumeBuilderPage() {
       });
       
       if (type === 'summary') {
-        setData(prev => ({ ...prev, summary: res.generatedText }));
+        setData(prev => ({ ...prev, summary: { ...prev.summary, content: res.generatedText } }));
       } else {
-        handleExperienceUpdate(index!, 'description', res.generatedText);
+        const newExp = [...data.experience];
+        newExp[index!] = { ...newExp[index!], description: res.generatedText };
+        setData(prev => ({ ...prev, experience: newExp }));
       }
       
       toast({
-        title: "AI Generation Successful",
-        description: "Your content has been optimized for ATS compatibility.",
+        title: "AI Optimization Successful",
+        description: "Content refined for ATS compatibility.",
       });
     } catch (e: any) {
       toast({
         variant: "destructive",
-        title: "AI Generation Failed",
-        description: e.message || "Failed to generate content. Please try again.",
+        title: "AI Service Error",
+        description: "Could not generate content. Please try again later.",
       });
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const addArrayItem = (key: keyof Omit<ResumeData, 'personal' | 'summary' | 'interests'>) => {
+    const newItem: any = { id: Math.random().toString(36).substr(2, 9) };
+    if (key === 'experience') {
+      Object.assign(newItem, { title: '', company: '', location: '', employmentType: 'Full-time', startDate: '', endDate: '', current: false, description: '' });
+    } else if (key === 'education') {
+      Object.assign(newItem, { degree: '', field: '', school: '', location: '', startDate: '', endDate: '' });
+    } else if (key === 'skills') {
+      Object.assign(newItem, { category: 'New Category', items: [] });
+    }
+    setData(prev => ({ ...prev, [key]: [...(prev[key] as any[]), newItem] }));
   };
 
   return (
@@ -185,206 +267,288 @@ export default function ResumeBuilderPage() {
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
         <Link href="/"><Logo /></Link>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
+          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Resume Editor</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
-          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6 shadow-lg shadow-orange-100">
+          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6 shadow-lg shadow-orange-100 transition-all active:scale-95">
             <Download className="h-4 w-4" /> Download PDF
           </Button>
         </div>
       </header>
 
       <div className="flex flex-1 pt-16 h-full overflow-hidden">
-        {/* Left Side: Editor (Scrollable) */}
-        <aside className="w-[500px] bg-white border-r flex flex-col h-full shrink-0">
+        {/* Editor Sidebar */}
+        <aside className="w-[550px] bg-white border-r flex flex-col h-full shrink-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 shrink-0">
-              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest transition-all">
-                <Layout className="h-4 w-4 mr-2" /> Templates & Styles
+              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
+                <Layout className="h-4 w-4 mr-2" /> Design & Style
               </TabsTrigger>
-              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest transition-all">
-                <TypeIcon className="h-4 w-4 mr-2" /> Text Content
+              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
+                <FileText className="h-4 w-4 mr-2" /> Content Editor
               </TabsTrigger>
             </TabsList>
 
-            <ScrollArea className="flex-1 w-full">
-              <div className="p-10 space-y-12">
+            <ScrollArea className="flex-1 w-full bg-slate-50/30">
+              <div className="p-8 pb-32">
                 
-                {/* Templates Tab */}
+                {/* DESIGN TAB */}
                 <TabsContent value="templates" className="m-0 space-y-12">
                   <section className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Select Template</h3>
-                      <span className="text-[10px] font-bold text-slate-300">20 Styles Available</span>
+                      <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Templates</h3>
+                      <span className="text-[10px] font-bold text-slate-300">20 Styles</span>
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       {TEMPLATES.map(template => (
                         <div key={template.id} className="group cursor-pointer space-y-3" onClick={() => setSelectedTemplateId(template.id)}>
                           <div className={cn(
-                            "relative aspect-[3/4] bg-slate-50 rounded-2xl border-2 transition-all duration-300 overflow-hidden flex items-center justify-center",
-                            selectedTemplateId === template.id 
-                              ? "border-[#EF593E] ring-4 ring-orange-50 shadow-xl" 
-                              : "border-slate-100 hover:border-slate-300 shadow-sm"
+                            "relative aspect-[3/4] bg-white rounded-2xl border-2 transition-all duration-300 overflow-hidden shadow-sm flex items-center justify-center",
+                            selectedTemplateId === template.id ? "border-[#EF593E] ring-4 ring-orange-50" : "border-slate-100 hover:border-slate-300"
                           )}>
-                            <div className="absolute inset-4 space-y-2 opacity-20">
+                             <div className="absolute inset-4 space-y-2 opacity-10">
                               <div className="h-4 w-1/2 bg-slate-400 rounded" />
                               <div className="h-10 w-full bg-slate-300 rounded" />
                               <div className="h-2 w-full bg-slate-200 rounded" />
                             </div>
                             {selectedTemplateId === template.id && (
-                              <div className="absolute inset-0 bg-white/40 flex items-center justify-center">
-                                <div className="w-10 h-10 rounded-full bg-[#EF593E] flex items-center justify-center text-white shadow-xl animate-in zoom-in-50 duration-300">
+                              <div className="absolute inset-0 bg-orange-500/10 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-full bg-[#EF593E] flex items-center justify-center text-white shadow-xl animate-in zoom-in-50">
                                   <Check className="h-5 w-5" />
                                 </div>
                               </div>
                             )}
                           </div>
                           <div className="text-center">
-                            <p className="text-xs font-black uppercase text-slate-800 tracking-tight">{template.name}</p>
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{template.category}</p>
+                            <p className="text-xs font-black uppercase text-slate-800">{template.name}</p>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase">{template.category}</p>
                           </div>
                         </div>
                       ))}
                     </div>
                   </section>
+
                   <section className="space-y-8 pt-10 border-t">
                     <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography & Theme</h3>
                     <div className="space-y-8">
                       <div className="grid grid-cols-5 gap-3">
                         {THEMES.map(theme => (
-                          <button 
-                            key={theme.id} 
-                            onClick={() => setSelectedTheme(theme)}
-                            className={cn(
-                              "w-full aspect-square rounded-full border-4 transition-all shadow-sm",
-                              selectedTheme.id === theme.id ? "border-[#EF593E]" : "border-transparent"
-                            )}
-                            style={{ backgroundColor: theme.primary }}
-                          />
+                          <button key={theme.id} onClick={() => setSelectedTheme(theme)} className={cn("w-full aspect-square rounded-xl border-4 transition-all shadow-sm", selectedTheme.id === theme.id ? "border-[#EF593E]" : "border-transparent")} style={{ backgroundColor: theme.primary }} />
                         ))}
                       </div>
-                      <div className="space-y-4">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Font Size ({fontSize}px)</Label>
-                        <Slider value={[fontSize]} min={10} max={18} step={1} onValueChange={([v]) => setFontSize(v)} />
-                      </div>
-                      <div className="space-y-4">
-                        <Label className="text-[10px] font-black uppercase text-slate-400">Line Height ({lineHeight})</Label>
-                        <Slider value={[lineHeight]} min={1} max={2.5} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
+                      <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <Label className="text-[10px] font-black uppercase text-slate-400">Font Size ({fontSize}px)</Label>
+                          <Slider value={[fontSize]} min={10} max={18} step={1} onValueChange={([v]) => setFontSize(v)} />
+                        </div>
+                        <div className="space-y-4">
+                          <Label className="text-[10px] font-black uppercase text-slate-400">Line Height ({lineHeight})</Label>
+                          <Slider value={[lineHeight]} min={1} max={2.5} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
+                        </div>
                       </div>
                     </div>
                   </section>
                 </TabsContent>
 
-                {/* Content Tab */}
-                <TabsContent value="content" className="m-0 space-y-12">
-                  <section className="space-y-8">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
-                        <User className="h-4 w-4 text-[#EF593E]" />
-                      </div>
-                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-[0.2em]">Personal Details</h3>
-                    </div>
-                    <div className="grid grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400 opacity-60">Full Name</Label>
-                        <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl border-slate-100 h-11" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase text-slate-400 opacity-60">Job Title</Label>
-                        <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl border-slate-100 h-11" />
-                      </div>
-                    </div>
-                  </section>
-
-                  <section className="space-y-8 pt-10 border-t">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-[0.2em]">Summary</h3>
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
-                        onClick={() => handleAiGenerate('summary')} 
-                        disabled={isGenerating} 
-                        className="text-[10px] font-black uppercase text-[#EF593E] h-8 hover:bg-orange-50 gap-2"
-                      >
-                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} 
-                        AI Magic
-                      </Button>
-                    </div>
-                    <Textarea 
-                      value={data.summary} 
-                      onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))} 
-                      className="min-h-[140px] rounded-2xl text-sm leading-relaxed border-slate-100 shadow-sm" 
-                    />
-                  </section>
-
-                  <section className="space-y-8 pt-10 border-t">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-[0.2em]">Experience</h3>
-                      <Button 
-                        onClick={addExperience} 
-                        variant="ghost" 
-                        className="h-8 text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50 gap-1.5"
-                      >
-                        <Plus className="h-4 w-4" /> Add Entry
-                      </Button>
-                    </div>
-                    <div className="space-y-6">
-                      {data.experience.map((exp, i) => (
-                        <div key={exp.id} className="p-8 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-6 group relative hover:border-orange-200 transition-all">
-                          <Button 
-                            onClick={() => removeExperience(i)} 
-                            variant="ghost" 
-                            size="icon" 
-                            className="absolute top-4 right-4 h-8 w-8 opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-500 hover:bg-red-50 transition-all"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                          <div className="grid grid-cols-2 gap-4">
-                            <Input placeholder="Title" value={exp.title} onChange={(e) => handleExperienceUpdate(i, 'title', e.target.value)} className="h-10 text-xs rounded-xl bg-white border-slate-200" />
-                            <Input placeholder="Company" value={exp.company} onChange={(e) => handleExperienceUpdate(i, 'company', e.target.value)} className="h-10 text-xs rounded-xl bg-white border-slate-200" />
+                {/* CONTENT TAB */}
+                <TabsContent value="content" className="m-0 space-y-4">
+                  <Accordion type="multiple" defaultValue={['personal']} className="space-y-4">
+                    
+                    {/* PERSONAL DETAILS */}
+                    <AccordionItem value="personal" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
+                      <AccordionTrigger className="hover:no-underline py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><User className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest">Personal Details</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-6 space-y-6">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Full Name</Label>
+                            <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl h-11" />
                           </div>
-                          <div className="relative">
-                            <Textarea 
-                              placeholder="Achievements..." 
-                              value={exp.description} 
-                              onChange={(e) => handleExperienceUpdate(i, 'description', e.target.value)} 
-                              className="min-h-[120px] text-xs leading-relaxed rounded-xl bg-white border-slate-200" 
-                            />
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              onClick={() => handleAiGenerate('experience', i)} 
-                              disabled={isGenerating} 
-                              className="absolute bottom-2 right-2 h-7 px-3 text-[9px] font-black uppercase text-[#EF593E] bg-white/90 backdrop-blur shadow-sm hover:bg-white transition-all rounded-lg"
-                            >
-                              AI Refine
-                            </Button>
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Headline / Tagline</Label>
+                            <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl h-11" />
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </section>
-                </TabsContent>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-bold text-slate-400 uppercase">LinkedIn</Label>
+                            <Input value={data.personal.linkedin} onChange={(e) => handlePersonalUpdate('linkedin', e.target.value)} className="rounded-xl h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-bold text-slate-400 uppercase">GitHub</Label>
+                            <Input value={data.personal.github} onChange={(e) => handlePersonalUpdate('github', e.target.value)} className="rounded-xl h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Portfolio</Label>
+                            <Input value={data.personal.portfolio} onChange={(e) => handlePersonalUpdate('portfolio', e.target.value)} className="rounded-xl h-11" />
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
+                    {/* PROFESSIONAL SUMMARY */}
+                    <AccordionItem value="summary" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
+                      <AccordionTrigger className="hover:no-underline py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><Sparkles className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest">Professional Summary</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-6 space-y-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <div className="flex items-center gap-2">
+                            <Switch checked={data.summary.asBullets} onCheckedChange={(v) => setData(prev => ({ ...prev, summary: { ...prev.summary, asBullets: v } }))} />
+                            <Label className="text-[10px] font-bold text-slate-400 uppercase">Use Bullets</Label>
+                          </div>
+                          <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('summary')} className="text-[10px] font-black uppercase text-[#EF593E] h-8 gap-2">
+                            {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-4 w-4" />} AI Improve
+                          </Button>
+                        </div>
+                        <div className="relative">
+                          <Textarea 
+                            value={data.summary.content} 
+                            onChange={(e) => setData(prev => ({ ...prev, summary: { ...prev.summary, content: e.target.value } }))} 
+                            className="min-h-[160px] rounded-2xl text-sm leading-relaxed" 
+                          />
+                          <div className="absolute bottom-3 right-4 text-[10px] font-bold text-slate-300">
+                            {data.summary.content.length} characters
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* WORK EXPERIENCE */}
+                    <AccordionItem value="experience" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
+                      <AccordionTrigger className="hover:no-underline py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><Briefcase className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest">Work Experience</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-6 space-y-6">
+                        {data.experience.map((exp, i) => (
+                          <div key={exp.id} className="p-6 rounded-3xl bg-slate-50 border space-y-6 group relative">
+                            <Button variant="ghost" size="icon" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => setData(prev => ({ ...prev, experience: prev.experience.filter(e => e.id !== exp.id) }))}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <div className="grid grid-cols-2 gap-4">
+                              <Input placeholder="Job Title" value={exp.title} onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].title = e.target.value;
+                                setData(prev => ({ ...prev, experience: newExp }));
+                              }} className="h-10 text-xs rounded-xl" />
+                              <Input placeholder="Company" value={exp.company} onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].company = e.target.value;
+                                setData(prev => ({ ...prev, experience: newExp }));
+                              }} className="h-10 text-xs rounded-xl" />
+                            </div>
+                            <div className="grid grid-cols-3 gap-4">
+                              <Input placeholder="Location" value={exp.location} onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].location = e.target.value;
+                                setData(prev => ({ ...prev, experience: newExp }));
+                              }} className="h-10 text-xs rounded-xl" />
+                              <Select value={exp.employmentType} onValueChange={(v) => {
+                                const newExp = [...data.experience];
+                                newExp[i].employmentType = v;
+                                setData(prev => ({ ...prev, experience: newExp }));
+                              }}>
+                                <SelectTrigger className="h-10 text-xs rounded-xl"><SelectValue placeholder="Type" /></SelectTrigger>
+                                <SelectContent>
+                                  {['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance'].map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                </SelectContent>
+                              </Select>
+                              <div className="flex items-center gap-2">
+                                <Switch checked={exp.current} onCheckedChange={(v) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].current = v;
+                                  setData(prev => ({ ...prev, experience: newExp }));
+                                }} />
+                                <Label className="text-[10px] font-bold uppercase">Current</Label>
+                              </div>
+                            </div>
+                            <Textarea placeholder="Describe achievements..." value={exp.description} onChange={(e) => {
+                              const newExp = [...data.experience];
+                              newExp[i].description = e.target.value;
+                              setData(prev => ({ ...prev, experience: newExp }));
+                            }} className="min-h-[120px] text-xs rounded-xl" />
+                            <div className="flex justify-end">
+                               <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('experience', i)} className="text-[10px] font-black uppercase text-[#EF593E] h-8 gap-2">
+                                <Sparkles className="h-4 w-4" /> AI Refine
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                        <Button variant="outline" className="w-full h-12 rounded-2xl border-dashed border-2 font-bold uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E] hover:bg-orange-50 transition-all" onClick={() => addArrayItem('experience')}>
+                          <PlusCircle className="h-4 w-4" /> Add Experience Entry
+                        </Button>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* SKILLS */}
+                    <AccordionItem value="skills" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm">
+                      <AccordionTrigger className="hover:no-underline py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center"><Code className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest">Skills & Expertise</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-6 space-y-6">
+                         {data.skills.map((skillGroup, i) => (
+                           <div key={skillGroup.id} className="p-6 rounded-3xl bg-slate-50 border space-y-4">
+                              <Input value={skillGroup.category} onChange={(e) => {
+                                const newSkills = [...data.skills];
+                                newSkills[i].category = e.target.value;
+                                setData(prev => ({ ...prev, skills: newSkills }));
+                              }} className="h-10 text-[10px] font-black uppercase tracking-widest border-none bg-transparent focus-visible:ring-0" />
+                              <div className="flex flex-wrap gap-2">
+                                {skillGroup.items.map((skill, j) => (
+                                  <div key={skill.id} className="group flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border shadow-sm">
+                                    <span className="text-xs font-bold text-slate-700">{skill.name}</span>
+                                    <Button variant="ghost" size="icon" className="h-4 w-4 text-red-300 opacity-0 group-hover:opacity-100" onClick={() => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items = newSkills[i].items.filter(it => it.id !== skill.id);
+                                      setData(prev => ({ ...prev, skills: newSkills }));
+                                    }}><Trash2 className="h-3 w-3" /></Button>
+                                  </div>
+                                ))}
+                                <Button variant="ghost" size="sm" className="h-8 rounded-xl text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-100" onClick={() => {
+                                  const name = prompt('Skill Name:');
+                                  if (name) {
+                                    const newSkills = [...data.skills];
+                                    newSkills[i].items.push({ id: Math.random().toString(), name, level: 'Advanced' });
+                                    setData(prev => ({ ...prev, skills: newSkills }));
+                                  }
+                                }}>+ Add</Button>
+                              </div>
+                           </div>
+                         ))}
+                         <Button variant="outline" className="w-full h-12 rounded-2xl border-dashed border-2 font-bold uppercase text-[10px] gap-2 text-slate-400" onClick={() => addArrayItem('skills')}>
+                          <PlusCircle className="h-4 w-4" /> Add Skill Category
+                        </Button>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                  </Accordion>
+                </TabsContent>
               </div>
-              <div className="h-20 shrink-0" /> {/* Bottom Spacer */}
             </ScrollArea>
           </Tabs>
         </aside>
 
-        {/* Right Side: Preview (Scrollable) */}
+        {/* Preview Panel */}
         <main className="flex-1 bg-[#F1F5F9] overflow-auto p-12 lg:p-20 flex flex-col items-center">
-          <div className="scale-[0.85] lg:scale-100 origin-top transition-transform duration-500">
+          <div className="origin-top transition-transform duration-500 hover:scale-[1.01]">
             <ResumeCanvas 
               templateId={selectedTemplateId}
               theme={selectedTheme}
               font={selectedFont}
-              data={{...data, skills: data.skills}}
-              sections={{
-                summary: true,
-                skills: true,
-                experience: true,
-                education: true,
-              }}
+              data={data}
+              sections={sectionVisibility}
               style={{ fontSize, lineHeight, sectionSpacing }}
             />
           </div>
