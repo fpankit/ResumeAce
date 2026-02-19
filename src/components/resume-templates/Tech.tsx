@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
@@ -18,7 +19,7 @@ export default function Tech({ data, theme, style, sections }: TemplateProps) {
         <div className="flex flex-wrap gap-4 text-[10px] mt-4 opacity-40 uppercase">
           <span>{data.personal.email}</span>
           <span>{data.personal.phone}</span>
-          <span>{data.personal.location}</span>
+          <span>{data.personal.location.city}, {data.personal.location.country}</span>
           {data.personal.github && <span>{data.personal.github}</span>}
         </div>
       </header>
@@ -44,10 +45,12 @@ export default function Tech({ data, theme, style, sections }: TemplateProps) {
               <div key={exp.id} className="border-l border-slate-100 pl-4 ml-0.5">
                 <div className="flex justify-between font-bold text-slate-900">
                   <span>{exp.title}</span>
-                  <span className="text-[10px] text-slate-400">{exp.startDate} - {exp.current ? 'NOW' : exp.endDate}</span>
+                  <span className="text-[10px] text-slate-400">{exp.startMonth} {exp.startYear} - {exp.current ? 'NOW' : `${exp.endMonth} ${exp.endYear}`}</span>
                 </div>
                 <p className="text-[11px] font-bold uppercase mb-2" style={{ color: theme.accent }}>{exp.company}</p>
-                <div className="text-xs text-slate-500 whitespace-pre-wrap leading-relaxed mb-2">• {exp.description.replace(/\n/g, '\n• ')}</div>
+                <div className="text-xs text-slate-500 whitespace-pre-wrap leading-relaxed mb-2">
+                  {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
+                </div>
                 {exp.technologies && (
                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Stack: {exp.technologies}</p>
                 )}

@@ -18,7 +18,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
           <span>•</span>
           <span>{data.personal.phone}</span>
           <span>•</span>
-          <span>{data.personal.location}</span>
+          <span>{data.personal.location.city}, {data.personal.location.country}</span>
           {data.personal.linkedin && (
             <>
               <span>•</span>
@@ -48,15 +48,30 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
             <div key={exp.id} className="mb-6 last:mb-0">
               <div className="flex justify-between font-bold">
                 <span className="text-slate-900">{exp.title}</span>
-                <span className="text-slate-400 text-[10px]">{exp.startDate} — {exp.current ? 'Present' : exp.endDate}</span>
+                <span className="text-slate-400 text-[10px]">{exp.startMonth} {exp.startYear} — {exp.current ? 'Present' : `${exp.endMonth} ${exp.endYear}`}</span>
               </div>
               <div className="flex justify-between items-center text-[11px] font-bold uppercase mb-2">
                 <span style={{ color: theme.accent }}>{exp.company}</span>
                 <span className="text-slate-400 opacity-60">{exp.employmentType} | {exp.location}</span>
               </div>
-              <p className="text-slate-600 whitespace-pre-wrap text-sm leading-relaxed mb-2">• {exp.description.replace(/\n/g, '\n• ')}</p>
+              
+              {exp.responsibilities && (
+                <div className="text-slate-600 whitespace-pre-wrap text-sm leading-relaxed mb-2">
+                  {exp.responsibilities.split('\n').map((line, i) => line && <p key={i} className="flex gap-2"><span className="opacity-40">•</span> {line}</p>)}
+                </div>
+              )}
+              
+              {exp.achievements && (
+                <div className="mt-2 pl-4 border-l-2 border-slate-100 italic">
+                   <p className="text-[10px] font-black uppercase text-slate-400 mb-1">Key Impact</p>
+                   <div className="text-slate-500 text-xs">
+                    {exp.achievements.split('\n').map((line, i) => line && <p key={i}>{line}</p>)}
+                   </div>
+                </div>
+              )}
+
               {exp.technologies && (
-                <p className="text-[10px] text-slate-400"><strong>Technologies:</strong> {exp.technologies}</p>
+                <p className="text-[10px] text-slate-400 mt-2"><strong>Technologies:</strong> {exp.technologies}</p>
               )}
             </div>
           ))}
@@ -72,7 +87,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
                 <span className="text-[10px] font-black uppercase text-slate-400 w-32 shrink-0">{group.category}</span>
                 <div className="flex flex-wrap gap-x-3 gap-y-1">
                   {group.items.map(skill => (
-                    <span key={skill.id} className="text-xs text-slate-600">{skill.name} <span className="text-[9px] opacity-40 font-bold">({skill.level})</span></span>
+                    <span key={skill.id} className="text-xs text-slate-600">{skill.name} <span className="text-[9px] opacity-40 font-bold">({skill.level}%)</span></span>
                   ))}
                 </div>
               </div>
@@ -88,7 +103,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
             <div key={edu.id} className="mb-4 last:mb-0">
               <div className="flex justify-between font-bold">
                 <span className="text-slate-900">{edu.degree} in {edu.field}</span>
-                <span className="text-slate-400 text-[10px]">{edu.startDate} — {edu.endDate}</span>
+                <span className="text-slate-400 text-[10px]">{edu.startYear} — {edu.endYear}</span>
               </div>
               <p className="text-xs font-bold text-slate-500 uppercase">{edu.school}, {edu.location}</p>
               {edu.gpa && <p className="text-[10px] text-slate-400 mt-1">GPA: {edu.gpa} {edu.honors && `• ${edu.honors}`}</p>}

@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
@@ -10,7 +11,7 @@ export default function ATSMinimal({ data, sections, style }: TemplateProps) {
       <header className="text-center border-b border-black pb-2">
         <h1 className="text-2xl font-bold uppercase">{data.personal.fullName}</h1>
         <p className="text-[10px] uppercase font-bold tracking-tight">
-          {data.personal.location} | {data.personal.phone} | {data.personal.email}
+          {data.personal.location.city}, {data.personal.location.state} | {data.personal.phone} | {data.personal.email}
           {data.personal.linkedin && ` | ${data.personal.linkedin}`}
         </p>
       </header>
@@ -29,13 +30,16 @@ export default function ATSMinimal({ data, sections, style }: TemplateProps) {
             <div key={exp.id} className="mb-3 last:mb-0">
               <div className="flex justify-between font-bold uppercase text-[11px]">
                 <span>{exp.company}</span>
-                <span>{exp.startDate} – {exp.current ? 'Present' : exp.endDate}</span>
+                <span>{exp.startMonth} {exp.startYear} – {exp.current ? 'Present' : `${exp.endMonth} ${exp.endYear}`}</span>
               </div>
               <div className="flex justify-between items-baseline italic text-[10px]">
                 <span>{exp.title}</span>
                 <span>{exp.location}</span>
               </div>
-              <div className="text-[10px] whitespace-pre-wrap mt-1 leading-snug">• {exp.description.replace(/\n/g, '\n• ')}</div>
+              <div className="text-[10px] whitespace-pre-wrap mt-1 leading-snug">
+                {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
+                {(exp.achievements || '').split('\n').map((line, i) => line && <p key={i}>• Achievement: {line}</p>)}
+              </div>
             </div>
           ))}
         </section>
@@ -62,7 +66,7 @@ export default function ATSMinimal({ data, sections, style }: TemplateProps) {
               <div>
                 <span className="font-bold">{edu.school}</span>, {edu.location} — <span className="italic">{edu.degree} in {edu.field}</span>
               </div>
-              <span className="font-bold">{edu.endDate}</span>
+              <span className="font-bold">{edu.endYear}</span>
             </div>
           ))}
         </section>
