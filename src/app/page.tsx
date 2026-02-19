@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { 
   ChevronDown, 
@@ -14,17 +13,12 @@ import {
   FileText,
   Lightbulb,
   ArrowLeftRight,
-  Check,
-  Wand2,
-  List as ListIcon,
-  Loader2,
-  Search
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 const BullIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -32,23 +26,32 @@ const BullIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const Logo = () => (
-  <div className="flex items-center gap-2 group">
-    <div className="relative w-10 h-10 rounded-lg bg-[#EF593E] flex items-center justify-center text-white overflow-hidden">
-      <BullIcon className="w-8 h-8 opacity-90" />
-    </div>
-    <div className="flex flex-col -space-y-1">
-      <div className="flex items-center gap-1">
-        <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
-        <span className="text-[#44546A] font-black text-xl tracking-tighter uppercase">Bulls</span>
+const Logo = ({ size = "md" }: { size?: "sm" | "md" | "lg" }) => {
+  const sizes = {
+    sm: { icon: "w-6 h-6", text: "text-lg", subtext: "text-[6px]" },
+    md: { icon: "w-10 h-10", text: "text-xl", subtext: "text-[7px]" },
+    lg: { icon: "w-12 h-12", text: "text-2xl", subtext: "text-[8px]" }
+  };
+  const s = sizes[size];
+
+  return (
+    <div className="flex items-center gap-2 group">
+      <div className={`relative ${s.icon} rounded-lg bg-[#EF593E] flex items-center justify-center text-white overflow-hidden`}>
+        <BullIcon className="w-full h-full p-1 opacity-90" />
       </div>
-      <div className="flex items-center gap-1">
-        <div className="h-[1px] flex-1 bg-slate-200" />
-        <span className="text-[7px] text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Where Careers Fly</span>
+      <div className="flex flex-col -space-y-1">
+        <div className="flex items-center gap-1">
+          <span className={`text-[#EF593E] font-black ${s.text} tracking-tighter uppercase`}>Network</span>
+          <span className={`text-[#44546A] font-black ${s.text} tracking-tighter uppercase`}>Bulls</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="h-[1px] flex-1 bg-slate-200" />
+          <span className={`${s.subtext} text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap`}>Where Careers Fly</span>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ResumeIllustration = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
@@ -82,6 +85,7 @@ export default function Home() {
   const router = useRouter();
   const [isScanning, setIsScanning] = useState(false);
   const [scanStep, setScanStep] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const scanSteps = [
     "Uploading Document...",
@@ -111,66 +115,81 @@ export default function Home() {
 
   const handleUploadClick = () => {
     if (user) {
-      setIsScanning(true);
+      fileInputRef.current?.click();
     } else {
       router.push("/login?tab=signup");
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setIsScanning(true);
     }
   };
 
   if (isScanning) {
     return (
       <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-full max-w-md space-y-8 animate-in fade-in zoom-in duration-500">
-          <div className="relative mx-auto w-48 h-64 bg-slate-50 border-2 border-slate-200 rounded-xl overflow-hidden shadow-2xl">
-            {/* Animated Laser Line */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-primary/80 shadow-[0_0_15px_rgba(239,89,62,0.8)] z-10 animate-[scan_2s_linear_infinite]" />
-            
+        <div className="w-full max-w-md space-y-12 animate-in fade-in zoom-in duration-500">
+          {/* Scanning Document Visual */}
+          <div className="relative mx-auto w-48 h-64 bg-slate-50 border-2 border-slate-100 rounded-xl overflow-hidden shadow-2xl">
             {/* Simulated Content */}
-            <div className="p-4 space-y-3 opacity-20">
-              <div className="w-20 h-2 bg-slate-300 rounded" />
+            <div className="p-4 space-y-3 opacity-10">
+              <div className="w-16 h-2 bg-slate-300 rounded" />
               <div className="w-full h-2 bg-slate-200 rounded" />
               <div className="w-full h-2 bg-slate-200 rounded" />
               <div className="w-2/3 h-2 bg-slate-200 rounded" />
-              <div className="pt-4 space-y-2">
+              <div className="pt-6 space-y-2">
                 <div className="w-full h-2 bg-slate-200 rounded" />
                 <div className="w-full h-2 bg-slate-200 rounded" />
+                <div className="w-3/4 h-2 bg-slate-200 rounded" />
               </div>
             </div>
+            {/* Animated Laser Line */}
+            <div className="absolute top-0 left-0 w-full h-[3px] bg-[#EF593E] shadow-[0_0_12px_rgba(239,89,62,0.8)] z-10 animate-scan" />
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-center gap-3 text-[#EF593E]">
-              <Loader2 className="h-6 w-6 animate-spin" />
-              <h2 className="text-2xl font-black uppercase tracking-tight">ATS Analysis in Progress</h2>
+          <div className="space-y-6">
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-5 w-5 animate-spin text-[#EF593E]" />
+                <h2 className="text-2xl font-black text-[#EF593E] uppercase tracking-tighter">
+                  ATS Analysis in Progress
+                </h2>
+              </div>
+              <p className="text-slate-500 font-medium text-lg h-6">
+                {scanSteps[scanStep]}
+              </p>
             </div>
-            <p className="text-slate-500 font-medium h-6">{scanSteps[scanStep]}</p>
             
-            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            {/* Thick Progress Bar */}
+            <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
               <div 
-                className="bg-primary h-full transition-all duration-500 ease-out" 
+                className="bg-[#EF593E] h-full transition-all duration-500 ease-out" 
                 style={{ width: `${((scanStep + 1) / scanSteps.length) * 100}%` }}
               />
             </div>
           </div>
 
-          <div className="pt-8 opacity-40">
+          {/* Footer Logo */}
+          <div className="pt-12 flex justify-center opacity-80">
             <Logo />
           </div>
         </div>
-
-        <style jsx global>{`
-          @keyframes scan {
-            0% { top: 0; }
-            50% { top: 100%; }
-            100% { top: 0; }
-          }
-        `}</style>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+        className="hidden" 
+        accept=".pdf,.doc,.docx"
+      />
+      
       <header className="px-6 h-20 flex items-center bg-white border-b border-gray-100 sticky top-0 z-50">
         <Link className="flex items-center gap-2" href="/">
           <Logo />
@@ -186,9 +205,6 @@ export default function Home() {
             Cover Letter <ChevronDown className="h-4 w-4 opacity-50" />
           </button>
           <Link href="#" className="hover:text-[#EF593E] transition-colors">FAQ</Link>
-          <button className="flex items-center gap-1 hover:text-[#EF593E] transition-colors">
-            Resources <ChevronDown className="h-4 w-4 opacity-50" />
-          </button>
         </nav>
         <div className="ml-auto flex items-center gap-6">
           {!isUserLoading && (
@@ -257,120 +273,24 @@ export default function Home() {
 
         {/* How it works section */}
         <section className="py-16 bg-white overflow-visible">
-          <div className="container mx-auto px-6">
-            <h2 className="text-3xl font-black text-center text-slate-900 mb-16 uppercase tracking-tight">How to use the resume checker</h2>
-            <div className="relative space-y-16">
-              {/* Step 1 */}
-              <div className="sticky top-28 z-10">
-                <div className="bg-white rounded-3xl p-8 lg:p-12 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[350px] flex flex-col lg:flex-row gap-10 items-center">
-                  <div className="flex-1 space-y-4">
-                    <div className="text-[#EF593E] font-bold text-base uppercase tracking-wider">Step 1</div>
-                    <h3 className="text-2xl lg:text-3xl font-black text-slate-900 leading-tight">
-                      Import your existing resume into the resume builder
-                    </h3>
-                    <p className="text-sm lg:text-base text-slate-500">
-                      Upload your resume or import from LinkedIn. (Or start from scratch.)
-                      <br /><br />
-                      You&apos;ll get structured sections and tools to help you organize fast.
-                    </p>
-                  </div>
-                  <div className="flex-1 w-full max-w-sm space-y-4">
-                    <div className="bg-white border border-slate-200 rounded-lg p-2">
-                      <Input disabled placeholder="www.linkedin.com/in/yourprofileurl" className="bg-slate-50/50 border-none shadow-none text-[10px]" />
-                    </div>
-                    <Button variant="outline" className="w-full h-10 gap-2 border-[#EF593E]/20 bg-[#EF593E]/5 text-slate-600 font-bold text-xs">
-                      <Linkedin className="h-4 w-4 text-[#0077B5]" /> Import LinkedIn Profile Data
-                    </Button>
-                    <div className="relative border-2 border-dashed border-slate-200 rounded-xl p-6 flex flex-col items-center justify-center text-center space-y-2 bg-slate-50/30 group">
-                      <Upload className="h-5 w-5 text-slate-400" />
-                      <p className="text-[10px] text-slate-400">Drag & Drop your resume here or click to select a file (.doc or .pdf).</p>
-                      <MousePointer2 className="absolute -bottom-3 -right-3 h-8 w-8 text-[#EF593E] fill-[#EF593E] rotate-[20deg]" />
-                    </div>
-                  </div>
-                </div>
+          <div className="container mx-auto px-6 text-center">
+            <h2 className="text-3xl font-black text-slate-900 mb-16 uppercase tracking-tight">How to use the resume checker</h2>
+            <div className="grid md:grid-cols-3 gap-12">
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#EF593E]/10 flex items-center justify-center text-[#EF593E] font-bold mx-auto">1</div>
+                <h3 className="font-bold text-xl">Upload Resume</h3>
+                <p className="text-slate-500 text-sm">Upload your existing resume in PDF or DOCX format.</p>
               </div>
-              
-              {/* Step 2 */}
-              <div className="sticky top-36 z-20">
-                <div className="bg-white rounded-3xl p-8 lg:p-12 border-2 border-accent/20 shadow-xl shadow-accent/5 min-h-[350px] flex flex-col lg:flex-row gap-10 items-center">
-                  <div className="flex-1 space-y-4">
-                    <div className="text-accent font-bold text-base uppercase tracking-wider">Step 2</div>
-                    <h3 className="text-2xl lg:text-3xl font-black text-slate-900 leading-tight">
-                      Click the &quot;Analyzer&quot; tab to check your resume score
-                    </h3>
-                    <p className="text-sm lg:text-base text-slate-500">
-                      Open the Analyzer tab to see your resume score, personalized findings, and recommendations—automatically generated by the Network Bulls AI.
-                    </p>
-                  </div>
-                  <div className="flex-1 w-full max-w-sm flex items-center justify-center gap-6 lg:gap-8">
-                    <FileText className="h-8 w-8 text-slate-300" />
-                    <Lightbulb className="h-8 w-8 text-slate-300" />
-                    <div className="relative">
-                       <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center text-white shadow-2xl">
-                          <PieChart className="h-8 w-8" />
-                       </div>
-                       <MousePointer2 className="absolute -bottom-4 -right-1 h-8 w-8 text-[#EF593E] fill-[#EF593E] rotate-[20deg]" />
-                    </div>
-                    <ArrowLeftRight className="h-8 w-8 text-slate-300" />
-                  </div>
-                </div>
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#EF593E]/10 flex items-center justify-center text-[#EF593E] font-bold mx-auto">2</div>
+                <h3 className="font-bold text-xl">AI Analysis</h3>
+                <p className="text-slate-500 text-sm">Our AI scans your content against industry ATS standards.</p>
               </div>
-
-              {/* Step 3 */}
-              <div className="sticky top-44 z-30">
-                <div className="bg-white rounded-3xl p-8 lg:p-12 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[350px] flex flex-col lg:flex-row gap-10 items-center">
-                  <div className="flex-1 space-y-4">
-                    <div className="text-[#EF593E] font-bold text-base uppercase tracking-wider">Step 3</div>
-                    <h3 className="text-2xl lg:text-3xl font-black text-slate-900 leading-tight">
-                      Review your resume score and see what needs fixing
-                    </h3>
-                    <p className="text-sm lg:text-base text-slate-500">
-                      Check the list of issues flagged by the ATS checker. Click any issue for a quick explanation, and use “Show Me” to jump to the exact section.
-                    </p>
-                  </div>
-                  <div className="flex-1 w-full max-w-sm relative flex items-center justify-center">
-                    <div className="bg-white border-2 border-[#EF593E] rounded-xl p-6 shadow-lg max-w-[280px] w-full space-y-3 relative">
-                      <div className="flex items-center gap-2 text-[8px] font-bold text-[#EF593E] uppercase tracking-wider">
-                         <div className="w-1.5 h-1.5 rounded-full bg-[#EF593E]" /> RESUME STRUCTURE
-                      </div>
-                      <div className="space-y-1">
-                        <div className="text-[11px] font-semibold text-slate-400 leading-tight">Number of Achievements in</div>
-                        <div className="text-[11px] font-semibold text-slate-400 leading-tight">Work Experience #2</div>
-                      </div>
-                      <div className="flex justify-end pt-1">
-                         <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold px-4 rounded-full h-8 text-[11px]">
-                           Show Me
-                         </Button>
-                      </div>
-                      <div className="absolute -left-12 top-1/2 -translate-y-1/2">
-                         <div className="w-24 h-24 rounded-full bg-white shadow-2xl flex flex-col items-center justify-center border-4 border-accent relative z-10">
-                            <span className="text-2xl font-black text-slate-900">75</span>
-                            <span className="text-[8px] font-bold text-slate-500 text-center leading-tight">Overall Score</span>
-                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#EF593E]/10 flex items-center justify-center text-[#EF593E] font-bold mx-auto">3</div>
+                <h3 className="font-bold text-xl">Get Results</h3>
+                <p className="text-slate-500 text-sm">Receive a score and actionable improvement tips.</p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-slate-50 py-16">
-          <div className="container mx-auto px-6 text-center space-y-10">
-            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">A resume checker for every job</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { title: "Calculating score...", icon: "📊", desc: "Real-time ATS compatibility analysis" },
-                { title: "Keyword Optimization", icon: "🔍", desc: "Identify missing industry keywords" },
-                { title: "Pro Improvements", icon: "✨", desc: "Actionable advice for every section" }
-              ].map((feature, i) => (
-                <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group text-left">
-                  <div className="text-3xl mb-3 group-hover:scale-110 transition-transform inline-block">{feature.icon}</div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">{feature.title}</h3>
-                  <p className="text-sm text-slate-500">{feature.desc}</p>
-                </div>
-              ))}
             </div>
           </div>
         </section>
@@ -379,7 +299,7 @@ export default function Home() {
       <footer className="py-10 border-t border-slate-100 bg-white">
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col items-center md:items-start gap-1">
-            <Logo />
+            <Logo size="sm" />
             <p className="text-[10px] text-slate-400 mt-2">© 2024 Network Bulls AI. Part of the CareerAce network.</p>
           </div>
           <div className="flex gap-6 text-[11px] font-bold text-slate-500">
@@ -392,4 +312,3 @@ export default function Home() {
     </div>
   );
 }
-
