@@ -1,4 +1,3 @@
-
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
@@ -9,6 +8,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
   
   return (
     <div className="space-y-6" style={s}>
+      {/* Header */}
       <header className="text-center border-b-2 pb-6" style={{ borderColor: theme.primary, marginBottom: `${style.sectionSpacing}px` }}>
         <h1 className="text-5xl font-black uppercase tracking-tighter" style={{ color: theme.primary }}>{data.personal.fullName}</h1>
         <p className="text-lg font-bold opacity-60 uppercase tracking-widest mt-1">{data.personal.jobTitle}</p>
@@ -28,6 +28,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
         </div>
       </header>
       
+      {/* Professional Summary */}
       {sections.summary && data.summary.content && (
         <section style={spacing}>
           <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-3 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>Professional Profile</h2>
@@ -35,6 +36,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
         </section>
       )}
 
+      {/* Work Experience */}
       {sections.experience && data.experience.length > 0 && (
         <section style={spacing}>
           <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-4 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>Work Experience</h2>
@@ -77,6 +79,28 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
         </section>
       )}
 
+      {/* Projects */}
+      {sections.projects && data.projects.length > 0 && (
+        <section style={spacing}>
+          <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-4 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>Notable Projects</h2>
+          {data.projects.map((proj) => (
+            <div key={proj.id} className="mb-6 last:mb-0">
+              <div className="flex justify-between font-black text-slate-900 uppercase">
+                <span className="text-base">{proj.title}</span>
+                <span className="text-slate-400 text-[10px]">{proj.duration}</span>
+              </div>
+              <p className="text-[11px] font-bold uppercase" style={{ color: theme.accent }}>{proj.role} {proj.teamSize && `• Team of ${proj.teamSize}`}</p>
+              <p className="text-slate-600 text-sm mt-2 leading-relaxed">{proj.description}</p>
+              {proj.impact && <p className="text-slate-500 text-xs mt-2 italic font-medium">Impact: {proj.impact}</p>}
+              {proj.technologies && (
+                <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase">Stack: {proj.technologies}</p>
+              )}
+            </div>
+          ))}
+        </section>
+      )}
+
+      {/* Skills */}
       {sections.skills && data.skills.length > 0 && (
         <section style={spacing}>
           <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-3 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>Skills & Expertise</h2>
@@ -97,6 +121,7 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
         </section>
       )}
 
+      {/* Education */}
       {sections.education && data.education.length > 0 && (
         <section style={spacing}>
           <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-3 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>Education</h2>
@@ -112,6 +137,71 @@ export default function Classic({ data, theme, sections, style }: TemplateProps)
           ))}
         </section>
       )}
+
+      {/* Certifications & Achievements */}
+      <div className="grid grid-cols-2 gap-8">
+        {sections.certifications && data.certifications.length > 0 && (
+          <section style={spacing}>
+            <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-3 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>Certifications</h2>
+            {data.certifications.map(cert => (
+              <div key={cert.id} className="mb-2">
+                <p className="text-sm font-bold text-slate-800">{cert.name}</p>
+                <p className="text-[10px] font-black uppercase text-slate-400">{cert.org} • {cert.issueDate}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {sections.achievements && data.achievements.length > 0 && (
+          <section style={spacing}>
+            <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-3 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>Achievements</h2>
+            {data.achievements.map(ach => (
+              <div key={ach.id} className="mb-2">
+                <p className="text-sm font-bold text-slate-800">{ach.title}</p>
+                <p className="text-[10px] font-black uppercase text-slate-400">{ach.category} • {ach.year}</p>
+              </div>
+            ))}
+          </section>
+        )}
+      </div>
+
+      {/* Languages & Interests */}
+      <div className="grid grid-cols-2 gap-8 pt-4 border-t border-slate-100">
+        {sections.languages && data.languages.length > 0 && (
+          <section>
+            <h2 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3">Languages</h2>
+            <div className="space-y-1">
+              {data.languages.map(lang => (
+                <div key={lang.id} className="flex justify-between text-xs font-bold text-slate-700 uppercase tracking-tighter">
+                  <span>{lang.name}</span>
+                  <span className="opacity-40">{lang.speaking}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {sections.interests && data.interests.length > 0 && (
+          <section>
+            <h2 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3">Interests & Hobbies</h2>
+            <div className="flex flex-wrap gap-2">
+              {data.interests.map((interest, i) => (
+                <span key={i} className="text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded border border-slate-100">
+                  {interest}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+
+      {/* Custom Sections */}
+      {sections.customSections && data.customSections.map(cs => (
+        <section key={cs.id} style={spacing}>
+          <h2 className="text-xs font-black uppercase tracking-widest border-b-2 mb-3 pb-1" style={{ color: theme.primary, borderColor: theme.primary }}>{cs.title}</h2>
+          <div className="text-slate-600 whitespace-pre-wrap text-sm leading-relaxed">{cs.content}</div>
+        </section>
+      ))}
     </div>
   );
 }
