@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
@@ -13,7 +14,7 @@ export default function Academic({ data, theme, style, sections }: TemplateProps
           {data.personal.fullName.toUpperCase()}
         </h1>
         <div className="flex justify-center flex-wrap gap-4 text-[10px] font-bold opacity-40 uppercase tracking-widest">
-          <span>{data.personal.location}</span>
+          <span>{data.personal.location.city}, {data.personal.location.country}</span>
           <span>{data.personal.email}</span>
           <span>{data.personal.phone}</span>
           {data.personal.linkedin && <span>{data.personal.linkedin}</span>}
@@ -42,11 +43,13 @@ export default function Academic({ data, theme, style, sections }: TemplateProps
                 <div className="flex justify-between font-bold">
                   <span className="text-lg">{exp.title}</span>
                   <span className="text-slate-400 text-xs">
-                    {exp.startDate} – {exp.current ? 'Present' : exp.endDate}
+                    {exp.startMonth} {exp.startYear} – {exp.current ? 'Present' : `${exp.endMonth} ${exp.endYear}`}
                   </span>
                 </div>
                 <p className="font-bold opacity-60 text-xs uppercase">{exp.company} | {exp.location}</p>
-                <div className="text-slate-600 whitespace-pre-wrap">• {exp.description.replace(/\n/g, '\n• ')}</div>
+                <div className="text-slate-600 whitespace-pre-wrap leading-relaxed">
+                  {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
+                </div>
               </div>
             ))}
           </div>

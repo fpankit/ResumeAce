@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
@@ -20,7 +21,7 @@ export default function Modern({ data, theme, style, sections }: TemplateProps) 
           <div className="flex flex-col gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             <div className="flex items-center justify-end gap-2">{data.personal.email} <Mail className="h-3 w-3" /></div>
             <div className="flex items-center justify-end gap-2">{data.personal.phone} <Phone className="h-3 w-3" /></div>
-            <div className="flex items-center justify-end gap-2">{data.personal.location?.city}, {data.personal.location?.country} <MapPin className="h-3 w-3" /></div>
+            <div className="flex items-center justify-end gap-2">{data.personal.location.city}, {data.personal.location.country} <MapPin className="h-3 w-3" /></div>
           </div>
           <div className="flex justify-end gap-3 pt-2">
             {data.personal.linkedin && <Linkedin className="h-3.5 w-3.5 text-blue-600" />}
@@ -103,7 +104,7 @@ export default function Modern({ data, theme, style, sections }: TemplateProps) 
                   
                   <div className="mt-4 space-y-4">
                     <div className="text-[13px] text-slate-600 leading-relaxed whitespace-pre-wrap">
-                      {(exp.responsibilities || '').split('\n').map((line, i) => (
+                      {(exp.responsibilities || '').split('\n').map((line, i) => line && (
                         <p key={i} className="flex gap-2 mb-1">
                           <span className="text-slate-300">•</span>
                           {line}

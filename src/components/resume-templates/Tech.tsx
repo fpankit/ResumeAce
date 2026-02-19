@@ -71,7 +71,7 @@ export default function Tech({ data, theme, style, sections }: TemplateProps) {
                 <div className="col-span-1 text-[9px] font-black uppercase text-slate-400 py-1">{group.category}</div>
                 <div className="col-span-3 flex flex-wrap gap-2">
                   {group.items.map(skill => (
-                    <div key={skill.id} className="px-2 py-1 bg-slate-100 text-[9px] font-bold text-slate-600 border border-slate-200 uppercase">
+                    <div key={skill.id} className="px-2 py-1 bg-slate-100 text-[9px] font-bold text-600 border border-slate-200 uppercase">
                       {skill.name}
                     </div>
                   ))}
