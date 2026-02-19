@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Mail, Phone, MapPin, Linkedin, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Globe, Calendar, Briefcase, GraduationCap, Award, Languages, Heart } from 'lucide-react';
 
 interface ResumeCanvasProps {
   templateId: string;
@@ -10,98 +10,79 @@ interface ResumeCanvasProps {
   font: any;
   data: any;
   sections: any;
+  style?: {
+    lineHeight: number;
+    fontSize: number;
+    sectionSpacing: number;
+  };
 }
 
-export const ResumeCanvas = ({ templateId, theme, font, data, sections }: ResumeCanvasProps) => {
+export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }: ResumeCanvasProps) => {
   const { personal, summary, skills, experience, education, projects, certifications, achievements, languages, interests } = data;
+  const config = style || { lineHeight: 1.5, fontSize: 14, sectionSpacing: 24 };
 
-  // Helper for rendering headers
-  const SectionHeader = ({ title }: { title: string }) => (
-    <div className="resume-heading" style={{ color: theme.primary, borderColor: `${theme.primary}33` }}>
-      {title}
+  const SectionHeader = ({ title, icon: Icon }: { title: string, icon?: any }) => (
+    <div 
+      className="resume-heading mb-4 flex items-center gap-2 border-b pb-2" 
+      style={{ color: theme.primary, borderColor: `${theme.primary}22` }}
+    >
+      {Icon && <Icon className="h-4 w-4" />}
+      <span className="text-sm font-black uppercase tracking-widest">{title}</span>
     </div>
   );
 
-  const renderContent = () => {
+  const ExperienceItem = ({ exp }: { exp: any }) => (
+    <div className="space-y-2 mb-6 last:mb-0">
+      <div className="flex justify-between items-baseline">
+        <h3 className="text-base font-black text-slate-900">{exp.title}</h3>
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{exp.period}</span>
+      </div>
+      <p className="text-xs font-bold uppercase tracking-widest" style={{ color: theme.accent }}>{exp.company} • {exp.location}</p>
+      <p className="resume-body text-slate-600 leading-relaxed whitespace-pre-wrap">{exp.description}</p>
+    </div>
+  );
+
+  const renderLayout = () => {
     switch (templateId) {
       case 'two-column':
         return (
-          <div className="flex gap-8 h-full">
-            {/* Sidebar */}
-            <div className="w-1/3 space-y-8 pr-6 border-r" style={{ borderColor: `${theme.primary}22` }}>
-              <div className="space-y-2">
-                <h1 className="text-2xl font-bold leading-tight" style={{ color: theme.primary }}>{personal.fullName}</h1>
-                <p className="text-lg font-medium opacity-80">{personal.jobTitle}</p>
+          <div className="flex h-full gap-12">
+            <div className="w-1/3 space-y-10 pr-8 border-r" style={{ borderColor: `${theme.primary}11` }}>
+              <div className="space-y-4">
+                <h1 className="text-3xl font-black leading-none uppercase tracking-tighter" style={{ color: theme.primary }}>{personal.fullName}</h1>
+                <p className="text-sm font-bold opacity-60 uppercase tracking-widest">{personal.jobTitle}</p>
               </div>
-
-              <div className="space-y-4 text-xs">
+              <div className="space-y-4">
                 <SectionHeader title="Contact" />
-                <div className="space-y-2 opacity-80">
+                <div className="space-y-3 text-[10px] font-medium text-slate-500">
                   <div className="flex items-center gap-2"><Mail className="h-3 w-3" /> {personal.email}</div>
                   <div className="flex items-center gap-2"><Phone className="h-3 w-3" /> {personal.phone}</div>
                   <div className="flex items-center gap-2"><MapPin className="h-3 w-3" /> {personal.location}</div>
                 </div>
               </div>
-
               {sections.skills && (
                 <div className="space-y-4">
-                  <SectionHeader title="Skills" />
+                  <SectionHeader title="Expertise" />
                   <div className="flex flex-wrap gap-2">
                     {skills.map((s: string) => (
-                      <span key={s} className="px-2 py-1 bg-slate-100 rounded text-[10px] font-medium">{s}</span>
+                      <span key={s} className="px-2 py-1 bg-slate-50 border rounded text-[9px] font-bold uppercase tracking-tighter text-slate-600">{s}</span>
                     ))}
                   </div>
                 </div>
               )}
-
-              {sections.languages && (
-                <div className="space-y-4">
-                  <SectionHeader title="Languages" />
-                  <div className="space-y-1 text-xs opacity-80">
-                    {languages.map((l: string) => <div key={l}>{l}</div>)}
-                  </div>
-                </div>
-              )}
             </div>
-
-            {/* Main */}
-            <div className="flex-1 space-y-8">
+            <div className="flex-1 space-y-10">
               {sections.summary && (
-                <div className="space-y-4">
-                  <SectionHeader title="Professional Profile" />
-                  <p className="resume-body italic">{summary}</p>
-                </div>
+                <section>
+                  <SectionHeader title="Profile" icon={User} />
+                  <p className="resume-body italic leading-relaxed text-slate-600">{summary}</p>
+                </section>
               )}
-
               {sections.experience && (
-                <div className="space-y-6">
-                  <SectionHeader title="Work Experience" />
-                  {experience.map((exp: any) => (
-                    <div key={exp.id} className="space-y-2">
-                      <div className="flex justify-between items-baseline">
-                        <h3 className="resume-subheading">{exp.title}</h3>
-                        <span className="resume-date">{exp.period}</span>
-                      </div>
-                      <p className="text-xs font-bold" style={{ color: theme.accent }}>{exp.company} • {exp.location}</p>
-                      <p className="resume-body whitespace-pre-wrap">{exp.description}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {sections.education && (
-                <div className="space-y-6">
-                  <SectionHeader title="Education" />
-                  {education.map((edu: any) => (
-                    <div key={edu.id} className="space-y-1">
-                      <div className="flex justify-between items-baseline">
-                        <h3 className="resume-subheading">{edu.degree}</h3>
-                        <span className="resume-date">{edu.period}</span>
-                      </div>
-                      <p className="text-xs">{edu.school} • {edu.location}</p>
-                    </div>
-                  ))}
-                </div>
+                <section>
+                  <SectionHeader title="Experience" icon={Briefcase} />
+                  {experience.map((exp: any) => <ExperienceItem key={exp.id} exp={exp} />)}
+                </section>
               )}
             </div>
           </div>
@@ -109,183 +90,108 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections }: Resume
 
       case 'academic':
         return (
-          <div className="space-y-8">
-             <div className="text-center border-b pb-8" style={{ borderColor: theme.primary }}>
-               <h1 className="text-4xl font-bold uppercase tracking-widest" style={{ color: theme.primary }}>{personal.fullName}</h1>
-               <div className="flex justify-center gap-6 mt-4 text-xs font-medium uppercase tracking-tighter opacity-70">
-                 <span>{personal.location}</span>
-                 <span>{personal.email}</span>
-                 <span>{personal.phone}</span>
-               </div>
-             </div>
-             
-             <div className="grid grid-cols-4 gap-12">
-               <div className="col-span-1">
-                 <h2 className="text-sm font-black uppercase tracking-widest mb-4" style={{ color: theme.accent }}>Summary</h2>
-               </div>
-               <div className="col-span-3">
-                 <p className="resume-body">{summary}</p>
-               </div>
-             </div>
-
-             <div className="grid grid-cols-4 gap-12">
-               <div className="col-span-1">
-                 <h2 className="text-sm font-black uppercase tracking-widest mb-4" style={{ color: theme.accent }}>Experience</h2>
-               </div>
-               <div className="col-span-3 space-y-6">
-                 {experience.map((exp: any) => (
-                   <div key={exp.id} className="space-y-1">
-                     <h3 className="resume-subheading">{exp.title}</h3>
-                     <p className="text-xs font-bold opacity-60 uppercase tracking-widest">{exp.company} | {exp.period}</p>
-                     <p className="resume-body mt-2">{exp.description}</p>
-                   </div>
-                 ))}
-               </div>
-             </div>
+          <div className="space-y-12">
+            <div className="text-center space-y-4 border-b pb-10" style={{ borderColor: theme.primary }}>
+              <h1 className="text-4xl font-black uppercase tracking-[0.2em]" style={{ color: theme.primary }}>{personal.fullName}</h1>
+              <div className="flex justify-center gap-8 text-[10px] font-black uppercase tracking-widest opacity-40">
+                <span>{personal.location}</span>
+                <span>{personal.email}</span>
+                <span>{personal.phone}</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-4 gap-12">
+              <div className="col-span-1">
+                <h2 className="text-xs font-black uppercase tracking-widest" style={{ color: theme.accent }}>Professional Summary</h2>
+              </div>
+              <div className="col-span-3">
+                <p className="resume-body leading-relaxed">{summary}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-4 gap-12">
+              <div className="col-span-1">
+                <h2 className="text-xs font-black uppercase tracking-widest" style={{ color: theme.accent }}>Experience</h2>
+              </div>
+              <div className="col-span-3 space-y-10">
+                {experience.map((exp: any) => (
+                  <div key={exp.id} className="space-y-2">
+                    <div className="flex justify-between items-baseline">
+                      <h3 className="text-base font-bold text-slate-900">{exp.title}</h3>
+                      <span className="text-[10px] font-bold opacity-40">{exp.period}</span>
+                    </div>
+                    <p className="text-xs font-black uppercase tracking-widest opacity-60">{exp.company} • {exp.location}</p>
+                    <p className="resume-body mt-4 leading-relaxed">{exp.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         );
 
-      case 'tech':
+      case 'ats-minimal':
         return (
-          <div className="space-y-8">
-            <div className="flex justify-between items-start border-l-8 pl-8 py-4" style={{ borderColor: theme.primary }}>
-              <div>
-                <h1 className="text-5xl font-black uppercase tracking-tighter" style={{ color: theme.primary }}>{personal.fullName}</h1>
-                <p className="text-xl font-bold opacity-40 uppercase tracking-widest">{personal.jobTitle}</p>
-              </div>
-              <div className="text-right text-xs space-y-1 font-mono">
-                <div>{personal.email}</div>
-                <div>{personal.phone}</div>
-                <div className="text-indigo-600 font-bold">{personal.website}</div>
-              </div>
+          <div className="space-y-6 font-mono text-[11px] leading-tight text-black">
+            <div className="text-center space-y-1 mb-8">
+              <h1 className="text-xl font-bold uppercase">{personal.fullName}</h1>
+              <p>{personal.location} | {personal.phone} | {personal.email}</p>
+              <p>{personal.linkedin} | {personal.website}</p>
             </div>
-
-            <div className="grid grid-cols-12 gap-10">
-              <div className="col-span-8 space-y-10">
-                <section>
-                  <SectionHeader title="Core Projects" />
-                  <div className="space-y-6">
-                    {projects.map((p: any) => (
-                      <div key={p.id} className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="resume-subheading">{p.name}</h3>
-                          <span className="text-[10px] text-indigo-500 font-bold">{p.link}</span>
-                        </div>
-                        <p className="resume-body">{p.description}</p>
-                      </div>
-                    ))}
+            <section>
+              <h2 className="font-bold border-b border-black uppercase mb-2">Summary</h2>
+              <p>{summary}</p>
+            </section>
+            <section>
+              <h2 className="font-bold border-b border-black uppercase mb-2">Experience</h2>
+              {experience.map((exp: any) => (
+                <div key={exp.id} className="mb-4">
+                  <div className="flex justify-between font-bold uppercase">
+                    <span>{exp.company}</span>
+                    <span>{exp.period}</span>
                   </div>
-                </section>
-
-                <section>
-                  <SectionHeader title="Employment" />
-                  <div className="space-y-6">
-                    {experience.map((exp: any) => (
-                      <div key={exp.id}>
-                        <div className="flex justify-between items-baseline font-bold text-sm">
-                          <span>{exp.title} @ {exp.company}</span>
-                          <span className="resume-date">{exp.period}</span>
-                        </div>
-                        <p className="resume-body mt-1">{exp.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              </div>
-
-              <div className="col-span-4 space-y-10">
-                 <section>
-                   <SectionHeader title="Stacks" />
-                   <div className="flex flex-wrap gap-2">
-                    {skills.map((s: string) => (
-                      <span key={s} className="px-3 py-1 bg-slate-100 font-mono text-[9px] uppercase font-bold">{s}</span>
-                    ))}
-                   </div>
-                 </section>
-
-                 <section>
-                   <SectionHeader title="Learning" />
-                   <div className="space-y-2 text-xs">
-                     {certifications.map((c: string) => (
-                       <div key={c} className="border-l-2 pl-3 py-1">{c}</div>
-                     ))}
-                   </div>
-                 </section>
-              </div>
-            </div>
+                  <p className="italic">{exp.title}</p>
+                  <p className="whitespace-pre-wrap mt-1 leading-normal">• {exp.description.replace(/\n/g, '\n• ')}</p>
+                </div>
+              ))}
+            </section>
+            <section>
+              <h2 className="font-bold border-b border-black uppercase mb-2">Skills</h2>
+              <p className="font-bold">{skills.join(' | ')}</p>
+            </section>
           </div>
         );
 
-      default: // Classic Single Column & others (fallback)
+      default: // Classic & fallback for all 20 templates
         return (
           <div className="space-y-10">
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <h1 className="text-3xl font-bold uppercase tracking-widest" style={{ color: theme.primary }}>{personal.fullName}</h1>
-              <p className="text-lg font-medium italic opacity-70">{personal.jobTitle}</p>
-              <div className="flex justify-center flex-wrap gap-x-6 gap-y-1 text-xs font-medium">
-                <div className="flex items-center gap-1.5"><Mail className="h-3 w-3" /> {personal.email}</div>
-                <div className="flex items-center gap-1.5"><Phone className="h-3 w-3" /> {personal.phone}</div>
-                <div className="flex items-center gap-1.5"><MapPin className="h-3 w-3" /> {personal.location}</div>
-                <div className="flex items-center gap-1.5"><Linkedin className="h-3 w-3" /> {personal.linkedin}</div>
+            <header className="text-center space-y-2 mb-12">
+              <h1 className="text-4xl font-black uppercase tracking-tighter" style={{ color: theme.primary }}>{personal.fullName}</h1>
+              <p className="text-lg font-bold opacity-40 uppercase tracking-[0.2em]">{personal.jobTitle}</p>
+              <div className="flex justify-center flex-wrap gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                <span className="flex items-center gap-1.5"><Mail className="h-3 w-3" /> {personal.email}</span>
+                <span className="flex items-center gap-1.5"><Phone className="h-3 w-3" /> {personal.phone}</span>
+                <span className="flex items-center gap-1.5"><MapPin className="h-3 w-3" /> {personal.location}</span>
               </div>
-            </div>
-
-            {/* Content Sections */}
-            <div className="space-y-8">
+            </header>
+            <div className="space-y-12">
               {sections.summary && (
                 <section>
-                  <SectionHeader title="Professional Summary" />
-                  <p className="resume-body">{summary}</p>
+                  <SectionHeader title="Profile Summary" icon={User} />
+                  <p className="resume-body text-slate-600 leading-relaxed">{summary}</p>
                 </section>
               )}
-
               {sections.experience && (
                 <section>
-                  <SectionHeader title="Professional Experience" />
-                  <div className="space-y-6">
-                    {experience.map((exp: any) => (
-                      <div key={exp.id} className="space-y-2">
-                        <div className="flex justify-between items-baseline">
-                          <h3 className="resume-subheading">{exp.title}</h3>
-                          <span className="resume-date">{exp.period}</span>
-                        </div>
-                        <div className="flex justify-between text-xs font-bold opacity-60 italic">
-                          <span>{exp.company}</span>
-                          <span>{exp.location}</span>
-                        </div>
-                        <p className="resume-body whitespace-pre-wrap">{exp.description}</p>
-                      </div>
-                    ))}
-                  </div>
+                  <SectionHeader title="Professional Experience" icon={Briefcase} />
+                  {experience.map((exp: any) => <ExperienceItem key={exp.id} exp={exp} />)}
                 </section>
               )}
-
               {sections.skills && (
                 <section>
-                  <SectionHeader title="Technical Skills" />
-                  <div className="flex flex-wrap gap-x-6 gap-y-2">
+                  <SectionHeader title="Key Skills" icon={Award} />
+                  <div className="flex flex-wrap gap-x-8 gap-y-3">
                     {skills.map((s: string) => (
-                      <div key={s} className="resume-body font-medium flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }}></span>
+                      <div key={s} className="text-xs font-bold text-slate-700 flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }} />
                         {s}
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {sections.education && (
-                <section>
-                  <SectionHeader title="Education" />
-                  <div className="space-y-4">
-                    {education.map((edu: any) => (
-                      <div key={edu.id} className="space-y-1">
-                        <div className="flex justify-between items-baseline">
-                          <h3 className="resume-subheading">{edu.degree}</h3>
-                          <span className="resume-date">{edu.period}</span>
-                        </div>
-                        <p className="text-sm italic opacity-70">{edu.school} • {edu.location}</p>
                       </div>
                     ))}
                   </div>
@@ -299,22 +205,31 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections }: Resume
 
   return (
     <div 
-      className="resume-a4" 
+      className="resume-a4 print:m-0 print:shadow-none" 
       style={{ 
         fontFamily: font.family,
-        borderTop: `8px solid ${theme.primary}` 
+        borderTop: `10px solid ${theme.primary}`,
+        fontSize: `${config.fontSize}px`,
+        lineHeight: config.lineHeight,
       }}
     >
-      {renderContent()}
+      <div style={{ padding: '0px' }}>
+        {renderLayout()}
+      </div>
       
-      {/* Dynamic Theme Color Injections */}
       <style jsx global>{`
-        .resume-heading {
-          color: ${theme.primary} !important;
-          border-color: ${theme.primary}33 !important;
+        .resume-a4 {
+          padding: 60px !important;
+          color: #334155;
         }
-        .resume-subheading {
-          color: ${theme.primary} !important;
+        .resume-body {
+          font-size: 1em;
+        }
+        @media print {
+          .resume-a4 {
+            border-top: none !important;
+            padding: 40px !important;
+          }
         }
       `}</style>
     </div>

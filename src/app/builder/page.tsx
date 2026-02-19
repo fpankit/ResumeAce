@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Download, 
   Save, 
@@ -9,38 +9,26 @@ import {
   Layout, 
   Settings, 
   User, 
-  Briefcase, 
-  GraduationCap, 
-  Wrench, 
-  FolderGit2, 
-  Award, 
-  Languages, 
-  Heart,
-  ChevronLeft,
-  ChevronRight,
-  Menu,
-  X,
-  Plus,
-  Trash2,
-  Check
+  Plus, 
+  Trash2, 
+  Check, 
+  Sparkles,
+  Loader2,
+  ChevronDown,
+  Maximize2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
+import { generateResumeContent } from '@/ai/flows/generate-resume-content';
+import { useToast } from '@/hooks/use-toast';
 
 const THEMES = [
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB' },
@@ -59,26 +47,26 @@ const FONTS = [
 ];
 
 const TEMPLATES = [
-  { id: 'classic', name: 'Classic Single Column' },
-  { id: 'modern', name: 'Modern Professional' },
-  { id: 'executive', name: 'Executive Clean' },
-  { id: 'ats-minimal', name: 'ATS Prime Minimal' },
-  { id: 'two-column', name: 'Two Column Sidebar' },
-  { id: 'compact', name: 'Compact Dense' },
-  { id: 'academic', name: 'Academic CV' },
-  { id: 'tech', name: 'Tech Developer Style' },
-  { id: 'management', name: 'Management Resume' },
-  { id: 'creative', name: 'Creative Minimal' },
-  { id: 'bold-header', name: 'Bold Header Layout' },
-  { id: 'elegant-serif', name: 'Elegant Serif' },
-  { id: 'structured-timeline', name: 'Structured Timeline' },
-  { id: 'corporate-formal', name: 'Corporate Formal' },
-  { id: 'soft-gray', name: 'Soft Gray Layout' },
-  { id: 'blue-accent', name: 'Blue Accent Left Border' },
-  { id: 'monochrome', name: 'Monochrome Minimal' },
-  { id: 'fresher', name: 'Compact Fresher' },
-  { id: 'senior', name: 'Senior Professional' },
-  { id: 'hybrid', name: 'Hybrid Modern Clean' },
+  { id: 'classic', name: 'Classic Single Column', category: 'Standard' },
+  { id: 'modern', name: 'Modern Professional', category: 'Standard' },
+  { id: 'executive', name: 'Executive Clean', category: 'Executive' },
+  { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS' },
+  { id: 'two-column', name: 'Two Column Sidebar', category: 'Standard' },
+  { id: 'compact', name: 'Compact Dense', category: 'Compact' },
+  { id: 'academic', name: 'Academic CV', category: 'Academic' },
+  { id: 'tech', name: 'Tech Developer Style', category: 'Tech' },
+  { id: 'management', name: 'Management Resume', category: 'Executive' },
+  { id: 'creative', name: 'Creative Minimal', category: 'Creative' },
+  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern' },
+  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant' },
+  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern' },
+  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive' },
+  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern' },
+  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Elegant' },
+  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS' },
+  { id: 'fresher', name: 'Compact Fresher', category: 'Compact' },
+  { id: 'senior', name: 'Senior Professional', category: 'Executive' },
+  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern' },
 ];
 
 export default function ResumeBuilder() {
@@ -86,6 +74,11 @@ export default function ResumeBuilder() {
   const [selectedTemplate, setSelectedTemplate] = useState('classic');
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
+  const [lineHeight, setLineHeight] = useState(1.5);
+  const [fontSize, setFontSize] = useState(14);
+  const [sectionSpacing, setSectionSpacing] = useState(24);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
   
   const [sections, setSections] = useState({
     summary: true,
@@ -158,37 +151,70 @@ export default function ResumeBuilder() {
     interests: ['Blockchain Technology', 'Digital Art', 'Mountain Biking']
   });
 
-  const handleDownload = () => {
-    window.print();
-  };
-
   const updateField = (section: string, field: string, value: any) => {
     setData(prev => ({
       ...prev,
-      [section]: {
-        ...(prev as any)[section],
-        [field]: value
-      }
+      [section]: typeof value === 'object' && !Array.isArray(value) 
+        ? { ...(prev as any)[section], [field]: value }
+        : { ...(prev as any)[section], [field]: value }
     }));
   };
 
-  const updateSummary = (value: string) => {
-    setData(prev => ({ ...prev, summary: value }));
+  const handlePersonalUpdate = (field: string, value: string) => {
+    setData(prev => ({
+      ...prev,
+      personal: { ...prev.personal, [field]: value }
+    }));
   };
 
+  const handleAiGenerate = async (type: 'summary' | 'experience', index?: number) => {
+    setIsGenerating(true);
+    try {
+      const keywords = type === 'summary' ? data.skills.join(', ') : data.experience[index!].description;
+      const res = await generateResumeContent({
+        type,
+        jobTitle: data.personal.jobTitle,
+        keywords: keywords || 'Professional growth, technical leadership'
+      });
+      
+      if (type === 'summary') {
+        setData(prev => ({ ...prev, summary: res.generatedText }));
+      } else {
+        const newExp = [...data.experience];
+        newExp[index!] = { ...newExp[index!], description: res.generatedText };
+        setData(prev => ({ ...prev, experience: newExp }));
+      }
+      
+      toast({
+        title: "AI Generation Successful",
+        description: "Content has been updated with professional refinements.",
+      });
+    } catch (e: any) {
+      toast({
+        variant: "destructive",
+        title: "AI Generation Failed",
+        description: e.message || "Failed to connect to AI service.",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleDownload = () => window.print();
+
   return (
-    <div className="flex h-screen bg-slate-100 overflow-hidden font-sans">
+    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans no-print">
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-6 z-50 no-print">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">R</div>
-          <h1 className="text-xl font-bold text-slate-900">BuilderPro</h1>
-        </div>
+      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="gap-2">
-            <Save className="h-4 w-4" /> Save
-          </Button>
-          <Button onClick={handleDownload} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 shadow-lg shadow-indigo-200">
+          <div className="w-9 h-9 bg-[#EF593E] rounded-lg flex items-center justify-center text-white font-black text-xl shadow-lg shadow-orange-100">B</div>
+          <h1 className="text-lg font-black text-slate-900 tracking-tight">Network Bulls <span className="text-[#EF593E]">Pro</span></h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
+          <Button variant="ghost" className="text-slate-500 font-bold">Settings</Button>
+          <div className="h-6 w-[1px] bg-slate-200 mx-2" />
+          <Button onClick={handleDownload} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 shadow-lg shadow-orange-100 rounded-lg px-6">
             <Download className="h-4 w-4" /> Download PDF
           </Button>
         </div>
@@ -196,172 +222,213 @@ export default function ResumeBuilder() {
 
       {/* Main Container */}
       <div className="flex flex-1 pt-16 h-full">
-        {/* Left Panel: Controls */}
-        <aside className="w-96 bg-white border-r flex flex-col no-print">
+        {/* Left Panel */}
+        <aside className="w-[500px] bg-white border-r flex flex-col relative z-20">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-            <TabsList className="grid grid-cols-3 h-14 bg-white border-b rounded-none p-0">
-              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-indigo-600 data-[state=active]:bg-transparent">
-                <Layout className="h-4 w-4 mr-2" /> Layout
+            <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 sticky top-0 z-10">
+              <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest">
+                <Layout className="h-4 w-4 mr-2" /> Templates & Colors
               </TabsTrigger>
-              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-indigo-600 data-[state=active]:bg-transparent">
-                <Settings className="h-4 w-4 mr-2" /> Data
-              </TabsTrigger>
-              <TabsTrigger value="style" className="rounded-none border-b-2 border-transparent data-[state=active]:border-indigo-600 data-[state=active]:bg-transparent">
-                <Palette className="h-4 w-4 mr-2" /> Style
+              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] data-[state=active]:bg-transparent font-black text-[10px] uppercase tracking-widest">
+                <TypeIcon className="h-4 w-4 mr-2" /> Text Content
               </TabsTrigger>
             </TabsList>
 
-            <ScrollArea className="flex-1 p-6">
-              {/* Templates Tab */}
-              <TabsContent value="templates" className="mt-0 space-y-6">
-                <div className="grid grid-cols-2 gap-3">
-                  {TEMPLATES.map(template => (
-                    <button
-                      key={template.id}
-                      onClick={() => setSelectedTemplate(template.id)}
-                      className={cn(
-                        "p-4 rounded-xl border-2 text-left transition-all hover:border-indigo-200",
-                        selectedTemplate === template.id ? "border-indigo-600 bg-indigo-50" : "border-slate-100 bg-slate-50"
-                      )}
-                    >
-                      <div className="aspect-[3/4] bg-white border mb-2 rounded shadow-sm"></div>
-                      <p className="text-xs font-bold text-slate-800 line-clamp-1">{template.name}</p>
-                    </button>
-                  ))}
-                </div>
-              </TabsContent>
+            <ScrollArea className="flex-1">
+              <div className="p-8">
+                {/* Templates Tab */}
+                <TabsContent value="templates" className="mt-0 space-y-10">
+                  <section className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Select Template</h3>
+                      <span className="text-[10px] font-bold text-slate-300">20 Styles Available</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-6">
+                      {TEMPLATES.map(template => (
+                        <div key={template.id} className="group cursor-pointer space-y-3" onClick={() => setSelectedTemplate(template.id)}>
+                          <div className={cn(
+                            "relative aspect-[3/4] bg-slate-50 rounded-2xl border-2 transition-all duration-300 overflow-hidden flex items-center justify-center",
+                            selectedTemplate === template.id 
+                              ? "border-[#EF593E] ring-4 ring-orange-50 shadow-xl" 
+                              : "border-slate-100 hover:border-slate-300 shadow-sm"
+                          )}>
+                            <div className="absolute inset-4 space-y-2 opacity-20">
+                              <div className="h-4 w-1/2 bg-slate-400 rounded" />
+                              <div className="h-10 w-full bg-slate-300 rounded" />
+                              <div className="h-2 w-full bg-slate-200 rounded" />
+                              <div className="h-2 w-3/4 bg-slate-200 rounded" />
+                            </div>
+                            {selectedTemplate === template.id && (
+                              <div className="absolute inset-0 bg-white/40 flex items-center justify-center animate-in zoom-in-50 duration-300">
+                                <div className="w-10 h-10 rounded-full bg-[#EF593E] flex items-center justify-center text-white shadow-xl">
+                                  <Check className="h-5 w-5" />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xs font-black uppercase text-slate-800 tracking-tight">{template.name}</p>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{template.category}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
 
-              {/* Content Tab */}
-              <TabsContent value="content" className="mt-0 space-y-8">
-                {/* Personal Info */}
-                <section className="space-y-4">
-                  <div className="flex items-center gap-2 text-indigo-600">
-                    <User className="h-4 w-4" />
-                    <h3 className="text-sm font-bold uppercase tracking-wider">Personal Details</h3>
-                  </div>
-                  <div className="grid gap-3">
-                    <div className="space-y-1">
-                      <Label className="text-[10px] uppercase text-slate-400 font-bold">Full Name</Label>
-                      <Input value={data.personal.fullName} onChange={(e) => updateField('personal', 'fullName', e.target.value)} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-[10px] uppercase text-slate-400 font-bold">Job Title</Label>
-                      <Input value={data.personal.jobTitle} onChange={(e) => updateField('personal', 'jobTitle', e.target.value)} />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-1">
-                        <Label className="text-[10px] uppercase text-slate-400 font-bold">Email</Label>
-                        <Input value={data.personal.email} onChange={(e) => updateField('personal', 'email', e.target.value)} />
+                  <section className="space-y-6 pt-10 border-t">
+                    <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography & Layout</h3>
+                    <div className="space-y-8">
+                      <div className="space-y-4">
+                        <div className="flex justify-between text-[10px] font-bold uppercase">
+                          <span className="text-slate-500">Line Height</span>
+                          <span className="text-[#EF593E]">{lineHeight}x</span>
+                        </div>
+                        <Slider value={[lineHeight]} min={1} max={2.5} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
                       </div>
-                      <div className="space-y-1">
-                        <Label className="text-[10px] uppercase text-slate-400 font-bold">Phone</Label>
-                        <Input value={data.personal.phone} onChange={(e) => updateField('personal', 'phone', e.target.value)} />
+                      <div className="space-y-4">
+                        <div className="flex justify-between text-[10px] font-bold uppercase">
+                          <span className="text-slate-500">Body Font Size</span>
+                          <span className="text-[#EF593E]">{fontSize}px</span>
+                        </div>
+                        <Slider value={[fontSize]} min={10} max={20} step={1} onValueChange={([v]) => setFontSize(v)} />
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex justify-between text-[10px] font-bold uppercase">
+                          <span className="text-slate-500">Section Spacing</span>
+                          <span className="text-[#EF593E]">{sectionSpacing}px</span>
+                        </div>
+                        <Slider value={[sectionSpacing]} min={8} max={48} step={4} onValueChange={([v]) => setSectionSpacing(v)} />
                       </div>
                     </div>
-                  </div>
-                </section>
+                  </section>
+                </TabsContent>
 
-                {/* Summary */}
-                <section className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-indigo-600">
-                      <Settings className="h-4 w-4" />
-                      <h3 className="text-sm font-bold uppercase tracking-wider">Profile Summary</h3>
+                {/* Content Tab */}
+                <TabsContent value="content" className="mt-0 space-y-12">
+                  <section className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <User className="h-4 w-4 text-[#EF593E]" />
+                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Personal Details</h3>
                     </div>
-                    <Switch checked={sections.summary} onCheckedChange={(v) => setSections(prev => ({...prev, summary: v}))} />
-                  </div>
-                  {sections.summary && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black uppercase text-slate-400">Full Name</Label>
+                        <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl border-slate-100" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black uppercase text-slate-400">Job Title</Label>
+                        <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl border-slate-100" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black uppercase text-slate-400">Email</Label>
+                        <Input value={data.personal.email} onChange={(e) => handlePersonalUpdate('email', e.target.value)} className="rounded-xl border-slate-100" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black uppercase text-slate-400">Phone</Label>
+                        <Input value={data.personal.phone} onChange={(e) => handlePersonalUpdate('phone', e.target.value)} className="rounded-xl border-slate-100" />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="space-y-6 pt-10 border-t">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Sparkles className="h-4 w-4 text-[#EF593E]" />
+                        <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Professional Summary</h3>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50 gap-2 h-8"
+                        onClick={() => handleAiGenerate('summary')}
+                        disabled={isGenerating}
+                      >
+                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        AI Magic
+                      </Button>
+                    </div>
                     <Textarea 
                       value={data.summary} 
-                      onChange={(e) => updateSummary(e.target.value)}
-                      className="min-h-[120px]"
+                      onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))}
+                      className="min-h-[120px] rounded-xl border-slate-100 leading-relaxed text-sm"
                     />
-                  )}
-                </section>
+                  </section>
 
-                {/* Section Toggles */}
-                <section className="space-y-4 pt-4 border-t">
-                  <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Toggle Sections</h3>
-                  <div className="grid gap-4">
-                    {Object.entries(sections).map(([key, enabled]) => (
-                      key !== 'summary' && (
-                        <div key={key} className="flex items-center justify-between">
-                          <Label className="capitalize font-bold text-slate-700">{key}</Label>
-                          <Switch 
-                            checked={enabled} 
-                            onCheckedChange={(v) => setSections(prev => ({...prev, [key]: v}))} 
-                          />
+                  <section className="space-y-8 pt-10 border-t">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Work History</h3>
+                      <Button variant="ghost" className="h-8 text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50">
+                        <Plus className="h-3 w-3 mr-1" /> Add Entry
+                      </Button>
+                    </div>
+                    <div className="space-y-6">
+                      {data.experience.map((exp, i) => (
+                        <div key={exp.id} className="p-6 rounded-2xl bg-slate-50/50 border border-slate-100 space-y-4 group transition-all hover:border-orange-200">
+                          <div className="grid grid-cols-2 gap-3">
+                            <Input placeholder="Job Title" value={exp.title} onChange={(e) => {
+                              const newExp = [...data.experience];
+                              newExp[i].title = e.target.value;
+                              setData(prev => ({ ...prev, experience: newExp }));
+                            }} className="h-9 text-xs" />
+                            <Input placeholder="Company" value={exp.company} onChange={(e) => {
+                              const newExp = [...data.experience];
+                              newExp[i].company = e.target.value;
+                              setData(prev => ({ ...prev, experience: newExp }));
+                            }} className="h-9 text-xs" />
+                          </div>
+                          <div className="relative">
+                            <Textarea 
+                              placeholder="Describe achievements..." 
+                              value={exp.description} 
+                              onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].description = e.target.value;
+                                setData(prev => ({ ...prev, experience: newExp }));
+                              }}
+                              className="min-h-[100px] text-xs leading-relaxed" 
+                            />
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="absolute bottom-2 right-2 h-7 px-2 text-[9px] font-black uppercase text-[#EF593E] hover:bg-white bg-white/50 backdrop-blur shadow-sm"
+                              onClick={() => handleAiGenerate('experience', i)}
+                              disabled={isGenerating}
+                            >
+                              AI Refine
+                            </Button>
+                          </div>
                         </div>
-                      )
-                    ))}
-                  </div>
-                </section>
-              </TabsContent>
-
-              {/* Style Tab */}
-              <TabsContent value="style" className="mt-0 space-y-8">
-                <section className="space-y-4">
-                  <div className="flex items-center gap-2 text-indigo-600">
-                    <Palette className="h-4 w-4" />
-                    <h3 className="text-sm font-bold uppercase tracking-wider">Theme Presets</h3>
-                  </div>
-                  <div className="grid grid-cols-1 gap-2">
-                    {THEMES.map(theme => (
-                      <button
-                        key={theme.id}
-                        onClick={() => setSelectedTheme(theme)}
-                        className={cn(
-                          "w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all",
-                          selectedTheme.id === theme.id ? "border-indigo-600 bg-indigo-50" : "border-slate-100 hover:border-indigo-100"
-                        )}
-                      >
-                        <div className="flex gap-1">
-                          <div className="w-5 h-5 rounded-full" style={{ backgroundColor: theme.primary }}></div>
-                          <div className="w-5 h-5 rounded-full" style={{ backgroundColor: theme.accent }}></div>
-                        </div>
-                        <span className="text-sm font-medium text-slate-700">{theme.name}</span>
-                        {selectedTheme.id === theme.id && <Check className="h-4 w-4 ml-auto text-indigo-600" />}
-                      </button>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="space-y-4">
-                  <div className="flex items-center gap-2 text-indigo-600">
-                    <TypeIcon className="h-4 w-4" />
-                    <h3 className="text-sm font-bold uppercase tracking-wider">Typography</h3>
-                  </div>
-                  <div className="grid gap-2">
-                    {FONTS.map(font => (
-                      <button
-                        key={font.id}
-                        onClick={() => setSelectedFont(font)}
-                        className={cn(
-                          "w-full flex items-center p-3 rounded-xl border-2 transition-all",
-                          selectedFont.id === font.id ? "border-indigo-600 bg-indigo-50" : "border-slate-100 hover:border-indigo-100"
-                        )}
-                      >
-                        <span className="text-sm" style={{ fontFamily: font.family }}>{font.name}</span>
-                        {selectedFont.id === font.id && <Check className="h-4 w-4 ml-auto text-indigo-600" />}
-                      </button>
-                    ))}
-                  </div>
-                </section>
-              </TabsContent>
+                      ))}
+                    </div>
+                  </section>
+                </TabsContent>
+              </div>
             </ScrollArea>
           </Tabs>
         </aside>
 
-        {/* Center: Live Preview */}
-        <main className="flex-1 bg-slate-100 overflow-auto p-12 scroll-smooth">
-          <div className="max-w-[850px] mx-auto">
+        {/* Center Pane */}
+        <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center">
+          <div className="relative group mb-12">
             <ResumeCanvas 
               templateId={selectedTemplate}
               theme={selectedTheme}
               font={selectedFont}
               data={data}
               sections={sections}
+              style={{
+                lineHeight,
+                fontSize,
+                sectionSpacing
+              }}
             />
+            {/* Overlay controls for drag/drop feel */}
+            <div className="absolute -right-20 top-0 space-y-4 opacity-0 group-hover:opacity-100 transition-opacity no-print">
+              <Button size="icon" variant="secondary" className="rounded-full shadow-lg"><Maximize2 className="h-4 w-4" /></Button>
+              <Button size="icon" variant="secondary" className="rounded-full shadow-lg"><Settings className="h-4 w-4" /></Button>
+            </div>
           </div>
         </main>
       </div>
