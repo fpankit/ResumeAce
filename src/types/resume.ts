@@ -140,6 +140,8 @@ export interface TemplateProps {
   theme: {
     primary: string;
     accent: string;
+    text?: string;
+    secondary?: string;
   };
   sections: Record<string, boolean>;
   style: {

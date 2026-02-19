@@ -26,7 +26,13 @@ import {
   Twitter,
   ExternalLink,
   Palette,
-  Maximize2
+  Maximize2,
+  Languages,
+  Heart,
+  Layers,
+  MapPin,
+  Calendar,
+  Link as LinkIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,6 +44,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { generateResumeContent } from '@/ai/flows/generate-resume-content';
 import { useToast } from '@/hooks/use-toast';
@@ -45,6 +52,7 @@ import { ResumeCanvas } from '@/components/resume/resume-canvas';
 import { ResumeData } from '@/types/resume';
 
 const THEMES = [
+  { id: 'coral', name: 'Network Bulls Coral', primary: '#EF593E', accent: '#D44D35', text: '#1E293B', secondary: '#64748B' },
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB', text: '#1E293B', secondary: '#64748B' },
   { id: 'midnight', name: 'Midnight Professional', primary: '#0F172A', accent: '#334155', text: '#0F172A', secondary: '#475569' },
   { id: 'emerald', name: 'Emerald Executive', primary: '#064E3B', accent: '#059669', text: '#064E3B', secondary: '#374151' },
@@ -54,18 +62,15 @@ const THEMES = [
   { id: 'gold', name: 'Warm Gold', primary: '#78350F', accent: '#D97706', text: '#451A03', secondary: '#78350F' },
   { id: 'ocean', name: 'Deep Ocean', primary: '#164E63', accent: '#0891B2', text: '#164E63', secondary: '#475569' },
   { id: 'charcoal', name: 'Pure Charcoal', primary: '#171717', accent: '#404040', text: '#171717', secondary: '#525252' },
-  { id: 'coral', name: 'Bulls Coral', primary: '#EF593E', accent: '#D44D35', text: '#1E293B', secondary: '#64748B' },
 ];
 
 const FONTS = [
-  { id: 'inter', name: 'Inter (Standard)', family: '"Inter", sans-serif' },
-  { id: 'roboto', name: 'Roboto', family: '"Roboto", sans-serif' },
-  { id: 'open-sans', name: 'Open Sans', family: '"Open Sans", sans-serif' },
+  { id: 'inter', name: 'Inter (Modern)', family: '"Inter", sans-serif' },
   { id: 'montserrat', name: 'Montserrat (Bold)', family: '"Montserrat", sans-serif' },
-  { id: 'poppins', name: 'Poppins', family: '"Poppins", sans-serif' },
+  { id: 'poppins', name: 'Poppins (Friendly)', family: '"Poppins", sans-serif' },
   { id: 'merriweather', name: 'Merriweather (Serif)', family: '"Merriweather", serif' },
   { id: 'eb-garamond', name: 'EB Garamond (Classic)', family: '"EB Garamond", serif' },
-  { id: 'lora', name: 'Lora', family: '"Lora", serif' },
+  { id: 'lora', name: 'Lora (Academic)', family: '"Lora", serif' },
   { id: 'playfair', name: 'Playfair Display', family: '"Playfair Display", serif' },
   { id: 'source-code', name: 'Source Code Pro', family: '"Source Code Pro", monospace' },
 ];
@@ -93,28 +98,28 @@ const TEMPLATES = [
   { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern' },
 ];
 
-const BullIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2C9.79 2 8 3.79 8 6C8 7.31 8.63 8.47 9.61 9.22C6.44 10.05 4 12.75 4 16V18H20V16C20 12.75 17.56 10.05 14.39 9.22C15.37 8.47 16 7.31 16 6C16 3.79 14.21 2 12 2ZM12 4C13.1 4 14 4.9 14 6C14 7.1 13.1 8 12 8C10.9 8 10 7.1 10 6C10 4.9 10.9 4 12 4ZM6.18 16C6.67 13.72 8.7 12 11.13 12H12.87C15.3 12 17.33 13.72 17.82 16H6.18Z" />
-  </svg>
-);
-
 const Logo = () => (
   <div className="flex items-center gap-2">
-    <div className="w-9 h-9 rounded-xl bg-[#EF593E] flex items-center justify-center text-white overflow-hidden shadow-lg shadow-[#EF593E]/20">
-      <User className="w-5 h-5" />
+    <div className="w-10 h-10 rounded-xl bg-[#EF593E] flex items-center justify-center text-white overflow-hidden shadow-lg shadow-[#EF593E]/20">
+      <Briefcase className="w-6 h-6" />
     </div>
-    <div className="flex items-center gap-1">
-      <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
-      <span className="text-[#334155] font-black text-xl tracking-tighter uppercase">Bulls</span>
+    <div className="flex flex-col -space-y-1">
+      <div className="flex items-center gap-1">
+        <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
+        <span className="text-[#334155] font-black text-xl tracking-tighter uppercase">Bulls</span>
+      </div>
+      <div className="flex items-center gap-1">
+        <div className="h-[1px] flex-1 bg-slate-200" />
+        <span className="text-[7px] text-[#EF593E] font-black tracking-[0.2em] uppercase whitespace-nowrap">Professional Builder</span>
+      </div>
     </div>
   </div>
 );
 
 export default function ResumeBuilderPage() {
-  const [activeTab, setActiveTab] = useState('design');
+  const [activeTab, setActiveTab] = useState('content');
   const [selectedTemplateId, setSelectedTemplateId] = useState('classic');
-  const [selectedTheme, setSelectedTheme] = useState(THEMES[9]); // Bulls Coral by default
+  const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
   const [lineHeight, setLineHeight] = useState(1.4);
   const [fontSize, setFontSize] = useState(11);
@@ -125,11 +130,13 @@ export default function ResumeBuilderPage() {
   const [data, setData] = useState<ResumeData>({
     personal: {
       fullName: 'Johnathan P. Doe',
+      middleName: 'Patrick',
       jobTitle: 'Principal Cloud Architect',
-      headline: 'Architecting high-availability systems for Fortune 500 companies',
+      headline: 'Architecting high-availability systems for global enterprises',
       email: 'j.doe@tech-pioneer.com',
       phone: '+1 (555) 789-0123',
       location: {
+        street: '123 Cloud Avenue',
         city: 'Seattle',
         state: 'WA',
         country: 'USA',
@@ -138,7 +145,10 @@ export default function ResumeBuilderPage() {
       linkedin: 'linkedin.com/in/johndoe-arch',
       github: 'github.com/johndoe-cloud',
       portfolio: 'johndoe.cloud',
+      twitter: 'twitter.com/johndoe_cloud',
+      stackoverflow: 'stackoverflow.com/u/1234567',
       nationality: 'United States',
+      maritalStatus: 'Prefer not to say',
     },
     summary: {
       content: 'Principal Cloud Architect with over 12 years of experience in digital transformation. Expert at migrating legacy workloads to hybrid-cloud infrastructures with zero downtime. Proven track record of reducing operational costs by 35% while increasing system reliability to 99.99%.',
@@ -154,6 +164,15 @@ export default function ResumeBuilderPage() {
           { id: '1a', name: 'Python', level: 95, years: '10', priority: 'Primary' },
           { id: '1b', name: 'Go', level: 85, years: '5', priority: 'Primary' }
         ]
+      },
+      {
+        id: '2',
+        category: 'Cloud & DevOps',
+        items: [
+          { id: '2a', name: 'AWS', level: 98, years: '8', priority: 'Primary' },
+          { id: '2b', name: 'Kubernetes', level: 90, years: '6', priority: 'Primary' },
+          { id: '2c', name: 'Terraform', level: 92, years: '5', priority: 'Primary' }
+        ]
       }
     ],
     experience: [
@@ -161,8 +180,12 @@ export default function ResumeBuilderPage() {
         id: '1',
         title: 'Principal Cloud Architect',
         company: 'CloudScale Enterprises',
+        website: 'cloudscale.io',
         location: 'Seattle, WA',
         employmentType: 'Full-time',
+        industry: 'Cloud Computing',
+        teamSize: '15',
+        reportingTo: 'CTO',
         startMonth: 'January',
         startYear: '2020',
         current: true,
@@ -170,7 +193,7 @@ export default function ResumeBuilderPage() {
         achievements: 'Migrated 400+ applications to AWS with zero downtime.\nDesigned a serverless data processing engine handling 5TB/day.',
         technologies: 'AWS, Terraform, Go, Python',
         kpiMetrics: 'Reduced AWS monthly spend by $1.2M through optimization.',
-        teamSize: '15'
+        wasPromoted: true
       }
     ],
     education: [
@@ -179,12 +202,14 @@ export default function ResumeBuilderPage() {
         degreeType: 'Master of Science',
         degree: 'M.S. in Computer Science', 
         field: 'Distributed Systems',
+        specialization: 'Cloud Computing',
         school: 'University of Washington', 
         location: 'Seattle, WA',
         startYear: '2012', 
         endYear: '2014',
         gpa: '3.95/4.0',
-        honors: 'President\'s Medalist'
+        honors: 'President\'s Medalist',
+        thesisTitle: 'Optimized Resource Allocation in Multi-tenant Cloud Environments'
       }
     ],
     projects: [
@@ -193,6 +218,8 @@ export default function ResumeBuilderPage() {
         title: 'AutoOptimizer Bot',
         role: 'Lead Architect',
         description: 'AI-driven tool for automated cloud cost reduction.',
+        problemStatement: 'Manual cloud cost management was inefficient and error-prone.',
+        solutionApproach: 'Developed a Python-based bot that uses reinforcement learning to identify underutilized resources.',
         technologies: 'Python, OpenAI API, AWS SDK',
         impact: 'Saved initial beta users over 20% on cloud bills within 24 hours.'
       }
@@ -203,12 +230,12 @@ export default function ResumeBuilderPage() {
     achievements: [
       { id: '1', title: 'Speaker at AWS re:Invent', description: 'Presented on serverless scaling strategies.', year: '2023', category: 'Professional' }
     ],
-    publications: [],
     languages: [
       { id: '1', name: 'English', reading: 'Native', writing: 'Native', speaking: 'Native' }
     ],
     interests: ['Blockchain Architecture', 'Aviation', 'Deep Sea Fishing'],
-    customSections: []
+    customSections: [],
+    publications: []
   });
 
   const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean>>({
@@ -225,32 +252,82 @@ export default function ResumeBuilderPage() {
     publications: false
   });
 
-  const handlePersonalUpdate = (field: string, value: any) => {
+  const updateField = (path: string, value: any) => {
     setData(prev => {
-      if (field.includes('.')) {
-        const [obj, key] = field.split('.');
-        return {
-          ...prev,
-          [obj]: { ...(prev as any)[obj], [key]: value }
-        };
+      const keys = path.split('.');
+      if (keys.length === 1) return { ...prev, [keys[0]]: value };
+      
+      const newData = { ...prev };
+      let current: any = newData;
+      for (let i = 0; i < keys.length - 1; i++) {
+        current[keys[i]] = { ...current[keys[i]] };
+        current = current[keys[i]];
       }
-      return {
-        ...prev,
-        personal: { ...prev.personal, [field]: value }
-      };
+      current[keys[keys.length - 1]] = value;
+      return newData;
     });
   };
 
   const addArrayItem = (key: keyof Omit<ResumeData, 'personal' | 'summary' | 'interests'>) => {
     const newItem: any = { id: Math.random().toString(36).substr(2, 9) };
     if (key === 'experience') {
-      Object.assign(newItem, { title: '', company: '', location: '', employmentType: 'Full-time', startMonth: 'Jan', startYear: '2024', current: false, responsibilities: '', achievements: '', technologies: '' });
+      Object.assign(newItem, { 
+        title: '', company: '', location: '', employmentType: 'Full-time', 
+        startMonth: 'Jan', startYear: '2024', current: false, 
+        responsibilities: '', achievements: '', technologies: '',
+        industry: '', teamSize: '', reportingTo: ''
+      });
     } else if (key === 'skills') {
       Object.assign(newItem, { category: 'Other', items: [] });
     } else if (key === 'projects') {
-      Object.assign(newItem, { title: '', role: '', description: '', technologies: '', solutionApproach: '' });
+      Object.assign(newItem, { 
+        title: '', role: '', description: '', technologies: '', 
+        problemStatement: '', solutionApproach: '', impact: '' 
+      });
+    } else if (key === 'education') {
+      Object.assign(newItem, { 
+        degreeType: '', degree: '', field: '', school: '', location: '', 
+        startYear: '', endYear: '', gpa: '', honors: '' 
+      });
+    } else if (key === 'certifications') {
+      Object.assign(newItem, { name: '', org: '', issueDate: '', expiryDate: '', credentialId: '', url: '' });
+    } else if (key === 'languages') {
+      Object.assign(newItem, { name: '', reading: 'Native', writing: 'Native', speaking: 'Native' });
     }
     setData(prev => ({ ...prev, [key]: [...(prev[key] as any[]), newItem] }));
+  };
+
+  const removeArrayItem = (key: keyof Omit<ResumeData, 'personal' | 'summary' | 'interests'>, id: string) => {
+    setData(prev => ({ ...prev, [key]: (prev[key] as any[]).filter((i: any) => i.id !== id) }));
+  };
+
+  const handleAiRefine = async (type: 'summary' | 'experience', index?: number) => {
+    setIsGenerating(true);
+    try {
+      const keywords = type === 'summary' 
+        ? data.skills.map(s => s.items.map(i => i.name).join(', ')).join(', ') 
+        : data.experience[index!].responsibilities;
+      
+      const res = await generateResumeContent({
+        type,
+        jobTitle: data.personal.jobTitle,
+        keywords: keywords || 'Professional growth, technical leadership'
+      });
+      
+      if (type === 'summary') {
+        updateField('summary.content', res.generatedText);
+      } else {
+        const newExp = [...data.experience];
+        newExp[index!] = { ...newExp[index!], responsibilities: res.generatedText };
+        updateField('experience', newExp);
+      }
+      
+      toast({ title: "AI Magic Success", description: "Content refined professionally." });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "AI Magic Failed", description: e.message });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -258,34 +335,34 @@ export default function ResumeBuilderPage() {
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
         <Link href="/"><Logo /></Link>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Resume Editor Pro</Button>
+          <Button variant="ghost" className="text-slate-500 font-black uppercase text-[10px] tracking-widest hover:text-[#EF593E]">Resume Editor Pro</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
-          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6 shadow-lg shadow-orange-100 transition-all active:scale-95">
-            <Download className="h-4 w-4" /> Download Professional PDF
+          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-black uppercase text-[10px] tracking-widest gap-2 rounded-lg px-6 h-10 shadow-lg shadow-orange-100 transition-all active:scale-95">
+            <Download className="h-4 w-4" /> Export Professional PDF
           </Button>
         </div>
       </header>
 
       <div className="flex flex-1 pt-16 h-full overflow-hidden">
         {/* Editor Sidebar */}
-        <aside className="w-[580px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10">
+        <aside className="w-[600px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 shrink-0">
               <TabsTrigger 
                 value="design" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[11px] uppercase tracking-[0.1em] gap-2 py-4"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[11px] uppercase tracking-[0.15em] gap-2 py-4"
               >
                 <Palette className="h-4 w-4" /> Design & Theme
               </TabsTrigger>
               <TabsTrigger 
                 value="content" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[11px] uppercase tracking-[0.1em] gap-2 py-4"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[11px] uppercase tracking-[0.15em] gap-2 py-4"
               >
                 <FileText className="h-4 w-4" /> Text Content
               </TabsTrigger>
             </TabsList>
 
-            <ScrollArea className="flex-1 w-full bg-slate-50/20">
+            <ScrollArea className="flex-1 w-full bg-slate-50/30">
               <div className="p-8 pb-32">
                 
                 {/* DESIGN TAB */}
@@ -405,44 +482,79 @@ export default function ResumeBuilderPage() {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="pt-2 pb-8 space-y-8">
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-3 gap-4">
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-black text-slate-400 uppercase">First & Last Name</Label>
-                            <Input value={data.personal.fullName} onChange={(e) => handlePersonalUpdate('fullName', e.target.value)} className="rounded-xl h-11 bg-slate-50/50 border-slate-100" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">First Name</Label>
+                            <Input value={data.personal.fullName.split(' ')[0]} onChange={(e) => updateField('personal.fullName', `${e.target.value} ${data.personal.fullName.split(' ').slice(1).join(' ')}`)} className="rounded-xl h-11" />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-black text-slate-400 uppercase">Professional Headline</Label>
-                            <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl h-11 bg-slate-50/50 border-slate-100" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Middle Name</Label>
+                            <Input value={data.personal.middleName} onChange={(e) => updateField('personal.middleName', e.target.value)} className="rounded-xl h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Last Name</Label>
+                            <Input value={data.personal.fullName.split(' ').slice(-1)[0]} onChange={(e) => updateField('personal.fullName', `${data.personal.fullName.split(' ').slice(0, -1).join(' ')} ${e.target.value}`)} className="rounded-xl h-11" />
                           </div>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-6">
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-black text-slate-400 uppercase">Email Address</Label>
-                            <Input value={data.personal.email} onChange={(e) => handlePersonalUpdate('email', e.target.value)} className="rounded-xl h-11" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Professional Headline</Label>
+                            <Input value={data.personal.jobTitle} onChange={(e) => updateField('personal.jobTitle', e.target.value)} className="rounded-xl h-11 bg-slate-50/50" />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-[10px] font-black text-slate-400 uppercase">Phone Number</Label>
-                            <Input value={data.personal.phone} onChange={(e) => handlePersonalUpdate('phone', e.target.value)} className="rounded-xl h-11" />
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Nationality</Label>
+                            <Input value={data.personal.nationality} onChange={(e) => updateField('personal.nationality', e.target.value)} className="rounded-xl h-11" />
                           </div>
                         </div>
 
-                        <div className="space-y-4 pt-4 border-t border-slate-100">
-                          <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Digital Footprint</h4>
-                          <div className="grid grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                              <div className="flex items-center gap-2 mb-1">
-                                <Linkedin className="h-3 w-3 text-blue-600" />
-                                <Label className="text-[10px] font-bold uppercase text-slate-500">LinkedIn</Label>
-                              </div>
-                              <Input value={data.personal.linkedin} onChange={(e) => handlePersonalUpdate('linkedin', e.target.value)} className="rounded-xl" placeholder="linkedin.com/in/..." />
+                        <div className="grid grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Email Address</Label>
+                            <Input value={data.personal.email} onChange={(e) => updateField('personal.email', e.target.value)} className="rounded-xl h-11" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-black text-slate-400 uppercase">Phone Number</Label>
+                            <Input value={data.personal.phone} onChange={(e) => updateField('personal.phone', e.target.value)} className="rounded-xl h-11" />
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 pt-4 border-t">
+                          <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Full Address</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2 col-span-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Street Address</Label>
+                              <Input value={data.personal.location.street} onChange={(e) => updateField('personal.location.street', e.target.value)} className="rounded-xl h-11" />
                             </div>
                             <div className="space-y-2">
-                              <div className="flex items-center gap-2 mb-1">
-                                <Github className="h-3 w-3 text-slate-900" />
-                                <Label className="text-[10px] font-bold uppercase text-slate-500">GitHub</Label>
-                              </div>
-                              <Input value={data.personal.github} onChange={(e) => handlePersonalUpdate('github', e.target.value)} className="rounded-xl" placeholder="github.com/..." />
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">City</Label>
+                              <Input value={data.personal.location.city} onChange={(e) => updateField('personal.location.city', e.target.value)} className="rounded-xl h-11" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">State / Region</Label>
+                              <Input value={data.personal.location.state} onChange={(e) => updateField('personal.location.state', e.target.value)} className="rounded-xl h-11" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 pt-4 border-t">
+                          <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Digital Presence</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">LinkedIn Profile</Label>
+                              <Input value={data.personal.linkedin} onChange={(e) => updateField('personal.linkedin', e.target.value)} className="rounded-xl h-11" placeholder="linkedin.com/..." />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">GitHub Profile</Label>
+                              <Input value={data.personal.github} onChange={(e) => updateField('personal.github', e.target.value)} className="rounded-xl h-11" placeholder="github.com/..." />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Portfolio Website</Label>
+                              <Input value={data.personal.portfolio} onChange={(e) => updateField('personal.portfolio', e.target.value)} className="rounded-xl h-11" placeholder="yourdomain.com" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Twitter / X</Label>
+                              <Input value={data.personal.twitter} onChange={(e) => updateField('personal.twitter', e.target.value)} className="rounded-xl h-11" placeholder="twitter.com/..." />
                             </div>
                           </div>
                         </div>
@@ -458,21 +570,25 @@ export default function ResumeBuilderPage() {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="pt-2 pb-8 space-y-6">
+                        <div className="space-y-2">
+                          <Label className="text-[10px] font-black text-slate-400 uppercase">Job Target / Career Goal</Label>
+                          <Input value={data.summary.jobTarget} onChange={(e) => updateField('summary.jobTarget', e.target.value)} className="rounded-xl h-11 bg-slate-50/50" placeholder="e.g. Senior Software Engineer" />
+                        </div>
                         <div className="flex justify-between items-center bg-slate-50/50 p-4 rounded-xl border border-slate-100">
                           <div className="flex items-center gap-4">
-                            <Switch checked={data.summary.asBullets} onCheckedChange={(v) => setData(prev => ({ ...prev, summary: { ...prev.summary, asBullets: v } }))} />
-                            <Label className="text-[10px] font-black uppercase text-slate-500">Bullet Mode</Label>
+                            <Switch checked={data.summary.asBullets} onCheckedChange={(v) => updateField('summary.asBullets', v)} />
+                            <Label className="text-[10px] font-black uppercase text-slate-500">Bullet Point Mode</Label>
                           </div>
-                          <Button size="sm" className="bg-[#EF593E] hover:bg-[#D44D35] text-white text-[10px] font-black uppercase h-8 px-4 gap-2 rounded-lg shadow-sm">
-                            <Sparkles className="h-3.5 w-3.5" /> AI Magic
+                          <Button size="sm" onClick={() => handleAiRefine('summary')} disabled={isGenerating} className="bg-[#EF593E] hover:bg-[#D44D35] text-white text-[10px] font-black uppercase h-8 px-4 gap-2 rounded-lg shadow-sm">
+                            {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} AI Magic
                           </Button>
                         </div>
                         <div className="relative">
                           <Textarea 
                             value={data.summary.content} 
-                            onChange={(e) => setData(prev => ({ ...prev, summary: { ...prev.summary, content: e.target.value } }))} 
+                            onChange={(e) => updateField('summary.content', e.target.value)} 
                             className="min-h-[160px] rounded-2xl text-sm leading-relaxed border-slate-100 focus:ring-[#EF593E]" 
-                            placeholder="Elevate your profile with a powerful summary of your career impact..."
+                            placeholder="Write a compelling summary of your professional journey..."
                           />
                           <div className="absolute bottom-3 right-4 text-[9px] font-black text-slate-300 tracking-widest">
                             {data.summary.content.length} / 1200 CHARS
@@ -492,7 +608,7 @@ export default function ResumeBuilderPage() {
                       <AccordionContent className="pt-2 pb-8 space-y-8">
                         {data.experience.map((exp, i) => (
                           <div key={exp.id} className="p-8 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-8 group relative transition-all hover:border-orange-200">
-                            <Button variant="ghost" size="icon" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => setData(prev => ({ ...prev, experience: prev.experience.filter(e => e.id !== exp.id) }))}>
+                            <Button variant="ghost" size="icon" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeArrayItem('experience', exp.id)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
                             
@@ -502,39 +618,423 @@ export default function ResumeBuilderPage() {
                                 <Input value={exp.title} onChange={(e) => {
                                   const newExp = [...data.experience];
                                   newExp[i].title = e.target.value;
-                                  setData(prev => ({ ...prev, experience: newExp }));
+                                  updateField('experience', newExp);
                                 }} className="h-11 rounded-xl" />
                               </div>
                               <div className="space-y-2">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Company</Label>
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Company Name</Label>
                                 <Input value={exp.company} onChange={(e) => {
                                   const newExp = [...data.experience];
                                   newExp[i].company = e.target.value;
-                                  setData(prev => ({ ...prev, experience: newExp }));
+                                  updateField('experience', newExp);
                                 }} className="h-11 rounded-xl" />
                               </div>
                             </div>
 
+                            <div className="grid grid-cols-3 gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Employment Type</Label>
+                                <Select value={exp.employmentType} onValueChange={(v) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].employmentType = v as any;
+                                  updateField('experience', newExp);
+                                }}>
+                                  <SelectTrigger className="h-11 rounded-xl"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Full-time">Full-time</SelectItem>
+                                    <SelectItem value="Part-time">Part-time</SelectItem>
+                                    <SelectItem value="Contract">Contract</SelectItem>
+                                    <SelectItem value="Internship">Internship</SelectItem>
+                                    <SelectItem value="Freelance">Freelance</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Industry</Label>
+                                <Input value={exp.industry} onChange={(e) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].industry = e.target.value;
+                                  updateField('experience', newExp);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Reporting To</Label>
+                                <Input value={exp.reportingTo} onChange={(e) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].reportingTo = e.target.value;
+                                  updateField('experience', newExp);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-4 gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Start Month</Label>
+                                <Input value={exp.startMonth} onChange={(e) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].startMonth = e.target.value;
+                                  updateField('experience', newExp);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Start Year</Label>
+                                <Input value={exp.startYear} onChange={(e) => {
+                                  const newExp = [...data.experience];
+                                  newExp[i].startYear = e.target.value;
+                                  updateField('experience', newExp);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                              {!exp.current && (
+                                <>
+                                  <div className="space-y-2">
+                                    <Label className="text-[10px] font-black text-slate-400 uppercase">End Month</Label>
+                                    <Input value={exp.endMonth} onChange={(e) => {
+                                      const newExp = [...data.experience];
+                                      newExp[i].endMonth = e.target.value;
+                                      updateField('experience', newExp);
+                                    }} className="h-11 rounded-xl" />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <Label className="text-[10px] font-black text-slate-400 uppercase">End Year</Label>
+                                    <Input value={exp.endYear} onChange={(e) => {
+                                      const newExp = [...data.experience];
+                                      newExp[i].endYear = e.target.value;
+                                      updateField('experience', newExp);
+                                    }} className="h-11 rounded-xl" />
+                                  </div>
+                                </>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                              <Switch checked={exp.current} onCheckedChange={(v) => {
+                                const newExp = [...data.experience];
+                                newExp[i].current = v;
+                                updateField('experience', newExp);
+                              }} />
+                              <Label className="text-[10px] font-black uppercase text-slate-500">I currently work here</Label>
+                            </div>
+
                             <div className="space-y-4 pt-4 border-t border-slate-100">
                               <div className="flex items-center justify-between">
-                                <Label className="text-[10px] font-black text-slate-400 uppercase">Achievements & Responsibilities</Label>
-                                <Button variant="ghost" className="h-7 text-[10px] font-black uppercase text-[#EF593E] gap-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Core Responsibilities</Label>
+                                <Button variant="ghost" size="sm" onClick={() => handleAiRefine('experience', i)} className="h-7 text-[10px] font-black uppercase text-[#EF593E] gap-2">
                                   <Sparkles className="h-3 w-3" /> AI Refine
                                 </Button>
                               </div>
-                              <Textarea placeholder="Highlight your impact with specific results..." value={exp.responsibilities} onChange={(e) => {
+                              <Textarea value={exp.responsibilities} onChange={(e) => {
                                 const newExp = [...data.experience];
                                 newExp[i].responsibilities = e.target.value;
-                                setData(prev => ({ ...prev, experience: newExp }));
-                              }} className="min-h-[120px] rounded-xl text-sm" />
+                                updateField('experience', newExp);
+                              }} className="min-h-[120px] rounded-xl text-sm" placeholder="List your primary duties..." />
+                            </div>
+
+                            <div className="space-y-4 pt-4 border-t border-slate-100">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Key Achievements & Impact</Label>
+                              <Textarea value={exp.achievements} onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].achievements = e.target.value;
+                                updateField('experience', newExp);
+                              }} className="min-h-[100px] rounded-xl text-sm" placeholder="Quantify your success (e.g. Increased revenue by 20%)..." />
+                            </div>
+
+                            <div className="space-y-4 pt-4 border-t border-slate-100">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Technologies Used (Tags)</Label>
+                              <Input value={exp.technologies} onChange={(e) => {
+                                const newExp = [...data.experience];
+                                newExp[i].technologies = e.target.value;
+                                updateField('experience', newExp);
+                              }} className="h-11 rounded-xl" placeholder="e.g. AWS, React, Python..." />
                             </div>
                           </div>
                         ))}
                         <Button variant="outline" className="w-full h-14 rounded-2xl border-dashed border-2 font-black uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E] transition-all" onClick={() => addArrayItem('experience')}>
-                          <PlusCircle className="h-5 w-5" /> Add New Career Milestone
+                          <PlusCircle className="h-5 w-5" /> Add Professional Milestone
                         </Button>
                       </AccordionContent>
                     </AccordionItem>
+
+                    {/* SKILLS */}
+                    <AccordionItem value="skills" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><Code className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">4. Core Expertise</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-8 space-y-8">
+                        {data.skills.map((group, i) => (
+                          <div key={group.id} className="p-6 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-6">
+                            <div className="flex justify-between items-center">
+                              <div className="space-y-2 w-1/2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Skill Category</Label>
+                                <Select value={group.category} onValueChange={(v) => {
+                                  const newSkills = [...data.skills];
+                                  newSkills[i].category = v as any;
+                                  updateField('skills', newSkills);
+                                }}>
+                                  <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Programming Languages">Programming Languages</SelectItem>
+                                    <SelectItem value="Frameworks & Libraries">Frameworks & Libraries</SelectItem>
+                                    <SelectItem value="Databases">Databases</SelectItem>
+                                    <SelectItem value="Cloud & DevOps">Cloud & DevOps</SelectItem>
+                                    <SelectItem value="Tools">Tools</SelectItem>
+                                    <SelectItem value="Soft Skills">Soft Skills</SelectItem>
+                                    <SelectItem value="Domain Skills">Domain Skills</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <Button variant="ghost" size="icon" className="text-red-400" onClick={() => removeArrayItem('skills', group.id)}>
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            <div className="space-y-4">
+                              {group.items.map((skill, si) => (
+                                <div key={skill.id} className="grid grid-cols-12 gap-4 items-end bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                                  <div className="col-span-4 space-y-2">
+                                    <Label className="text-[9px] font-black text-slate-400 uppercase">Skill Name</Label>
+                                    <Input value={skill.name} onChange={(e) => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items[si].name = e.target.value;
+                                      updateField('skills', newSkills);
+                                    }} className="h-9 rounded-lg text-xs" />
+                                  </div>
+                                  <div className="col-span-4 space-y-2">
+                                    <div className="flex justify-between">
+                                      <Label className="text-[9px] font-black text-slate-400 uppercase">Proficiency</Label>
+                                      <span className="text-[9px] font-bold text-[#EF593E]">{skill.level}%</span>
+                                    </div>
+                                    <Slider value={[skill.level]} onValueChange={([v]) => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items[si].level = v;
+                                      updateField('skills', newSkills);
+                                    }} />
+                                  </div>
+                                  <div className="col-span-3 space-y-2">
+                                    <Label className="text-[9px] font-black text-slate-400 uppercase">Priority</Label>
+                                    <Select value={skill.priority} onValueChange={(v) => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items[si].priority = v as any;
+                                      updateField('skills', newSkills);
+                                    }}>
+                                      <SelectTrigger className="h-9 rounded-lg text-xs"><SelectValue /></SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="Primary">Primary</SelectItem>
+                                        <SelectItem value="Secondary">Secondary</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  <div className="col-span-1">
+                                    <Button variant="ghost" size="icon" className="text-slate-300 hover:text-red-400 h-9" onClick={() => {
+                                      const newSkills = [...data.skills];
+                                      newSkills[i].items.splice(si, 1);
+                                      updateField('skills', newSkills);
+                                    }}><Trash2 className="h-3 w-3" /></Button>
+                                  </div>
+                                </div>
+                              ))}
+                              <Button variant="ghost" size="sm" className="text-[10px] font-black uppercase text-[#EF593E] gap-2 h-10 w-full rounded-xl border border-dashed border-orange-100 hover:bg-orange-50" onClick={() => {
+                                const newSkills = [...data.skills];
+                                newSkills[i].items.push({ id: Math.random().toString(36).substr(2, 9), name: '', level: 50, priority: 'Primary' });
+                                updateField('skills', newSkills);
+                              }}>
+                                <Plus className="h-3 w-3" /> Add Skill to {group.category}
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                        <Button variant="outline" className="w-full h-14 rounded-2xl border-dashed border-2 font-black uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E]" onClick={() => addArrayItem('skills')}>
+                          <PlusCircle className="h-5 w-5" /> Add Skill Category
+                        </Button>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* EDUCATION */}
+                    <AccordionItem value="education" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><GraduationCap className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">5. Academic Background</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-8 space-y-8">
+                        {data.education.map((edu, i) => (
+                          <div key={edu.id} className="p-8 rounded-3xl bg-slate-50/50 border border-slate-100 space-y-6 relative group">
+                            <Button variant="ghost" size="icon" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100" onClick={() => removeArrayItem('education', edu.id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                            
+                            <div className="grid grid-cols-2 gap-6">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Degree Title</Label>
+                                <Input value={edu.degree} onChange={(e) => {
+                                  const newEdu = [...data.education];
+                                  newEdu[i].degree = e.target.value;
+                                  updateField('education', newEdu);
+                                }} className="h-11 rounded-xl" placeholder="e.g. Master of Science" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Field of Study</Label>
+                                <Input value={edu.field} onChange={(e) => {
+                                  const newEdu = [...data.education];
+                                  newEdu[i].field = e.target.value;
+                                  updateField('education', newEdu);
+                                }} className="h-11 rounded-xl" placeholder="e.g. Computer Science" />
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">University / School</Label>
+                                <Input value={edu.school} onChange={(e) => {
+                                  const newEdu = [...data.education];
+                                  newEdu[i].school = e.target.value;
+                                  updateField('education', newEdu);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Location</Label>
+                                <Input value={edu.location} onChange={(e) => {
+                                  const newEdu = [...data.education];
+                                  newEdu[i].location = e.target.value;
+                                  updateField('education', newEdu);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">End Year</Label>
+                                <Input value={edu.endYear} onChange={(e) => {
+                                  const newEdu = [...data.education];
+                                  newEdu[i].endYear = e.target.value;
+                                  updateField('education', newEdu);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">GPA / Score</Label>
+                                <Input value={edu.gpa} onChange={(e) => {
+                                  const newEdu = [...data.education];
+                                  newEdu[i].gpa = e.target.value;
+                                  updateField('education', newEdu);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-[10px] font-black text-slate-400 uppercase">Honors</Label>
+                                <Input value={edu.honors} onChange={(e) => {
+                                  const newEdu = [...data.education];
+                                  newEdu[i].honors = e.target.value;
+                                  updateField('education', newEdu);
+                                }} className="h-11 rounded-xl" />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        <Button variant="outline" className="w-full h-14 rounded-2xl border-dashed border-2 font-black uppercase text-[10px] gap-2 text-slate-400 hover:text-[#EF593E] hover:border-[#EF593E]" onClick={() => addArrayItem('education')}>
+                          <PlusCircle className="h-5 w-5" /> Add Academic Qualification
+                        </Button>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* LANGUAGES */}
+                    <AccordionItem value="languages" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><Languages className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">6. Languages</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-8 space-y-6">
+                        {data.languages.map((lang, i) => (
+                          <div key={lang.id} className="grid grid-cols-4 gap-4 bg-slate-50/50 p-6 rounded-2xl border border-slate-100 relative group">
+                            <Button variant="ghost" size="icon" className="absolute -top-2 -right-2 text-red-400 opacity-0 group-hover:opacity-100 h-8 w-8 bg-white shadow-sm border border-slate-100" onClick={() => removeArrayItem('languages', lang.id)}>
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Language</Label>
+                              <Input value={lang.name} onChange={(e) => {
+                                const newLang = [...data.languages];
+                                newLang[i].name = e.target.value;
+                                updateField('languages', newLang);
+                              }} className="h-10 rounded-xl" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Reading</Label>
+                              <Select value={lang.reading} onValueChange={(v) => {
+                                const newLang = [...data.languages];
+                                newLang[i].reading = v as any;
+                                updateField('languages', newLang);
+                              }}>
+                                <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Basic">Basic</SelectItem>
+                                  <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                  <SelectItem value="Advanced">Advanced</SelectItem>
+                                  <SelectItem value="Native">Native</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Writing</Label>
+                              <Select value={lang.writing} onValueChange={(v) => {
+                                const newLang = [...data.languages];
+                                newLang[i].writing = v as any;
+                                updateField('languages', newLang);
+                              }}>
+                                <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Basic">Basic</SelectItem>
+                                  <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                  <SelectItem value="Advanced">Advanced</SelectItem>
+                                  <SelectItem value="Native">Native</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-black text-slate-400 uppercase">Speaking</Label>
+                              <Select value={lang.speaking} onValueChange={(v) => {
+                                const newLang = [...data.languages];
+                                newLang[i].speaking = v as any;
+                                updateField('languages', newLang);
+                              }}>
+                                <SelectTrigger className="h-10 rounded-xl"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Basic">Basic</SelectItem>
+                                  <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                  <SelectItem value="Advanced">Advanced</SelectItem>
+                                  <SelectItem value="Native">Native</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        ))}
+                        <Button variant="ghost" size="sm" className="w-full h-12 text-[10px] font-black uppercase text-[#EF593E] border border-dashed border-orange-100 hover:bg-orange-50 gap-2 rounded-xl" onClick={() => addArrayItem('languages')}>
+                          <Plus className="h-4 w-4" /> Add Language
+                        </Button>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* INTERESTS */}
+                    <AccordionItem value="interests" className="bg-white border rounded-2xl overflow-hidden px-4 shadow-sm transition-all hover:border-orange-100">
+                      <AccordionTrigger className="hover:no-underline py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center"><Heart className="h-4 w-4 text-[#EF593E]" /></div>
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-800">7. Hobbies & Interests</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-8 space-y-4">
+                        <Label className="text-[10px] font-black text-slate-400 uppercase">Interests (Comma Separated)</Label>
+                        <Textarea 
+                          value={data.interests.join(', ')} 
+                          onChange={(e) => updateField('interests', e.target.value.split(',').map(i => i.trim()))} 
+                          className="min-h-[80px] rounded-2xl text-sm" 
+                          placeholder="e.g. Hiking, Photography, Chess..." 
+                        />
+                      </AccordionContent>
+                    </AccordionItem>
+
                   </Accordion>
                 </TabsContent>
               </div>
@@ -556,8 +1056,8 @@ export default function ResumeBuilderPage() {
           </div>
           
           <div className="fixed bottom-10 right-10 flex gap-4 no-print">
-            <Button size="icon" className="w-14 h-14 rounded-full bg-slate-900 shadow-xl"><Maximize2 className="h-6 w-6" /></Button>
-            <Button size="icon" className="w-14 h-14 rounded-full bg-[#EF593E] shadow-xl"><Download className="h-6 w-6" /></Button>
+            <Button size="icon" className="w-14 h-14 rounded-full bg-slate-900 text-white shadow-xl hover:bg-slate-800 transition-all"><Maximize2 className="h-6 w-6" /></Button>
+            <Button size="icon" onClick={() => window.print()} className="w-14 h-14 rounded-full bg-[#EF593E] text-white shadow-xl hover:bg-[#D44D35] transition-all"><Download className="h-6 w-6" /></Button>
           </div>
         </main>
       </div>
