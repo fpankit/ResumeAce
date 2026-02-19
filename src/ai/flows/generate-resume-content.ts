@@ -24,7 +24,14 @@ export async function generateResumeContent(input: GenerateContentInput): Promis
 
 const prompt = ai.definePrompt({
   name: 'generateResumeContentPrompt',
-  input: { schema: GenerateContentInputSchema },
+  input: { 
+    schema: z.object({
+      type: z.string(),
+      jobTitle: z.string(),
+      keywords: z.string(),
+      isSummary: z.boolean(),
+    }) 
+  },
   output: { schema: GenerateContentOutputSchema },
   prompt: `You are a professional resume writer and career coach.
 Your task is to generate high-impact, ATS-friendly resume content for a {{{jobTitle}}}.
@@ -32,7 +39,7 @@ Your task is to generate high-impact, ATS-friendly resume content for a {{{jobTi
 Type: {{{type}}}
 Keywords/Skills: {{{keywords}}}
 
-{{#if (eq type "summary")}}
+{{#if isSummary}}
 Generate a compelling 3-4 sentence professional summary that highlights key achievements and skills. Use active verbs and quantify results where possible.
 {{else}}
 Generate a 3-4 bullet point description for a specific work experience entry. Each bullet should start with a strong action verb and focus on accomplishments rather than just duties.
@@ -48,7 +55,11 @@ const generateContentFlow = ai.defineFlow(
     outputSchema: GenerateContentOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    // Logic-less templates: pass a pre-calculated boolean for conditionals
+    const { output } = await prompt({
+      ...input,
+      isSummary: input.type === 'summary',
+    });
     return output!;
   }
 );

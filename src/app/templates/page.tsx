@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -19,7 +18,8 @@ import {
   Mail,
   Phone,
   MapPin,
-  Maximize2
+  ChevronRight,
+  Monitor
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -55,18 +55,18 @@ const TEMPLATES = [
   { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS' },
   { id: 'two-column', name: 'Two Column Sidebar', category: 'Standard' },
   { id: 'compact', name: 'Compact Dense', category: 'Standard' },
-  { id: 'academic', name: 'Academic CV', category: 'Standard' },
+  { id: 'academic', name: 'Academic CV', category: 'Academic' },
   { id: 'tech', name: 'Tech Developer Style', category: 'Modern' },
   { id: 'management', name: 'Management Resume', category: 'Executive' },
-  { id: 'creative', name: 'Creative Minimal', category: 'Modern' },
+  { id: 'creative', name: 'Creative Minimal', category: 'Creative' },
   { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern' },
-  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Standard' },
+  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant' },
   { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern' },
   { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive' },
   { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern' },
-  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Standard' },
+  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern' },
   { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS' },
-  { id: 'fresher', name: 'Compact Fresher', category: 'Standard' },
+  { id: 'fresher', name: 'Compact Fresher', category: 'Compact' },
   { id: 'senior', name: 'Senior Professional', category: 'Executive' },
   { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern' },
 ];
@@ -108,6 +108,7 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
   );
 
   const renderContent = () => {
+    // Variety logic for 20 templates
     switch (templateId) {
       case 'two-column':
         return (
@@ -162,7 +163,7 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
               <p className="text-sm leading-relaxed">{summary}</p>
             </section>
             <section className="space-y-8">
-              <SectionHeader title="Professional History" />
+              <SectionHeader title="Experience" />
               {experience.map((exp: any, i: number) => (
                 <div key={i} className="space-y-1">
                   <div className="flex justify-between items-baseline">
@@ -178,6 +179,7 @@ const ResumePreview = ({ templateId, theme, font, data, style }: any) => {
         );
 
       case 'ats-minimal':
+      case 'monochrome':
         return (
           <div className="space-y-6 font-mono text-[11px] leading-tight text-black">
             <div className="text-center space-y-1 mb-8">
@@ -263,16 +265,24 @@ export default function ResumeBuilder() {
       phone: '+1 (555) 000-1111',
       location: 'New York, NY',
     },
-    summary: 'Strategic and results-driven Senior Software Engineer with 8+ years of experience in designing and implementing scalable cloud architectures.',
+    summary: 'Strategic and results-driven Senior Software Engineer with 8+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.',
     experience: [
       {
+        id: '1',
         title: 'Senior Software Engineer',
         company: 'TechGlobal Solutions',
         period: 'Jan 2020 - Present',
-        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system.'
+        description: 'Led the migration of a legacy monolithic architecture to a microservices-based system.\nArchitected and implemented a real-time data processing pipeline using Kafka and Spark.'
+      },
+      {
+        id: '2',
+        title: 'Software Developer',
+        company: 'InnoStream Inc.',
+        period: 'Jun 2016 - Dec 2019',
+        description: 'Developed and maintained core features of the flagship SaaS product, serving over 500k monthly active users.'
       }
     ],
-    skills: ['React', 'Next.js', 'Node.js', 'TypeScript']
+    skills: ['React', 'Next.js', 'Node.js', 'TypeScript', 'AWS']
   });
 
   const handlePersonalUpdate = (field: string, value: string) => {
@@ -283,15 +293,17 @@ export default function ResumeBuilder() {
   };
 
   const handleExperienceUpdate = (index: number, field: string, value: string) => {
-    const newExp = [...data.experience];
-    newExp[index] = { ...newExp[index], [field]: value };
-    setData(prev => ({ ...prev, experience: newExp }));
+    setData(prev => {
+      const newExp = [...prev.experience];
+      newExp[index] = { ...newExp[index], [field]: value };
+      return { ...prev, experience: newExp };
+    });
   };
 
   const addExperience = () => {
     setData(prev => ({
       ...prev,
-      experience: [...prev.experience, { title: '', company: '', period: '', description: '' }]
+      experience: [...prev.experience, { id: Math.random().toString(), title: '', company: '', period: '', description: '' }]
     }));
   };
 
@@ -318,9 +330,16 @@ export default function ResumeBuilder() {
         handleExperienceUpdate(index!, 'description', res.generatedText);
       }
       
-      toast({ title: "AI Generation Successful" });
+      toast({
+        title: "AI Generation Successful",
+        description: "Your content has been optimized for ATS compatibility.",
+      });
     } catch (e: any) {
-      toast({ variant: "destructive", title: "AI Generation Failed", description: e.message });
+      toast({
+        variant: "destructive",
+        title: "AI Generation Failed",
+        description: e.message || "Failed to generate content. Please try again.",
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -331,6 +350,8 @@ export default function ResumeBuilder() {
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
         <Link href="/"><Logo /></Link>
         <div className="flex items-center gap-4">
+          <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
+          <div className="h-6 w-[1px] bg-slate-200 mx-2" />
           <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold gap-2 rounded-lg px-6">
             <Download className="h-4 w-4" /> Download PDF
           </Button>
@@ -342,7 +363,7 @@ export default function ResumeBuilder() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 sticky top-0 z-10">
               <TabsTrigger value="templates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
-                <Layout className="h-4 w-4 mr-2" /> Select Template
+                <Layout className="h-4 w-4 mr-2" /> Templates & Styles
               </TabsTrigger>
               <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest">
                 <TypeIcon className="h-4 w-4 mr-2" /> Text Content
@@ -373,7 +394,7 @@ export default function ResumeBuilder() {
                             </div>
                             {selectedTemplate === template.id && (
                               <div className="absolute inset-0 bg-white/40 flex items-center justify-center">
-                                <div className="w-10 h-10 rounded-full bg-[#EF593E] flex items-center justify-center text-white shadow-xl animate-in zoom-in-50">
+                                <div className="w-10 h-10 rounded-full bg-[#EF593E] flex items-center justify-center text-white shadow-xl animate-in zoom-in-50 duration-300">
                                   <Check className="h-5 w-5" />
                                 </div>
                               </div>
@@ -431,29 +452,32 @@ export default function ResumeBuilder() {
                   <section className="space-y-6 pt-10 border-t">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Summary</h3>
-                      <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('summary')} disabled={isGenerating} className="text-[10px] font-black uppercase text-[#EF593E] h-8">
+                      <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('summary')} disabled={isGenerating} className="text-[10px] font-black uppercase text-[#EF593E] h-8 hover:bg-orange-50">
                         {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3 mr-1" />} AI Magic
                       </Button>
                     </div>
-                    <Textarea value={data.summary} onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))} className="min-h-[120px] rounded-xl text-sm" />
+                    <Textarea value={data.summary} onChange={(e) => setData(prev => ({ ...prev, summary: e.target.value }))} className="min-h-[120px] rounded-xl text-sm leading-relaxed" />
                   </section>
                   <section className="space-y-8 pt-10 border-t">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xs font-black uppercase text-slate-900 tracking-widest">Experience</h3>
-                      <Button onClick={addExperience} variant="ghost" className="h-8 text-[10px] font-black uppercase text-[#EF593E]"><Plus className="h-3 w-3 mr-1" /> Add</Button>
+                      <Button onClick={addExperience} variant="ghost" className="h-8 text-[10px] font-black uppercase text-[#EF593E] hover:bg-orange-50"><Plus className="h-3 w-3 mr-1" /> Add Entry</Button>
                     </div>
                     {data.experience.map((exp, i) => (
-                      <div key={i} className="p-6 rounded-2xl bg-slate-50/50 border space-y-4 group relative">
-                        <Button onClick={() => removeExperience(i)} variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100"><Trash2 className="h-3.5 w-3.5 text-red-500" /></Button>
-                        <Input placeholder="Title" value={exp.title} onChange={(e) => handleExperienceUpdate(i, 'title', e.target.value)} className="h-9 text-xs" />
+                      <div key={exp.id} className="p-6 rounded-2xl bg-slate-50/50 border space-y-4 group relative hover:border-orange-200 transition-all">
+                        <Button onClick={() => removeExperience(i)} variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-500 hover:bg-red-50"><Trash2 className="h-3.5 w-3.5" /></Button>
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input placeholder="Title" value={exp.title} onChange={(e) => handleExperienceUpdate(i, 'title', e.target.value)} className="h-9 text-xs" />
+                          <Input placeholder="Company" value={exp.company} onChange={(e) => handleExperienceUpdate(i, 'company', e.target.value)} className="h-9 text-xs" />
+                        </div>
                         <div className="relative">
-                          <Textarea placeholder="Achievements..." value={exp.description} onChange={(e) => handleExperienceUpdate(i, 'description', e.target.value)} className="min-h-[100px] text-xs" />
-                          <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('experience', i)} disabled={isGenerating} className="absolute bottom-2 right-2 h-7 px-2 text-[9px] font-black uppercase text-[#EF593E] bg-white/80">AI Refine</Button>
+                          <Textarea placeholder="Achievements..." value={exp.description} onChange={(e) => handleExperienceUpdate(i, 'description', e.target.value)} className="min-h-[100px] text-xs leading-relaxed" />
+                          <Button size="sm" variant="ghost" onClick={() => handleAiGenerate('experience', i)} disabled={isGenerating} className="absolute bottom-2 right-2 h-7 px-2 text-[9px] font-black uppercase text-[#EF593E] bg-white/80 backdrop-blur shadow-sm hover:bg-white transition-all">AI Refine</Button>
                         </div>
                       </div>
                     ))}
                   </section>
-                </TabsContent>
+                </div>
               </div>
             </ScrollArea>
           </Tabs>
