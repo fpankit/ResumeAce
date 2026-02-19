@@ -101,14 +101,12 @@ const BullIcon = ({ className }: { className?: string }) => (
 
 const Logo = () => (
   <div className="flex items-center gap-2">
-    <div className="w-8 h-8 rounded-lg bg-[#EF593E] flex items-center justify-center text-white overflow-hidden shadow-lg shadow-primary/20">
-      <BullIcon className="w-full h-full p-1 opacity-90" />
+    <div className="w-9 h-9 rounded-xl bg-[#EF593E] flex items-center justify-center text-white overflow-hidden shadow-lg shadow-[#EF593E]/20">
+      <User className="w-5 h-5" />
     </div>
-    <div className="flex flex-col -space-y-1">
-      <div className="flex items-center gap-1">
-        <span className="text-[#EF593E] font-black text-lg tracking-tighter uppercase">Network</span>
-        <span className="text-[#44546A] font-black text-lg tracking-tighter uppercase">Bulls</span>
-      </div>
+    <div className="flex items-center gap-1">
+      <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
+      <span className="text-[#334155] font-black text-xl tracking-tighter uppercase">Bulls</span>
     </div>
   </div>
 );
@@ -116,7 +114,7 @@ const Logo = () => (
 export default function ResumeBuilderPage() {
   const [activeTab, setActiveTab] = useState('design');
   const [selectedTemplateId, setSelectedTemplateId] = useState('classic');
-  const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
+  const [selectedTheme, setSelectedTheme] = useState(THEMES[9]); // Bulls Coral by default
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
   const [lineHeight, setLineHeight] = useState(1.4);
   const [fontSize, setFontSize] = useState(11);
@@ -155,14 +153,6 @@ export default function ResumeBuilderPage() {
         items: [
           { id: '1a', name: 'Python', level: 95, years: '10', priority: 'Primary' },
           { id: '1b', name: 'Go', level: 85, years: '5', priority: 'Primary' }
-        ]
-      },
-      {
-        id: '2',
-        category: 'Cloud & DevOps',
-        items: [
-          { id: '2a', name: 'AWS', level: 98, years: '8', priority: 'Primary' },
-          { id: '2b', name: 'Kubernetes', level: 92, years: '6', priority: 'Primary' }
         ]
       }
     ],
@@ -281,10 +271,16 @@ export default function ResumeBuilderPage() {
         <aside className="w-[580px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 shrink-0">
-              <TabsTrigger value="design" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest gap-2">
+              <TabsTrigger 
+                value="design" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[11px] uppercase tracking-[0.1em] gap-2 py-4"
+              >
                 <Palette className="h-4 w-4" /> Design & Theme
               </TabsTrigger>
-              <TabsTrigger value="content" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[10px] uppercase tracking-widest gap-2">
+              <TabsTrigger 
+                value="content" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#EF593E] data-[state=active]:text-[#EF593E] font-black text-[11px] uppercase tracking-[0.1em] gap-2 py-4"
+              >
                 <FileText className="h-4 w-4" /> Text Content
               </TabsTrigger>
             </TabsList>
