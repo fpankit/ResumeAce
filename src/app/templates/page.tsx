@@ -63,12 +63,39 @@ const THEMES = [
   { id: 'burgundy', name: 'Royal Burgundy', primary: '#450A0A', accent: '#991B1B', text: '#450A0A', secondary: '#4B5563' },
 ];
 
-const FONTS = [
-  { id: 'inter', name: 'Inter (Modern)', family: '"Inter", sans-serif' },
-  { id: 'montserrat', name: 'Montserrat (Bold)', family: '"Montserrat", sans-serif' },
-  { id: 'poppins', name: 'Poppins (Friendly)', family: '"Poppins", sans-serif' },
-  { id: 'merriweather', name: 'Merriweather (Serif)', family: '"Merriweather", serif' },
+const FONT_CATEGORIES = [
+  {
+    name: 'Sans-Serif (Modern)',
+    fonts: [
+      { id: 'inter', name: 'Inter', family: '"Inter", sans-serif' },
+      { id: 'montserrat', name: 'Montserrat', family: '"Montserrat", sans-serif' },
+      { id: 'poppins', name: 'Poppins', family: '"Poppins", sans-serif' },
+      { id: 'roboto', name: 'Roboto', family: '"Roboto", sans-serif' },
+      { id: 'lato', name: 'Lato', family: '"Lato", sans-serif' },
+      { id: 'open-sans', name: 'Open Sans', family: '"Open Sans", sans-serif' },
+      { id: 'raleway', name: 'Raleway', family: '"Raleway", sans-serif' },
+    ]
+  },
+  {
+    name: 'Serif (Traditional)',
+    fonts: [
+      { id: 'merriweather', name: 'Merriweather', family: '"Merriweather", serif' },
+      { id: 'eb-garamond', name: 'EB Garamond', family: '"EB Garamond", serif' },
+      { id: 'lora', name: 'Lora', family: '"Lora", serif' },
+      { id: 'playfair', name: 'Playfair Display', family: '"Playfair Display", serif' },
+      { id: 'pt-serif', name: 'PT Serif', family: '"PT Serif", serif' },
+    ]
+  },
+  {
+    name: 'Monospace (Tech)',
+    fonts: [
+      { id: 'source-code-pro', name: 'Source Code Pro', family: '"Source Code Pro", monospace' },
+      { id: 'roboto-mono', name: 'Roboto Mono', family: '"Roboto Mono", monospace' },
+    ]
+  }
 ];
+
+const ALL_FONTS = FONT_CATEGORIES.flatMap(c => c.fonts);
 
 const TEMPLATES = [
   { id: 'classic', name: 'Classic Single Column', category: 'Standard' },
@@ -100,7 +127,7 @@ export default function ResumeBuilderPage() {
   const [activeTab, setActiveTab] = useState('content');
   const [selectedTemplateId, setSelectedTemplateId] = useState('classic');
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
-  const [selectedFont, setSelectedFont] = useState(FONTS[0]);
+  const [selectedFont, setSelectedFont] = useState(ALL_FONTS[0]);
   const [lineHeight, setLineHeight] = useState(1.4);
   const [fontSize, setFontSize] = useState(11);
   const [sectionSpacing, setSectionSpacing] = useState(20);
@@ -403,49 +430,54 @@ export default function ResumeBuilderPage() {
                   </section>
 
                   <section className="space-y-8 pt-10 border-t">
-                    <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography</h3>
-                    <div className="space-y-8">
-                      <div className="space-y-4">
-                        <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Select Font Family</Label>
-                        <div className="grid grid-cols-2 gap-3">
-                          {FONTS.map(font => (
-                            <Button 
-                              key={font.id} 
-                              variant="outline" 
-                              onClick={() => setSelectedFont(font)}
-                              className={cn(
-                                "h-11 justify-start px-4 text-xs font-bold rounded-xl border-slate-100",
-                                selectedFont.id === font.id && "border-[#EF593E] bg-orange-50 text-[#EF593E]"
-                              )}
-                              style={{ fontFamily: font.family }}
-                            >
-                              {font.name}
-                            </Button>
-                          ))}
+                    <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Typography Engine</h3>
+                    <div className="space-y-10">
+                      {FONT_CATEGORIES.map((category) => (
+                        <div key={category.name} className="space-y-4">
+                          <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{category.name}</Label>
+                          <div className="grid grid-cols-2 gap-3">
+                            {category.fonts.map(font => (
+                              <Button 
+                                key={font.id} 
+                                variant="outline" 
+                                onClick={() => setSelectedFont(font)}
+                                className={cn(
+                                  "h-11 justify-start px-4 text-xs font-bold rounded-xl border-slate-100 transition-all",
+                                  selectedFont.id === font.id ? "border-[#EF593E] bg-orange-50 text-[#EF593E] ring-2 ring-orange-100" : "hover:border-orange-200"
+                                )}
+                                style={{ fontFamily: font.family }}
+                              >
+                                {font.name}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-8 pt-4">
+                      ))}
+
+                      <div className="space-y-8 pt-6 border-t border-slate-100">
+                        <div className="grid grid-cols-2 gap-8 pt-4">
+                          <div className="space-y-4">
+                            <div className="flex justify-between">
+                              <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Font Size</Label>
+                              <span className="text-[10px] font-bold text-[#EF593E]">{fontSize}px</span>
+                            </div>
+                            <Slider value={[fontSize]} min={9} max={16} step={1} onValueChange={([v]) => setFontSize(v)} />
+                          </div>
+                          <div className="space-y-4">
+                            <div className="flex justify-between">
+                              <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Line Height</Label>
+                              <span className="text-[10px] font-bold text-[#EF593E]">{lineHeight}</span>
+                            </div>
+                            <Slider value={[lineHeight]} min={1} max={2.2} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
+                          </div>
+                        </div>
                         <div className="space-y-4">
                           <div className="flex justify-between">
-                            <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Font Size</Label>
-                            <span className="text-[10px] font-bold text-[#EF593E]">{fontSize}px</span>
+                            <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Section Spacing</Label>
+                            <span className="text-[10px] font-bold text-[#EF593E]">{sectionSpacing}px</span>
                           </div>
-                          <Slider value={[fontSize]} min={9} max={16} step={1} onValueChange={([v]) => setFontSize(v)} />
+                          <Slider value={[sectionSpacing]} min={10} max={48} step={2} onValueChange={([v]) => setSectionSpacing(v)} />
                         </div>
-                        <div className="space-y-4">
-                          <div className="flex justify-between">
-                            <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Line Height</Label>
-                            <span className="text-[10px] font-bold text-[#EF593E]">{lineHeight}</span>
-                          </div>
-                          <Slider value={[lineHeight]} min={1} max={2.2} step={0.1} onValueChange={([v]) => setLineHeight(v)} />
-                        </div>
-                      </div>
-                      <div className="space-y-4">
-                        <div className="flex justify-between">
-                          <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Section Spacing</Label>
-                          <span className="text-[10px] font-bold text-[#EF593E]">{sectionSpacing}px</span>
-                        </div>
-                        <Slider value={[sectionSpacing]} min={10} max={48} step={2} onValueChange={([v]) => setSectionSpacing(v)} />
                       </div>
                     </div>
                   </section>
