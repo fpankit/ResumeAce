@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useMemo } from 'react';
@@ -32,6 +31,21 @@ import Modern from '@/components/resume-templates/Modern';
 import ATSMinimal from '@/components/resume-templates/ATSMinimal';
 import TwoColumn from '@/components/resume-templates/TwoColumn';
 import Tech from '@/components/resume-templates/Tech';
+import Executive from '@/components/resume-templates/Executive';
+import Compact from '@/components/resume-templates/Compact';
+import Academic from '@/components/resume-templates/Academic';
+import Management from '@/components/resume-templates/Management';
+import Creative from '@/components/resume-templates/Creative';
+import BoldHeader from '@/components/resume-templates/BoldHeader';
+import ElegantSerif from '@/components/resume-templates/ElegantSerif';
+import Timeline from '@/components/resume-templates/Timeline';
+import Corporate from '@/components/resume-templates/Corporate';
+import SoftGray from '@/components/resume-templates/SoftGray';
+import BlueAccent from '@/components/resume-templates/BlueAccent';
+import Monochrome from '@/components/resume-templates/Monochrome';
+import Fresher from '@/components/resume-templates/Fresher';
+import Senior from '@/components/resume-templates/Senior';
+import Hybrid from '@/components/resume-templates/Hybrid';
 
 const THEMES = [
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB' },
@@ -55,21 +69,21 @@ const TEMPLATES = [
   { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS', component: ATSMinimal },
   { id: 'two-column', name: 'Two Column Sidebar', category: 'Modern', component: TwoColumn },
   { id: 'tech', name: 'Tech Developer Style', category: 'Tech', component: Tech },
-  { id: 'executive', name: 'Executive Clean', category: 'Executive', component: Classic },
-  { id: 'academic', name: 'Academic CV', category: 'Academic', component: Modern },
-  { id: 'management', name: 'Management Resume', category: 'Executive', component: Classic },
-  { id: 'creative', name: 'Creative Minimal', category: 'Creative', component: TwoColumn },
-  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern', component: Tech },
-  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant', component: Classic },
-  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern', component: Tech },
-  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive', component: Classic },
-  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern', component: Modern },
-  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern', component: TwoColumn },
-  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS', component: ATSMinimal },
-  { id: 'compact', name: 'Compact Dense', category: 'Standard', component: Classic },
-  { id: 'fresher', name: 'Compact Fresher', category: 'Compact', component: Modern },
-  { id: 'senior', name: 'Senior Professional', category: 'Executive', component: Classic },
-  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern', component: Modern },
+  { id: 'executive', name: 'Executive Clean', category: 'Executive', component: Executive },
+  { id: 'academic', name: 'Academic CV', category: 'Academic', component: Academic },
+  { id: 'management', name: 'Management Resume', category: 'Executive', component: Management },
+  { id: 'creative', name: 'Creative Minimal', category: 'Creative', component: Creative },
+  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern', component: BoldHeader },
+  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant', component: ElegantSerif },
+  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern', component: Timeline },
+  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive', component: Corporate },
+  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern', component: SoftGray },
+  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Modern', component: BlueAccent },
+  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS', component: Monochrome },
+  { id: 'compact', name: 'Compact Dense', category: 'Standard', component: Compact },
+  { id: 'fresher', name: 'Compact Fresher', category: 'Compact', component: Fresher },
+  { id: 'senior', name: 'Senior Professional', category: 'Executive', component: Senior },
+  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern', component: Hybrid },
 ];
 
 const BullIcon = ({ className }: { className?: string }) => (
@@ -334,7 +348,7 @@ export default function ResumeBuilderPage() {
                       </div>
                     ))}
                   </section>
-                </TabsContent>
+                </div>
               </div>
             </ScrollArea>
           </Tabs>
