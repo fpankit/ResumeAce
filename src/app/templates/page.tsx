@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -339,14 +338,18 @@ export default function ResumeBuilderPage() {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
-    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden no-print font-sans">
-      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
+    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50 no-print">
         <Link href="/"><Logo /></Link>
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-slate-500 font-black uppercase text-[10px] tracking-widest hover:text-[#EF593E]">Resume Editor Pro</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
-          <Button onClick={() => window.print()} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-black uppercase text-[10px] tracking-widest gap-2 rounded-lg px-6 h-10 shadow-lg shadow-orange-100 transition-all active:scale-95">
+          <Button onClick={handlePrint} className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-black uppercase text-[10px] tracking-widest gap-2 rounded-lg px-6 h-10 shadow-lg shadow-orange-100 transition-all active:scale-95">
             <Download className="h-4 w-4" /> Export Professional PDF
           </Button>
         </div>
@@ -354,7 +357,7 @@ export default function ResumeBuilderPage() {
 
       <div className="flex flex-1 pt-16 h-full overflow-hidden">
         {/* Editor Sidebar */}
-        <aside className="w-[500px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10">
+        <aside className="w-[500px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10 no-print">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 shrink-0">
               <TabsTrigger 
@@ -947,7 +950,7 @@ export default function ResumeBuilderPage() {
           
           <div className="fixed bottom-10 right-10 flex gap-4 no-print">
             <Button size="icon" className="w-14 h-14 rounded-full bg-slate-900 text-white shadow-xl hover:bg-slate-800 transition-all"><Maximize2 className="h-6 w-6" /></Button>
-            <Button size="icon" onClick={() => window.print()} className="w-14 h-14 rounded-full bg-[#EF593E] text-white shadow-xl hover:bg-[#D44D35] transition-all"><Download className="h-6 w-6" /></Button>
+            <Button size="icon" onClick={handlePrint} className="w-14 h-14 rounded-full bg-[#EF593E] text-white shadow-xl hover:bg-[#D44D35] transition-all"><Download className="h-6 w-6" /></Button>
           </div>
         </main>
       </div>
