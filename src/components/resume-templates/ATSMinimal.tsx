@@ -1,4 +1,3 @@
-
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
@@ -11,7 +10,7 @@ export default function ATSMinimal({ data, sections, style }: TemplateProps) {
       <header className="text-center border-b border-black pb-2">
         <h1 className="text-2xl font-bold uppercase">{data.personal.fullName}</h1>
         <p className="text-[10px] uppercase font-bold tracking-tight">
-          {data.personal.location.city}, {data.personal.location.state} | {data.personal.phone} | {data.personal.email}
+          {data.personal.location?.city}, {data.personal.location?.state} | {data.personal.phone} | {data.personal.email}
           {data.personal.linkedin && ` | ${data.personal.linkedin}`}
         </p>
       </header>
@@ -38,7 +37,7 @@ export default function ATSMinimal({ data, sections, style }: TemplateProps) {
               </div>
               <div className="text-[10px] whitespace-pre-wrap mt-1 leading-snug">
                 {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
-                {(exp.achievements || '').split('\n').map((line, i) => line && <p key={i}>• Achievement: {line}</p>)}
+                {(exp.achievements || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
               </div>
             </div>
           ))}

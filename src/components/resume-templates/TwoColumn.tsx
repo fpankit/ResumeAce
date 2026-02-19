@@ -24,7 +24,7 @@ export default function TwoColumn({ data, theme, style, sections }: TemplateProp
             <div className="space-y-3 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
               <div className="flex items-center gap-2"><Mail className="h-3 w-3 shrink-0" /> <span className="truncate">{data.personal.email}</span></div>
               <div className="flex items-center gap-2"><Phone className="h-3 w-3 shrink-0" /> {data.personal.phone}</div>
-              <div className="flex items-center gap-2"><MapPin className="h-3 w-3 shrink-0" /> {data.personal.location}</div>
+              <div className="flex items-center gap-2"><MapPin className="h-3 w-3 shrink-0" /> {data.personal.location.city}</div>
               {data.personal.linkedin && <div className="flex items-center gap-2"><Linkedin className="h-3 w-3 shrink-0" /> <span className="truncate">{data.personal.linkedin}</span></div>}
               {data.personal.github && <div className="flex items-center gap-2"><Github className="h-3 w-3 shrink-0" /> <span className="truncate">{data.personal.github}</span></div>}
             </div>
@@ -57,7 +57,7 @@ export default function TwoColumn({ data, theme, style, sections }: TemplateProp
                 <div key={edu.id} className="mb-4 last:mb-0">
                   <p className="text-[10px] font-black text-slate-800 leading-tight uppercase">{edu.degree}</p>
                   <p className="text-[9px] font-bold text-slate-400 mt-1 uppercase">{edu.school}</p>
-                  <p className="text-[8px] font-bold text-slate-300 uppercase mt-1">{edu.endDate}</p>
+                  <p className="text-[8px] font-bold text-slate-300 uppercase mt-1">{edu.endYear}</p>
                 </div>
               ))}
             </section>
@@ -83,14 +83,16 @@ export default function TwoColumn({ data, theme, style, sections }: TemplateProp
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="text-base font-black text-slate-900 leading-none">{exp.title}</h3>
                   <span className="text-[9px] font-bold text-slate-300 uppercase shrink-0 ml-4">
-                    {exp.startDate} — {exp.current ? 'NOW' : exp.endDate}
+                    {exp.startMonth} {exp.startYear} — {exp.current ? 'NOW' : `${exp.endMonth} ${exp.endYear}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-[10px] font-bold uppercase mb-3">
                   <span style={{ color: theme.accent }}>{exp.company}</span>
                   <span className="opacity-40">{exp.location}</span>
                 </div>
-                <div className="text-xs text-slate-500 whitespace-pre-wrap leading-relaxed">• {exp.description.replace(/\n/g, '\n• ')}</div>
+                <div className="text-xs text-slate-500 whitespace-pre-wrap leading-relaxed">
+                  {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
+                </div>
                 {exp.technologies && (
                   <p className="text-[9px] font-bold text-slate-400 uppercase mt-2 tracking-tight">Technologies: {exp.technologies}</p>
                 )}
