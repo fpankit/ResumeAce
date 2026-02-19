@@ -15,7 +15,7 @@ export default function BoldHeader({ data, theme, style, sections }: TemplatePro
         </div>
         <div className="text-right text-xs font-bold opacity-60 space-y-1">
           <p>{data.personal.email}</p>
-          <p>{data.personal.location}</p>
+          <p>{data.personal.location.city}, {data.personal.location.country}</p>
           <p>{data.personal.phone}</p>
         </div>
       </header>
@@ -40,13 +40,13 @@ export default function BoldHeader({ data, theme, style, sections }: TemplatePro
             <div key={exp.id} className="mb-8">
               <div className="flex justify-between items-baseline mb-1">
                 <h3 className="text-lg font-black text-slate-900">{exp.title}</h3>
-                <span className="text-[10px] font-bold text-slate-400">
-                  {exp.startDate} – {exp.current ? 'Present' : exp.endDate}
+                <span className="text-[10px] font-bold text-slate-400 uppercase">
+                   {exp.startMonth} {exp.startYear} – {exp.current ? 'Present' : `${exp.endMonth} ${exp.endYear}`}
                 </span>
               </div>
               <p className="text-xs font-black uppercase mb-4" style={{ color: theme.accent }}>{exp.company}</p>
               <div className="text-slate-600 whitespace-pre-wrap border-l-4 pl-6" style={{ borderColor: `${theme.accent}33` }}>
-                • {exp.description.replace(/\n/g, '\n• ')}
+                {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
               </div>
             </div>
           ))}

@@ -15,7 +15,7 @@ export default function Compact({ data, theme, style, sections }: TemplateProps)
           <span>|</span>
           <span>{data.personal.phone}</span>
           <span>|</span>
-          <span>{data.personal.location}</span>
+          <span>{data.personal.location.city}</span>
         </div>
       </header>
 
@@ -32,10 +32,10 @@ export default function Compact({ data, theme, style, sections }: TemplateProps)
             <div key={exp.id}>
               <div className="flex justify-between font-bold">
                 <span>{exp.title} @ {exp.company}</span>
-                <span className="opacity-40 text-[8px]">{exp.startDate} - {exp.current ? 'Now' : exp.endDate}</span>
+                <span className="opacity-40 text-[8px] uppercase">{exp.startMonth} {exp.startYear} - {exp.current ? 'Now' : `${exp.endMonth} ${exp.endYear}`}</span>
               </div>
-              <div className="text-slate-500 text-[9px] whitespace-pre-wrap mt-1">
-                • {exp.description.replace(/\n/g, '\n• ')}
+              <div className="text-slate-500 text-[9px] whitespace-pre-wrap mt-1 leading-tight">
+                {(exp.responsibilities || '').split('\n').map((line, i) => line && <p key={i}>• {line}</p>)}
               </div>
             </div>
           ))}
@@ -48,7 +48,7 @@ export default function Compact({ data, theme, style, sections }: TemplateProps)
           <div className="flex flex-wrap gap-x-3 gap-y-1">
             {data.skills.map(group => (
               <p key={group.id} className="text-[9px] text-slate-600">
-                <span className="font-bold">{group.category}:</span> {group.items.map(i => i.name).join(', ')}
+                <span className="font-bold uppercase">{group.category}:</span> {group.items.map(i => i.name).join(', ')}
               </p>
             ))}
           </div>
