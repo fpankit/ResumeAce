@@ -322,7 +322,6 @@ export default function ResumeBuilder() {
                             selectedTemplate === template.id ? "border-[#EF593E] ring-4 ring-[#EF593E]/10" : "border-slate-100 hover:border-slate-200"
                           )}
                         >
-                          {/* Mini Layout Previews */}
                           <div className="absolute inset-4 space-y-2 opacity-40">
                             {template.id === 'twocolumn' ? (
                                <div className="flex h-full gap-2">
@@ -457,7 +456,7 @@ export default function ResumeBuilder() {
                       ))}
                     </div>
                   </section>
-                </div>
+                </TabsContent>
               </div>
             </ScrollArea>
           </Tabs>
