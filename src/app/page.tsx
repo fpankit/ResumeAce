@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -124,46 +123,48 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="container mx-auto px-6 py-20 lg:py-32 hero-gradient overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8 max-w-xl">
-              <div className="space-y-4">
-                <h1 className="text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.1]">
-                  Free AI <span className="text-[#EF593E]">ATS</span><br />
-                  Resume Checker
-                </h1>
-                <p className="text-lg text-slate-500 leading-relaxed">
-                  Is your resume good enough? Run 16 essential checks on your resume. It's fast, and free. High scores lead to more interviews.
-                </p>
-              </div>
-
-              {/* Upload Zone */}
-              <div className="upload-zone p-12 rounded-2xl flex flex-col items-center justify-center text-center space-y-6 bg-[#EF593E]/5 border-2 border-dashed border-[#EF593E]/20">
-                <p className="text-slate-500 font-medium">
-                  Drop your resume here or choose a file<br />
-                  <span className="text-xs text-slate-400 font-normal">PDF & DOCX only (max 2MB)</span>
-                </p>
-                <Link href="/login">
-                  <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-8 h-12 gap-2 text-base shadow-xl shadow-[#EF593E]/20">
-                    Upload my resume <Upload className="h-5 w-5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Visual Side */}
-            <div className="relative hidden lg:block">
-              <div className="relative z-10 animate-in fade-in zoom-in duration-1000 scale-110">
-                <ResumeIllustration className="w-full h-auto drop-shadow-2xl" />
-                <div className="absolute -top-4 -right-4 text-[#EF593E] animate-bounce">
-                  <Sparkles className="h-10 w-10" />
+        {/* Hero Section - Removed overflow-hidden and made relative for Sparkles to move freely */}
+        <section className="relative hero-gradient overflow-visible">
+          <div className="container mx-auto px-6 py-20 lg:py-32">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8 max-w-xl">
+                <div className="space-y-4">
+                  <h1 className="text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.1]">
+                    Free AI <span className="text-[#EF593E]">ATS</span><br />
+                    Resume Checker
+                  </h1>
+                  <p className="text-lg text-slate-500 leading-relaxed">
+                    Is your resume good enough? Run 16 essential checks on your resume. It's fast, and free. High scores lead to more interviews.
+                  </p>
                 </div>
-                <div className="absolute bottom-12 right-12 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-3 border border-orange-100">
-                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
-                    <CheckCircle2 className="h-5 w-5 text-white" />
+
+                {/* Upload Zone */}
+                <div className="upload-zone p-12 rounded-2xl flex flex-col items-center justify-center text-center space-y-6 bg-[#EF593E]/5 border-2 border-dashed border-[#EF593E]/20">
+                  <p className="text-slate-500 font-medium">
+                    Drop your resume here or choose a file<br />
+                    <span className="text-xs text-slate-400 font-normal">PDF & DOCX only (max 2MB)</span>
+                  </p>
+                  <Link href="/login">
+                    <Button className="bg-[#EF593E] hover:bg-[#D44D35] text-white font-semibold px-8 h-12 gap-2 text-base shadow-xl shadow-[#EF593E]/20">
+                      Upload my resume <Upload className="h-5 w-5" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Visual Side */}
+              <div className="relative hidden lg:block overflow-visible">
+                <div className="relative z-10 animate-in fade-in zoom-in duration-1000">
+                  <ResumeIllustration className="w-full h-auto drop-shadow-2xl" />
+                  <div className="absolute -top-12 -right-8 text-[#EF593E] animate-bounce">
+                    <Sparkles className="h-12 w-12" />
                   </div>
-                  <span className="text-base font-bold text-slate-800">ATS Optimized</span>
+                  <div className="absolute bottom-12 right-0 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-3 border border-orange-100 translate-x-4">
+                    <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                      <CheckCircle2 className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="text-base font-bold text-slate-800 whitespace-nowrap">ATS Optimized</span>
+                  </div>
                 </div>
               </div>
             </div>
