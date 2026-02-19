@@ -4,8 +4,8 @@ import { FirebaseClientProvider } from '@/firebase';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'ResumeAce - AI Resume & ATS Analyzer',
-  description: 'Optimize your resume for applicant tracking systems with AI power.',
+  title: 'Network Bulls - AI Resume & ATS Analyzer',
+  description: 'Optimize your resume for applicant tracking systems with AI power by Network Bulls.',
 };
 
 export default function RootLayout({
