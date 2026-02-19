@@ -14,7 +14,16 @@ import {
   ArrowLeftRight,
   Paintbrush,
   Plus,
-  Check
+  Check,
+  Type,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  List as ListIcon,
+  ListOrdered,
+  Link as LinkIcon,
+  Wand2
 } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -45,42 +54,25 @@ const Logo = () => (
 
 const ResumeIllustration = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Back Paper */}
     <rect x="120" y="100" width="480" height="600" rx="40" transform="rotate(-12 120 100)" fill="white" stroke="#F1F5F9" strokeWidth="8"/>
     <rect x="180" y="180" width="120" height="120" rx="16" transform="rotate(-12 180 180)" fill="#F8FAFC"/>
     <rect x="330" y="180" width="160" height="15" rx="7.5" transform="rotate(-12 330 180)" fill="#F1F5F9"/>
-    
-    {/* Front Paper */}
-    <rect x="250" y="150" width="480" height="600" rx="40" fill="white" stroke="#E2E8F0" strokeWidth="8" className="shadow-2xl"/>
-    
-    {/* Character Box */}
+    <rect x="250" y="150" width="480" height="600" rx="40" fill="white" stroke="#E2E8F0" strokeWidth="8"/>
     <rect x="310" y="210" width="120" height="120" rx="16" fill="#F8FAFC"/>
-    
-    {/* Headset Character */}
-    <circle cx="370" cy="270" r="40" fill="#6366F1" opacity="0.9"/>
-    {/* Headset arc */}
+    <circle cx="370" cy="270" r="40" fill="#EF593E" opacity="0.9"/>
     <path d="M340 270C340 240 400 240 400 270" stroke="#1E293B" strokeWidth="10" fill="none" strokeLinecap="round"/>
-    {/* Earpads */}
     <rect x="330" y="260" width="14" height="24" rx="7" fill="#1E293B"/>
     <rect x="396" y="260" width="14" height="24" rx="7" fill="#1E293B"/>
-    {/* Mic wire */}
     <path d="M345 300C330 330 360 340 370 320" stroke="#1E293B" strokeWidth="2" fill="none"/>
-    {/* Face */}
     <path d="M360 275C365 282 375 282 380 275" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round"/>
-    
-    {/* Header Lines */}
-    <rect x="460" y="240" width="180" height="20" rx="10" fill="#6366F1"/>
-    <rect x="460" y="275" width="240" height="20" rx="10" fill="#6366F1"/>
-    
-    {/* Body Content Items */}
+    <rect x="460" y="240" width="180" height="20" rx="10" fill="#EF593E"/>
+    <rect x="460" y="275" width="240" height="20" rx="10" fill="#EF593E"/>
     <circle cx="340" cy="420" r="35" fill="#F1F5F9"/>
     <rect x="400" y="405" width="240" height="12" rx="6" fill="#F1F5F9"/>
     <rect x="400" y="430" width="180" height="12" rx="6" fill="#F1F5F9"/>
-    
     <circle cx="340" cy="520" r="35" fill="#F1F5F9"/>
     <rect x="400" y="505" width="240" height="12" rx="6" fill="#F1F5F9"/>
     <rect x="400" y="530" width="180" height="12" rx="6" fill="#F1F5F9"/>
-    
     <circle cx="340" cy="620" r="35" fill="#F1F5F9"/>
     <rect x="400" y="605" width="240" height="12" rx="6" fill="#F1F5F9"/>
     <rect x="400" y="630" width="180" height="12" rx="6" fill="#F1F5F9"/>
@@ -90,12 +82,10 @@ const ResumeIllustration = ({ className }: { className?: string }) => (
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* Navigation */}
       <header className="px-6 h-20 flex items-center bg-white border-b border-gray-100 sticky top-0 z-50">
         <Link className="flex items-center gap-2" href="/">
           <Logo />
         </Link>
-        
         <nav className="ml-12 hidden lg:flex gap-8 items-center text-sm font-medium text-slate-600">
           <button className="flex items-center gap-1 hover:text-[#EF593E] transition-colors">
             Resume Templates <ChevronDown className="h-4 w-4 opacity-50" />
@@ -111,7 +101,6 @@ export default function Home() {
             Resources <ChevronDown className="h-4 w-4 opacity-50" />
           </button>
         </nav>
-
         <div className="ml-auto flex items-center gap-6">
           <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-[#EF593E] transition-colors">
             Sign in
@@ -125,7 +114,6 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        {/* Hero Section */}
         <section className="relative hero-gradient overflow-visible">
           <div className="container mx-auto px-6 py-20 lg:py-32">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -139,8 +127,6 @@ export default function Home() {
                     Is your resume good enough? Run 16 essential checks on your resume. It's fast, and free. High scores lead to more interviews.
                   </p>
                 </div>
-
-                {/* Upload Zone */}
                 <div className="upload-zone p-12 rounded-2xl flex flex-col items-center justify-center text-center space-y-6 bg-[#EF593E]/5 border-2 border-dashed border-[#EF593E]/20">
                   <p className="text-slate-500 font-medium">
                     Drop your resume here or choose a file<br />
@@ -153,8 +139,6 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-
-              {/* Visual Side */}
               <div className="relative hidden lg:block overflow-visible">
                 <div className="relative z-10 animate-in fade-in zoom-in duration-1000">
                   <ResumeIllustration className="w-full h-auto drop-shadow-2xl" />
@@ -173,13 +157,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How to use section */}
         <section className="py-24 bg-white overflow-visible">
           <div className="container mx-auto px-6">
             <h2 className="text-4xl font-black text-center text-slate-900 mb-20 uppercase tracking-tight">How to use the resume checker</h2>
-            
             <div className="relative space-y-24">
-              {/* Step 1 Card */}
               <div className="sticky top-28 z-10">
                 <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
                   <div className="flex-1 space-y-6">
@@ -208,8 +189,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
-              {/* Step 2 Card */}
               <div className="sticky top-40 z-20">
                 <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-accent/20 shadow-xl shadow-accent/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
                   <div className="flex-1 space-y-6">
@@ -237,8 +216,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
-              {/* Step 3 Card */}
               <div className="sticky top-52 z-30">
                 <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
                   <div className="flex-1 space-y-6">
@@ -275,8 +252,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
-              {/* Step 4 Card */}
               <div className="sticky top-64 z-40">
                 <div className="bg-white rounded-3xl p-10 lg:p-16 border-2 border-[#EF593E]/20 shadow-xl shadow-[#EF593E]/5 min-h-[400px] flex flex-col lg:flex-row gap-12 items-center">
                   <div className="flex-1 space-y-6">
@@ -305,17 +280,14 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
               <div className="h-64"></div>
             </div>
           </div>
         </section>
 
-        {/* Feature Teaser */}
         <section className="bg-slate-50 py-24">
           <div className="container mx-auto px-6 text-center space-y-12">
             <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">A resume checker for every job</h2>
-            
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 { title: "Calculating score...", icon: "📊", desc: "Real-time ATS compatibility analysis" },
@@ -332,58 +304,24 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Quick ways to improve your ATS score */}
         <section className="py-24 bg-white">
            <div className="container mx-auto px-6 space-y-16">
               <h2 className="text-3xl font-black text-center text-slate-900 mb-16 uppercase tracking-tight">Quick ways to improve your ATS score</h2>
-
               <div className="grid gap-12 lg:gap-24">
-                 {/* Card 1: Job-match your resume */}
                  <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row items-center gap-16 overflow-hidden">
-                    <div className="flex-1 relative">
-                       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-[340px] w-full border border-slate-100 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
-                          <div className="flex items-center gap-2 mb-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
-                             <Sparkles className="h-3 w-3 text-primary" /> AI Assistant
-                          </div>
-                          <div className="space-y-4">
-                             <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Boost your score</div>
-                             <div className="flex items-center gap-3 bg-green-50/50 p-3 rounded-lg border border-green-100/50">
-                                <span className="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px] font-bold">+2%</span>
-                                <span className="text-xs font-medium text-slate-600">Add job title</span>
-                             </div>
-                             <div className="flex items-center gap-3 bg-green-50/50 p-3 rounded-lg border border-green-100/50">
-                                <span className="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px] font-bold">+15%</span>
-                                <span className="text-xs font-medium text-slate-600">Add employment history</span>
-                             </div>
-                             <div className="flex items-center justify-end">
-                                <div className="bg-white shadow-lg border border-slate-100 p-2 px-3 rounded-full flex items-center gap-2 -mr-8 mt-2 animate-bounce">
-                                   <span className="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px] font-bold">+2%</span>
-                                   <span className="text-xs font-bold text-slate-700">Add skills</span>
-                                </div>
-                             </div>
-                          </div>
-                       </div>
-                       {/* Floating Score */}
-                       <div className="absolute -top-10 right-0 bg-white shadow-2xl rounded-xl p-4 flex items-center gap-3 border border-slate-50 z-20 translate-x-4">
-                          <div className="w-12 h-12 rounded-lg bg-green-500 flex items-center justify-center text-white font-black text-lg">81%</div>
-                          <div className="flex flex-col">
-                             <span className="text-sm font-bold text-slate-900">Resume</span>
-                             <span className="text-xs text-slate-500">Score</span>
-                          </div>
-                       </div>
-                    </div>
                     <div className="flex-1 space-y-6">
-                       <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Job-match your resume</h3>
-                       <p className="text-slate-500 text-lg">Quickly fine-tune your resume to match the job description.</p>
+                       <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Check those keywords...</h3>
+                       <p className="text-slate-500 text-lg">Keywords unlock doors. Always use keywords from the job listing.</p>
                     </div>
-                 </div>
-
-                 {/* Card 2: Check those keywords... */}
-                 <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row-reverse items-center gap-16 overflow-hidden">
                     <div className="flex-1 relative w-full">
-                       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full border border-slate-100 animate-in fade-in slide-in-from-right-4 duration-700">
+                       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full border border-slate-100 animate-in fade-in slide-in-from-right-4 duration-700 relative">
                           <div className="flex items-center justify-between mb-8">
-                             <h4 className="text-xl font-bold text-slate-900">Check keywords</h4>
+                             <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 bg-blue-500/10 rounded-sm flex items-center justify-center">
+                                   <div className="w-2.5 h-2.5 bg-blue-500 rounded-sm" />
+                                </div>
+                                <span className="text-sm font-bold text-slate-700">Product Manager at Apple</span>
+                             </div>
                              <div className="flex items-center gap-4">
                                 <button className="text-xs font-bold text-primary hover:underline">Clear all</button>
                                 <span className="text-xs font-bold text-slate-400">12/12 <span className="uppercase tracking-widest text-[10px] ml-1">Keywords</span></span>
@@ -403,9 +341,59 @@ export default function Home() {
                           </div>
                        </div>
                     </div>
+                 </div>
+
+                 <div className="bg-[#F8FAFC] rounded-[40px] p-10 lg:p-20 flex flex-col lg:flex-row-reverse items-center gap-16 overflow-hidden">
                     <div className="flex-1 space-y-6">
-                       <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Check those keywords...</h3>
-                       <p className="text-slate-500 text-lg">Keywords unlock doors. Always use keywords from the job listing.</p>
+                       <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">Use a proven template</h3>
+                       <p className="text-slate-500 text-lg">Good templates give employers what they want. In 8 seconds...</p>
+                    </div>
+                    <div className="flex-1 relative w-full h-[400px]">
+                       <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="relative w-full max-w-[400px]">
+                             {/* Resume Template Stack */}
+                             <div className="absolute top-0 left-0 w-64 h-80 bg-white shadow-xl border border-slate-100 rounded-lg p-6 rotate-[-10deg] translate-x-[-20%] z-0">
+                                <div className="w-full h-4 bg-slate-100 rounded-full mb-4" />
+                                <div className="space-y-2">
+                                   <div className="w-3/4 h-2 bg-slate-50 rounded-full" />
+                                   <div className="w-full h-2 bg-slate-50 rounded-full" />
+                                   <div className="w-5/6 h-2 bg-slate-50 rounded-full" />
+                                </div>
+                             </div>
+                             <div className="absolute top-0 left-0 w-64 h-80 bg-white shadow-xl border border-slate-100 rounded-lg p-6 rotate-[5deg] translate-x-[20%] z-10">
+                                <div className="w-1/2 h-6 bg-slate-100 rounded-full mb-6" />
+                                <div className="space-y-3">
+                                   <div className="w-full h-2 bg-slate-50 rounded-full" />
+                                   <div className="w-full h-2 bg-slate-50 rounded-full" />
+                                   <div className="w-4/5 h-2 bg-slate-50 rounded-full" />
+                                </div>
+                             </div>
+                             <div className="absolute top-0 left-0 w-64 h-80 bg-white shadow-2xl border border-slate-200 rounded-lg p-6 z-20 translate-x-[0%]">
+                                <div className="flex flex-col items-center mb-6">
+                                   <div className="w-24 h-4 bg-slate-200 rounded-full mb-2" />
+                                   <div className="w-32 h-2 bg-slate-100 rounded-full" />
+                                </div>
+                                <div className="space-y-4">
+                                   <div className="w-full h-12 bg-slate-50 rounded-lg" />
+                                   <div className="w-full h-12 bg-slate-50 rounded-lg" />
+                                   <div className="w-full h-12 bg-slate-50 rounded-lg" />
+                                </div>
+                             </div>
+                             {/* Formatting Toolbar */}
+                             <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white shadow-2xl rounded-xl border border-slate-200 p-2 flex items-center gap-1 z-30">
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Bold className="w-4 h-4 text-slate-600" /></div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Italic className="w-4 h-4 text-slate-600" /></div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Underline className="w-4 h-4 text-slate-600" /></div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Strikethrough className="w-4 h-4 text-slate-600" /></div>
+                                <div className="w-px h-6 bg-slate-200 mx-1" />
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><ListIcon className="w-4 h-4 text-slate-600" /></div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><ListOrdered className="w-4 h-4 text-slate-600" /></div>
+                                <div className="w-px h-6 bg-slate-200 mx-1" />
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><LinkIcon className="w-4 h-4 text-slate-600" /></div>
+                                <div className="p-2 hover:bg-slate-50 rounded cursor-pointer"><Wand2 className="w-4 h-4 text-primary" /></div>
+                             </div>
+                          </div>
+                       </div>
                     </div>
                  </div>
               </div>
