@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useMemo } from 'react';
@@ -75,9 +74,9 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
       className="resume-a4 print:m-0 print:shadow-none" 
       style={{ 
         fontFamily: font?.family || '"Inter", sans-serif',
-        borderTop: `10px solid ${theme.primary}`,
         fontSize: `${config.fontSize}px`,
         lineHeight: config.lineHeight,
+        color: theme.text,
       }}
     >
       <SelectedTemplate 
@@ -90,7 +89,6 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
       <style jsx global>{`
         .resume-a4 {
           padding: 60px !important;
-          color: #334155;
           background: white;
           width: 210mm;
           min-height: 297mm;
@@ -101,7 +99,6 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
         }
         @media print {
           .resume-a4 {
-            border-top: none !important;
             padding: 40px !important;
             box-shadow: none !important;
             margin: 0 !important;
