@@ -1,9 +1,14 @@
+
 'use client';
 import React from 'react';
 import { TemplateProps } from '@/types/resume';
 
 export default function Classic({ data, theme, sections, style }: TemplateProps) {
-  const s = { fontSize: `${style.fontSize}px`, lineHeight: style.lineHeight };
+  const s = { 
+    fontSize: `${style.fontSize}px`, 
+    lineHeight: style.lineHeight,
+    fontFamily: style.fontFamily
+  };
   const spacing = { marginBottom: `${style.sectionSpacing}px` };
   
   return (

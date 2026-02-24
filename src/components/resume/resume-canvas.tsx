@@ -65,6 +65,7 @@ const TEMPLATE_COMPONENTS: Record<string, React.FC<any>> = {
 
 export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }: ResumeCanvasProps) => {
   const config = style || { lineHeight: 1.5, fontSize: 13, sectionSpacing: 24 };
+  const currentFontFamily = font?.family || '"Inter", sans-serif';
 
   const SelectedTemplate = useMemo(() => {
     return TEMPLATE_COMPONENTS[templateId] || Classic;
@@ -75,7 +76,7 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
       id="resume-canvas-area"
       className="resume-a4 print:m-0 print:shadow-none" 
       style={{ 
-        fontFamily: font?.family || '"Inter", sans-serif',
+        fontFamily: currentFontFamily,
         fontSize: `${config.fontSize}px`,
         lineHeight: config.lineHeight,
         color: theme.text,
@@ -85,7 +86,12 @@ export const ResumeCanvas = ({ templateId, theme, font, data, sections, style }:
         data={data} 
         theme={theme} 
         sections={sections}
-        style={{ fontSize: config.fontSize, lineHeight: config.lineHeight, sectionSpacing: config.sectionSpacing }} 
+        style={{ 
+          fontSize: config.fontSize, 
+          lineHeight: config.lineHeight, 
+          sectionSpacing: config.sectionSpacing,
+          fontFamily: currentFontFamily
+        }} 
       />
       
       <style jsx global>{`

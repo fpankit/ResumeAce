@@ -4,10 +4,14 @@ import React from 'react';
 import { TemplateProps } from '@/types/resume';
 
 export default function Tech({ data, theme, style, sections }: TemplateProps) {
-  const s = { fontSize: `${style.fontSize}px`, lineHeight: style.lineHeight };
+  const s = { 
+    fontSize: `${style.fontSize}px`, 
+    lineHeight: style.lineHeight,
+    fontFamily: style.fontFamily
+  };
   
   return (
-    <div className="space-y-8 font-mono" style={s}>
+    <div className="space-y-8" style={s}>
       <header className="bg-slate-900 text-white p-8 -m-[60px] mb-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-10">
           <div className="text-8xl font-black">{"{ }"}</div>

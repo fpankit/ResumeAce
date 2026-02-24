@@ -4,10 +4,14 @@ import React from 'react';
 import { TemplateProps } from '@/types/resume';
 
 export default function ATSMinimal({ data, sections, style }: TemplateProps) {
-  const s = { fontSize: `${style.fontSize}px`, lineHeight: style.lineHeight };
+  const s = { 
+    fontSize: `${style.fontSize}px`, 
+    lineHeight: style.lineHeight,
+    fontFamily: style.fontFamily 
+  };
 
   return (
-    <div className="font-serif text-black space-y-4" style={s}>
+    <div className="text-black space-y-4" style={s}>
       <header className="text-center border-b border-black pb-2">
         <h1 className="text-2xl font-bold uppercase">{data.personal.fullName}</h1>
         <p className="text-[10px] uppercase font-bold tracking-tight">

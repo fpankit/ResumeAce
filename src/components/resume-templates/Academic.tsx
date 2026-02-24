@@ -4,13 +4,17 @@ import React from 'react';
 import { TemplateProps } from '@/types/resume';
 
 export default function Academic({ data, theme, style, sections }: TemplateProps) {
-  const s = { fontSize: `${style.fontSize}px`, lineHeight: style.lineHeight };
+  const s = { 
+    fontSize: `${style.fontSize}px`, 
+    lineHeight: style.lineHeight,
+    fontFamily: style.fontFamily 
+  };
   const spacing = { marginBottom: `${style.sectionSpacing}px` };
 
   return (
     <div className="space-y-10" style={s}>
       <header className="text-center space-y-4" style={spacing}>
-        <h1 className="text-4xl font-serif font-black tracking-widest" style={{ color: theme.primary }}>
+        <h1 className="text-4xl font-black tracking-widest" style={{ color: theme.primary }}>
           {data.personal.fullName.toUpperCase()}
         </h1>
         <div className="flex justify-center flex-wrap gap-4 text-[10px] font-bold opacity-40 uppercase tracking-widest">
