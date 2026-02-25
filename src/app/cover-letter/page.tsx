@@ -31,8 +31,20 @@ export default function CoverLetterPage() {
     jobTitle: 'Senior Software Engineer',
     companyName: 'TechGlobal Innovations',
     recipientName: 'Hiring Manager',
-    skills: '',
-    content: `Dear Hiring Manager,\n\nI am writing to express my interest in the role at your company...`
+    skills: '10 years of React experience, led teams of 15, improved system uptime by 40%',
+    content: `Dear Hiring Manager,
+
+I am writing to express my strong interest in the Senior Software Engineer position at TechGlobal Innovations. With over a decade of experience in building scalable web applications and leading cross-functional teams, I am confident that I can contribute significantly to your engineering department.
+
+At my previous role, I spearheaded the migration of our core platform to a modern microservices architecture, which resulted in a 40% improvement in system uptime and a 25% reduction in deployment cycles. My expertise in React, Node.js, and cloud infrastructure aligns perfectly with the requirements of this role.
+
+I am particularly drawn to TechGlobal Innovations because of your commitment to pushing the boundaries of AI-driven developer tools. I look forward to the possibility of discussing how my background and skills can help drive your mission forward.
+
+Thank you for your time and consideration.
+
+Best regards,
+
+Ankit`
   });
 
   const { toast } = useToast();
