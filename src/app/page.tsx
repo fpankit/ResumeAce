@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -16,7 +15,8 @@ import {
   Zap,
   MousePointer2,
   Brush,
-  Linkedin
+  Linkedin,
+  Send
 } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@/firebase";
@@ -181,9 +181,9 @@ export default function Home() {
       <header className="px-6 h-20 flex items-center bg-white border-b border-gray-100 sticky top-0 z-50">
         <Link className="flex items-center gap-2" href="/"><Logo /></Link>
         <nav className="ml-12 hidden lg:flex gap-8 items-center text-sm font-medium text-slate-600">
-          <button className="hover:text-[#EF593E] transition-colors">Resume Templates</button>
-          <button className="hover:text-[#EF593E] transition-colors">Resume Examples</button>
-          <button className="hover:text-[#EF593E] transition-colors">Cover Letter</button>
+          <Link href="/templates" className="hover:text-[#EF593E] transition-colors">Resume Templates</Link>
+          <Link href="#" className="hover:text-[#EF593E] transition-colors">Resume Examples</Link>
+          <Link href="/cover-letter" className="hover:text-[#EF593E] transition-colors">Cover Letter</Link>
           <Link href="#" className="hover:text-[#EF593E] transition-colors">FAQ</Link>
         </nav>
         <div className="ml-auto flex items-center gap-6">
@@ -403,32 +403,25 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Card 2: Templates */}
+              {/* Card 2: Cover Letters */}
               <div className="bg-white p-8 rounded-3xl border-2 border-slate-100 hover:border-[#EF593E] transition-all hover:shadow-2xl hover:shadow-[#EF593E]/10 group">
                 <div className="flex flex-col md:flex-row gap-8 items-start">
                   <div className="flex-1 space-y-4">
-                    <Badge className="bg-[#EF593E]/10 text-[#EF593E] border-none font-black uppercase text-[10px] px-3">Proven Templates</Badge>
-                    <h3 className="text-2xl font-black text-slate-900 leading-tight">Use a proven template for your resume</h3>
-                    <p className="text-slate-500 text-sm leading-relaxed">Choose from our library of ATS-friendly templates designed by career experts to pass the bots.</p>
-                    <div className="flex items-center gap-3 pt-2">
-                      <div className="flex -space-x-2">
-                        {[1, 2, 3].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-100" />)}
-                      </div>
-                      <span className="text-xs font-bold text-slate-500">50+ Templates</span>
-                    </div>
+                    <Badge className="bg-[#EF593E]/10 text-[#EF593E] border-none font-black uppercase text-[10px] px-3">Cover Letters</Badge>
+                    <h3 className="text-2xl font-black text-slate-900 leading-tight">Write better cover letters with AI</h3>
+                    <p className="text-slate-500 text-sm leading-relaxed">Our AI analyzes your skills and the job description to write a persuasive cover letter in seconds.</p>
+                    <Button variant="outline" asChild className="mt-2 border-[#EF593E] text-[#EF593E] font-black text-[10px] uppercase h-9 rounded-lg hover:bg-orange-50">
+                      <Link href="/cover-letter">Build Cover Letter</Link>
+                    </Button>
                   </div>
-                  <div className="relative w-full md:w-48 h-32 bg-slate-50 rounded-xl overflow-hidden border border-slate-100 group-hover:drop-shadow-[0_0_15px_rgba(239,89,62,0.2)] transition-all">
-                     <div className="absolute top-4 left-4 right-4 bottom-0 bg-white shadow-sm border border-slate-100 rounded-t-lg p-2 space-y-1">
-                        <div className="w-8 h-8 rounded-full bg-slate-100 mx-auto" />
-                        <div className="h-1 w-12 bg-slate-200 mx-auto rounded" />
-                        <div className="h-1 w-full bg-slate-100 rounded" />
-                        <div className="h-1 w-full bg-slate-100 rounded" />
+                  <div className="relative w-full md:w-48 h-32 bg-slate-50 rounded-xl overflow-hidden border border-slate-100 flex items-center justify-center">
+                     <div className="bg-white p-4 shadow-xl border rounded-lg scale-75 rotate-3">
+                        <div className="w-12 h-1 bg-slate-200 mb-2" />
+                        <div className="w-full h-1 bg-slate-100 mb-1" />
+                        <div className="w-full h-1 bg-slate-100 mb-1" />
+                        <div className="w-2/3 h-1 bg-slate-100" />
                      </div>
-                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white shadow-lg border border-slate-100 rounded-lg px-2 py-1 flex gap-1 animate-in slide-in-from-bottom-2 duration-700">
-                        <div className="w-3 h-3 rounded bg-slate-100" />
-                        <div className="w-3 h-3 rounded bg-[#EF593E]" />
-                        <div className="w-3 h-3 rounded bg-slate-100" />
-                     </div>
+                     <Send className="absolute bottom-2 right-4 h-6 w-6 text-[#EF593E] opacity-20 -rotate-12" />
                   </div>
                 </div>
               </div>
