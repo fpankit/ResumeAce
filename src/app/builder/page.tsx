@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -97,13 +96,13 @@ export default function ResumeBuilder() {
 
   const [data, setData] = useState({
     personal: {
-      fullName: 'Johnathan Doe',
+      fullName: 'Ankit',
       jobTitle: 'Senior Software Architect',
-      email: 'john.doe@example.com',
+      email: 'ankit@example.com',
       phone: '+1 (555) 000-1111',
       location: { city: 'New York', country: 'USA' },
-      linkedin: 'linkedin.com/in/johndoe',
-      website: 'johndoe.dev'
+      linkedin: 'linkedin.com/in/ankit',
+      website: 'ankit.dev'
     },
     summary: { content: 'Strategic and results-driven Senior Software Architect with 10+ years of experience in designing and implementing scalable cloud architectures. Expert in full-stack development, distributed systems, and leading cross-functional teams to deliver high-impact technical solutions.' },
     skills: [

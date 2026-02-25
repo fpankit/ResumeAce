@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -137,25 +136,24 @@ export default function ResumeBuilderPage() {
   
   const [data, setData] = useState<ResumeData>({
     personal: {
-      fullName: 'Johnathan P. Doe',
-      middleName: 'Patrick',
+      fullName: 'Ankit',
       jobTitle: 'Principal Cloud Architect',
       headline: 'Architecting high-availability systems for global enterprises',
-      email: 'j.doe@tech-pioneer.com',
+      email: 'ankit@example.com',
       phone: '+1 (555) 789-0123',
       location: {
         street: '123 Cloud Avenue',
-        city: 'Seattle',
-        state: 'WA',
-        country: 'USA',
-        zip: '98101'
+        city: 'New Delhi',
+        state: 'Delhi',
+        country: 'India',
+        zip: '110001'
       },
-      linkedin: 'linkedin.com/in/johndoe-arch',
-      github: 'github.com/johndoe-cloud',
-      portfolio: 'johndoe.cloud',
-      twitter: 'twitter.com/johndoe_cloud',
-      nationality: 'United States',
-      maritalStatus: 'Married',
+      linkedin: 'linkedin.com/in/ankit',
+      github: 'github.com/ankit-cloud',
+      portfolio: 'ankit.cloud',
+      twitter: 'twitter.com/ankit_cloud',
+      nationality: 'Indian',
+      maritalStatus: 'Single',
     },
     summary: {
       content: 'Principal Cloud Architect with over 12 years of experience in digital transformation. Expert at migrating legacy workloads to hybrid-cloud infrastructures with zero downtime. Proven track record of reducing operational costs by 35% while increasing system reliability to 99.99%.',
@@ -188,7 +186,7 @@ export default function ResumeBuilderPage() {
         title: 'Principal Cloud Architect',
         company: 'CloudScale Enterprises',
         website: 'cloudscale.io',
-        location: 'Seattle, WA',
+        location: 'New Delhi, India',
         employmentType: 'Full-time',
         industry: 'Cloud Computing',
         teamSize: '15',
@@ -209,12 +207,12 @@ export default function ResumeBuilderPage() {
         degreeType: 'Master of Science',
         degree: 'M.S. in Computer Science', 
         field: 'Distributed Systems',
-        school: 'University of Washington', 
-        location: 'Seattle, WA',
+        school: 'Indian Institute of Technology', 
+        location: 'Delhi, India',
         startYear: '2012', 
         endYear: '2014',
         gpa: '3.95/4.0',
-        honors: 'President\'s Medalist'
+        honors: 'Gold Medalist'
       }
     ],
     projects: [

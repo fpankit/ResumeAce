@@ -55,10 +55,10 @@ export default function CoverLetterPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [data, setData] = useState({
-    fullName: 'Johnathan Doe',
-    email: 'j.doe@example.com',
+    fullName: 'Ankit',
+    email: 'ankit@example.com',
     phone: '+1 (555) 000-1111',
-    address: 'Seattle, WA',
+    address: 'New Delhi, India',
     jobTitle: 'Senior Software Engineer',
     companyName: 'TechGlobal Innovations',
     recipientName: 'Hiring Manager',
@@ -75,7 +75,7 @@ Thank you for your time and consideration.
 
 Best regards,
 
-Johnathan Doe`
+Ankit`
   });
 
   const { toast } = useToast();
