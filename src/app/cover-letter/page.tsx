@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -18,19 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-
-const Logo = () => (
-  <div className="flex flex-col -space-y-1 group">
-    <div className="flex items-center gap-1">
-      <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
-      <span className="text-[#334155] font-black text-xl tracking-tighter uppercase">Bulls</span>
-    </div>
-    <div className="flex items-center gap-1">
-      <div className="h-[1px] flex-1 bg-slate-200" />
-      <span className="text-[7px] text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Where Careers Fly</span>
-    </div>
-  </div>
-);
+import { Logo } from '@/components/brand/logo';
 
 export default function CoverLetterPage() {
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
@@ -73,7 +62,7 @@ export default function CoverLetterPage() {
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50 no-print">
-        <Link href="/"><Logo /></Link>
+        <Link href="/"><Logo size="sm" /></Link>
         <div className="flex items-center gap-4">
           <Button variant="ghost" asChild className="text-slate-500 font-black uppercase text-[10px] tracking-widest hover:text-[#EF593E]">
             <Link href="/templates"><ArrowLeft className="h-3 w-3 mr-2" /> Back to Resumes</Link>
