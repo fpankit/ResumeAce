@@ -1,8 +1,8 @@
-
 import type {Metadata} from 'next';
 import './globals.css';
 import { FirebaseClientProvider } from '@/firebase';
 import { Toaster } from '@/components/ui/toaster';
+import { Chatbot } from '@/components/brand/chatbot';
 
 export const metadata: Metadata = {
   title: 'Network Bulls - Professional Resume & Cover Letter Builder',
@@ -28,6 +28,7 @@ export default function RootLayout({
         <FirebaseClientProvider>
           {children}
           <Toaster />
+          <Chatbot />
         </FirebaseClientProvider>
       </body>
     </html>
