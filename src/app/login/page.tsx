@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth, useFirestore } from "@/firebase";
 import { 
@@ -16,21 +17,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
+import { Logo } from "@/components/brand/logo";
+import { Loader2 } from "lucide-react";
 
-const Logo = () => (
-  <div className="flex flex-col items-center gap-1 group">
-    <div className="flex items-center gap-1">
-      <span className="text-[#EF593E] font-black text-2xl tracking-tighter uppercase">Network</span>
-      <span className="text-[#334155] font-black text-2xl tracking-tighter uppercase">Bulls</span>
-    </div>
-    <div className="flex items-center gap-1 w-full max-w-[140px]">
-      <div className="h-[1px] flex-1 bg-slate-200" />
-      <span className="text-[8px] text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Where Careers Fly</span>
-    </div>
-  </div>
-);
-
-export default function LoginPage() {
+function LoginForm() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") === "signup" ? "signup" : "login";
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -96,7 +86,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="flex justify-center">
           <Link href="/" className="inline-block hover:scale-105 transition-transform">
-            <Logo />
+            <Logo size="lg" />
           </Link>
         </div>
 
@@ -124,7 +114,7 @@ export default function LoginPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white font-bold" disabled={loading}>
+                  <Button type="submit" className="w-full bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold" disabled={loading}>
                     {loading ? "Logging in..." : "Login"}
                   </Button>
                 </CardFooter>
@@ -154,7 +144,7 @@ export default function LoginPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white font-bold" disabled={loading}>
+                  <Button type="submit" className="w-full bg-[#EF593E] hover:bg-[#D44D35] text-white font-bold" disabled={loading}>
                     {loading ? "Creating account..." : "Sign Up"}
                   </Button>
                 </CardFooter>
@@ -164,5 +154,17 @@ export default function LoginPage() {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-[#EF593E]" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }
