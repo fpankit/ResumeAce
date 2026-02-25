@@ -1,33 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Download, 
-  Save, 
-  Palette, 
-  Type as TypeIcon, 
   Layout, 
-  Settings, 
+  Type as TypeIcon, 
   User, 
-  Plus, 
-  Trash2, 
   Check, 
-  Sparkles,
   Loader2,
-  ChevronDown,
-  Maximize2
+  Maximize2,
+  Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
-import { generateResumeContent } from '@/ai/flows/generate-resume-content';
 import { useToast } from '@/hooks/use-toast';
 
 const THEMES = [
@@ -52,21 +42,6 @@ const TEMPLATES = [
   { id: 'executive', name: 'Executive Clean', category: 'Executive' },
   { id: 'ats-minimal', name: 'ATS Prime Minimal', category: 'ATS' },
   { id: 'two-column', name: 'Two Column Sidebar', category: 'Standard' },
-  { id: 'compact', name: 'Compact Dense', category: 'Compact' },
-  { id: 'academic', name: 'Academic CV', category: 'Academic' },
-  { id: 'tech', name: 'Tech Developer Style', category: 'Tech' },
-  { id: 'management', name: 'Management Resume', category: 'Executive' },
-  { id: 'creative', name: 'Creative Minimal', category: 'Creative' },
-  { id: 'bold-header', name: 'Bold Header Layout', category: 'Modern' },
-  { id: 'elegant-serif', name: 'Elegant Serif', category: 'Elegant' },
-  { id: 'structured-timeline', name: 'Structured Timeline', category: 'Modern' },
-  { id: 'corporate-formal', name: 'Corporate Formal', category: 'Executive' },
-  { id: 'soft-gray', name: 'Soft Gray Layout', category: 'Modern' },
-  { id: 'blue-accent', name: 'Blue Accent Left Border', category: 'Elegant' },
-  { id: 'monochrome', name: 'Monochrome Minimal', category: 'ATS' },
-  { id: 'fresher', name: 'Compact Fresher', category: 'Compact' },
-  { id: 'senior', name: 'Senior Professional', category: 'Executive' },
-  { id: 'hybrid', name: 'Hybrid Modern Clean', category: 'Modern' },
 ];
 
 export default function ResumeBuilder() {
@@ -74,14 +49,10 @@ export default function ResumeBuilder() {
   const [selectedTemplate, setSelectedTemplate] = useState('classic');
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
-  const [lineHeight, setLineHeight] = useState(1.5);
-  const [fontSize, setFontSize] = useState(14);
-  const [sectionSpacing, setSectionSpacing] = useState(24);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const { toast } = useToast();
   
-  const [sections, setSections] = useState({
+  const [sections] = useState({
     personal: true,
     summary: true,
     skills: true,
@@ -145,35 +116,6 @@ export default function ResumeBuilder() {
     }));
   };
 
-  const handleAiGenerate = async (type: 'summary' | 'experience', index?: number) => {
-    setIsGenerating(true);
-    try {
-      const keywords = type === 'summary' ? data.personal.jobTitle : data.experience[index!].responsibilities;
-      const res = await generateResumeContent({
-        type,
-        jobTitle: data.personal.jobTitle,
-        keywords: keywords || 'Professional growth, technical leadership'
-      });
-      
-      if (type === 'summary') {
-        setData(prev => ({ ...prev, summary: { content: res.generatedText } }));
-      } else {
-        const newExp = [...data.experience];
-        newExp[index!] = { ...newExp[index!], responsibilities: res.generatedText };
-        setData(prev => ({ ...prev, experience: newExp }));
-      }
-      
-      toast({
-        title: "AI Generation Successful",
-        description: "Content has been updated with professional refinements.",
-      });
-    } catch (e: any) {
-      toast({ variant: "destructive", title: "AI Magic Failed", description: e.message });
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
   const handleExportPDF = async () => {
     const element = document.getElementById('resume-canvas-area');
     if (!element) return;
@@ -213,7 +155,6 @@ export default function ResumeBuilder() {
 
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
-      {/* Top Bar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50 no-print">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-[#EF593E] rounded-lg flex items-center justify-center text-white font-black text-xl shadow-lg shadow-orange-100">B</div>
@@ -234,9 +175,7 @@ export default function ResumeBuilder() {
         </div>
       </header>
 
-      {/* Main Container */}
       <div className="flex flex-1 pt-16 h-full print:overflow-visible print:h-auto">
-        {/* Left Panel */}
         <aside className="w-[500px] bg-white border-r flex flex-col relative z-20 no-print">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0 sticky top-0 z-10">
@@ -250,12 +189,11 @@ export default function ResumeBuilder() {
 
             <ScrollArea className="flex-1">
               <div className="p-8">
-                {/* Templates Tab */}
                 <TabsContent value="templates" className="mt-0 space-y-10">
                   <section className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Select Template</h3>
-                      <span className="text-[10px] font-bold text-slate-300">20 Styles Available</span>
+                      <span className="text-[10px] font-bold text-slate-300">5 Styles Available</span>
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       {TEMPLATES.map(template => (
@@ -284,7 +222,6 @@ export default function ResumeBuilder() {
                   </section>
                 </TabsContent>
 
-                {/* Content Tab */}
                 <TabsContent value="content" className="mt-0 space-y-12">
                   <section className="space-y-6">
                     <div className="flex items-center gap-3">
@@ -308,7 +245,6 @@ export default function ResumeBuilder() {
           </Tabs>
         </aside>
 
-        {/* Center Pane */}
         <main className="flex-1 bg-slate-100 overflow-auto p-16 flex flex-col items-center print:bg-white print:p-0 print:overflow-visible">
           <div className="relative group mb-12 print:m-0 print:shadow-none print:transform-none">
             <ResumeCanvas 
@@ -318,12 +254,11 @@ export default function ResumeBuilder() {
               data={data as any}
               sections={sections}
               style={{
-                lineHeight,
-                fontSize,
-                sectionSpacing
+                lineHeight: 1.5,
+                fontSize: 14,
+                sectionSpacing: 24
               }}
             />
-            {/* Overlay controls for drag/drop feel */}
             <div className="absolute -right-20 top-0 space-y-4 opacity-0 group-hover:opacity-100 transition-opacity no-print">
               <Button size="icon" variant="secondary" className="rounded-full shadow-lg"><Maximize2 className="h-4 w-4" /></Button>
               <Button size="icon" variant="secondary" className="rounded-full shadow-lg"><Settings className="h-4 w-4" /></Button>
