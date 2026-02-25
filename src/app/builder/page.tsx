@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -19,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
 import { useToast } from '@/hooks/use-toast';
-import { Logo } from '@/app/page';
+import { Logo } from '@/components/brand/logo';
 
 const THEMES = [
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB' },

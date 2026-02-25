@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef } from "react";
@@ -11,35 +12,7 @@ import {
 import Link from "next/link";
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
-
-export const Logo = ({ size = "md" }: { size?: "sm" | "md" | "lg" }) => {
-  const sizes = {
-    sm: { text: "text-lg", subtext: "text-[6px]", line: "h-[1px]", icon: "h-4 w-4" },
-    md: { text: "text-xl", subtext: "text-[7px]", line: "h-[1px]", icon: "h-5 w-5" },
-    lg: { text: "text-2xl", subtext: "text-[8px]", line: "h-[1px]", icon: "h-6 w-6" }
-  };
-  const s = sizes[size];
-
-  return (
-    <div className="flex items-center gap-2 group">
-      <div className={`${s.icon} text-[#EF593E]`}>
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-          <path d="M12 2C12 2 12 7 9 10C7.5 11.5 6 13.5 6 16C6 19.31 8.69 22 12 22C15.31 22 18 19.31 18 16C18 12 15 10 15 10C15 10 14 9 14 7C14 5 12 2 12 2Z" fill="currentColor" />
-        </svg>
-      </div>
-      <div className="flex flex-col -space-y-1">
-        <div className="flex items-center gap-1">
-          <span className={`text-[#EF593E] font-black ${s.text} tracking-tighter uppercase`}>Network</span>
-          <span className={`text-[#334155] font-black ${s.text} tracking-tighter uppercase`}>Bulls</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className={`${s.line} flex-1 bg-slate-200`} />
-          <span className={`${s.subtext} text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap`}>Where Careers Fly</span>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { Logo } from "@/components/brand/logo";
 
 const HeroIllustration = () => (
   <div className="relative w-full max-w-[500px] mx-auto">
@@ -51,7 +24,7 @@ const HeroIllustration = () => (
       <div className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center">
         <CheckCircle2 className="h-4 w-4 text-white" />
       </div>
-      <span className="text-sm font-bold text-slate-800 whitespace-nowrap text-orange-500">ATS Compatible</span>
+      <span className="text-sm font-bold text-[#EF593E] whitespace-nowrap">ATS Compatible</span>
     </div>
   </div>
 );
