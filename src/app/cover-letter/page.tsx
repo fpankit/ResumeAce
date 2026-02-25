@@ -9,8 +9,6 @@ import {
   User,
   Layout,
   Check,
-  Building2,
-  Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,16 +19,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
-const TEMPLATES = [
-  { id: 'modern', name: 'Modern Impact', color: '#EF593E' },
-  { id: 'classic', name: 'Classic Formal', color: '#1E3A8A' },
-  { id: 'minimal', name: 'Minimalist Tech', color: '#0F172A' },
-];
+const FlameIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M12 2C12 2 17 6.5 17 11C17 13.7614 14.7614 16 12 16C9.23858 16 7 13.7614 7 11C7 6.5 12 2 12 2Z" fill="url(#flame-grad-top-cl)" />
+    <path d="M12 22C12 22 18 16.5 18 12C18 10.5 17 9 15.5 8.5C14 8 13 8.5 12 9.5C11 8.5 10 8 8.5 8.5C7 9 6 10.5 6 12C6 16.5 12 22 12 22Z" fill="url(#flame-grad-bottom-cl)" opacity="0.9" />
+    <defs>
+      <linearGradient id="flame-grad-top-cl" x1="12" y1="2" x2="12" y2="16" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FF5C00" />
+        <stop offset="1" stopColor="#FFB800" />
+      </linearGradient>
+      <linearGradient id="flame-grad-bottom-cl" x1="12" y1="8" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FFB800" />
+        <stop offset="0.5" stopColor="#FF5C00" />
+        <stop offset="1" stopColor="#FF005C" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
 
 const Logo = () => (
   <div className="flex items-center gap-2">
-    <div className="w-10 h-10 rounded-xl bg-[#EF593E] flex items-center justify-center text-white overflow-hidden shadow-lg shadow-[#EF593E]/20">
-      <Send className="w-6 h-6" />
+    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-lg shadow-primary/5 border border-slate-100">
+      <FlameIcon className="w-8 h-8" />
     </div>
     <div className="flex flex-col -space-y-1">
       <div className="flex items-center gap-1">
@@ -77,9 +87,15 @@ export default function CoverLetterPage() {
     }
   };
 
+  const TEMPLATES = [
+    { id: 'modern', name: 'Modern Impact', color: '#EF593E' },
+    { id: 'classic', name: 'Classic Formal', color: '#1E3A8A' },
+    { id: 'minimal', name: 'Minimalist Tech', color: '#0F172A' },
+  ];
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
-      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50 no-print">
         <Link href="/"><Logo /></Link>
         <div className="flex items-center gap-4">
           <Button variant="ghost" asChild className="text-slate-500 font-black uppercase text-[10px] tracking-widest hover:text-[#EF593E]">
@@ -96,7 +112,7 @@ export default function CoverLetterPage() {
       </header>
 
       <div className="flex flex-1 pt-16 h-full overflow-hidden">
-        <aside className="w-[450px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10">
+        <aside className="w-[450px] bg-white border-r flex flex-col h-full shrink-0 shadow-2xl relative z-10 no-print">
           <Tabs defaultValue="content" className="flex flex-col h-full">
             <TabsList className="grid grid-cols-2 h-14 bg-white border-b rounded-none p-0">
               <TabsTrigger value="content" className="rounded-none font-black text-[11px] uppercase tracking-widest gap-2 py-4">

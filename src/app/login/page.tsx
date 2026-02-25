@@ -17,16 +17,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 
-const BullIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2C9.79 2 8 3.79 8 6C8 7.31 8.63 8.47 9.61 9.22C6.44 10.05 4 12.75 4 16V18H20V16C20 12.75 17.56 10.05 14.39 9.22C15.37 8.47 16 7.31 16 6C16 3.79 14.21 2 12 2ZM12 4C13.1 4 14 4.9 14 6C14 7.1 13.1 8 12 8C10.9 8 10 7.1 10 6C10 4.9 10.9 4 12 4ZM6.18 16C6.67 13.72 8.7 12 11.13 12H12.87C15.3 12 17.33 13.72 17.82 16H6.18Z" />
+const FlameIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M12 2C12 2 17 6.5 17 11C17 13.7614 14.7614 16 12 16C9.23858 16 7 13.7614 7 11C7 6.5 12 2 12 2Z" fill="url(#flame-grad-top-login)" />
+    <path d="M12 22C12 22 18 16.5 18 12C18 10.5 17 9 15.5 8.5C14 8 13 8.5 12 9.5C11 8.5 10 8 8.5 8.5C7 9 6 10.5 6 12C6 16.5 12 22 12 22Z" fill="url(#flame-grad-bottom-login)" opacity="0.9" />
+    <defs>
+      <linearGradient id="flame-grad-top-login" x1="12" y1="2" x2="12" y2="16" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FF5C00" />
+        <stop offset="1" stopColor="#FFB800" />
+      </linearGradient>
+      <linearGradient id="flame-grad-bottom-login" x1="12" y1="8" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FFB800" />
+        <stop offset="0.5" stopColor="#FF5C00" />
+        <stop offset="1" stopColor="#FF005C" />
+      </linearGradient>
+    </defs>
   </svg>
 );
 
 const Logo = () => (
   <div className="flex flex-col items-center gap-1 group">
-    <div className="relative w-12 h-12 rounded-xl bg-[#EF593E] flex items-center justify-center text-white overflow-hidden shadow-lg shadow-primary/20">
-      <BullIcon className="w-10 h-10 opacity-90" />
+    <div className="relative w-14 h-14 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-lg shadow-primary/5 border border-slate-100">
+      <FlameIcon className="w-12 h-12 p-1 opacity-90 transition-transform group-hover:scale-110" />
     </div>
     <div className="flex items-center gap-1 mt-2">
       <span className="text-[#EF593E] font-black text-2xl tracking-tighter uppercase">Network</span>

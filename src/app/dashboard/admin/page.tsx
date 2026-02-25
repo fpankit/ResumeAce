@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,19 +9,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Users, FileText, TrendingUp, Clock, LogOut, Loader2, ShieldCheck } from "lucide-react";
+import { Users, FileText, TrendingUp, LogOut, Loader2, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
-const BullIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2C9.79 2 8 3.79 8 6C8 7.31 8.63 8.47 9.61 9.22C6.44 10.05 4 12.75 4 16V18H20V16C20 12.75 17.56 10.05 14.39 9.22C15.37 8.47 16 7.31 16 6C16 3.79 14.21 2 12 2ZM12 4C13.1 4 14 4.9 14 6C14 7.1 13.1 8 12 8C10.9 8 10 7.1 10 6C10 4.9 10.9 4 12 4ZM6.18 16C6.67 13.72 8.7 12 11.13 12H12.87C15.3 12 17.33 13.72 17.82 16H6.18Z" />
+const FlameIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M12 2C12 2 17 6.5 17 11C17 13.7614 14.7614 16 12 16C9.23858 16 7 13.7614 7 11C7 6.5 12 2 12 2Z" fill="url(#flame-grad-top-admin)" />
+    <path d="M12 22C12 22 18 16.5 18 12C18 10.5 17 9 15.5 8.5C14 8 13 8.5 12 9.5C11 8.5 10 8 8.5 8.5C7 9 6 10.5 6 12C6 16.5 12 22 12 22Z" fill="url(#flame-grad-bottom-admin)" opacity="0.9" />
+    <defs>
+      <linearGradient id="flame-grad-top-admin" x1="12" y1="2" x2="12" y2="16" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FF5C00" />
+        <stop offset="1" stopColor="#FFB800" />
+      </linearGradient>
+      <linearGradient id="flame-grad-bottom-admin" x1="12" y1="8" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FFB800" />
+        <stop offset="0.5" stopColor="#FF5C00" />
+        <stop offset="1" stopColor="#FF005C" />
+      </linearGradient>
+    </defs>
   </svg>
 );
 
 const Logo = () => (
   <div className="flex items-center gap-2">
-    <div className="w-8 h-8 rounded-lg bg-[#EF593E] flex items-center justify-center text-white overflow-hidden">
-      <BullIcon className="w-7 h-7" />
+    <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm">
+      <FlameIcon className="w-6 h-6" />
     </div>
     <div className="flex flex-col -space-y-1">
       <div className="flex items-center gap-1">
@@ -54,7 +65,6 @@ export default function AdminDashboard() {
       if (!user || !db) return;
       try {
         const adminDoc = await getDocs(query(collection(db, "roles_admin")));
-        // Simple check for prototype: if user ID exists in roles_admin (handled by rules)
         setIsAdmin(true);
       } catch (e) {
         setIsAdmin(false);
@@ -83,7 +93,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="px-6 h-16 flex items-center justify-between border-b border-gray-200 bg-white sticky top-0 z-50">
+      <header className="px-6 h-16 flex items-center justify-between border-b border-gray-200 bg-white sticky top-0 z-50 no-print">
         <div className="flex items-center gap-4">
           <Link href="/">
             <Logo />
