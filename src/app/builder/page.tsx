@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
 import { useToast } from '@/hooks/use-toast';
+import { Logo } from '@/app/page';
 
 const THEMES = [
   { id: 'corporate-blue', name: 'Corporate Blue', primary: '#1E3A8A', accent: '#2563EB' },
@@ -156,10 +157,7 @@ export default function ResumeBuilder() {
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50 no-print">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#EF593E] rounded-lg flex items-center justify-center text-white font-black text-xl shadow-lg shadow-orange-100">B</div>
-          <h1 className="text-lg font-black text-slate-900 tracking-tight">Network Bulls <span className="text-[#EF593E]">Pro</span></h1>
-        </div>
+        <Logo size="sm" />
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-slate-500 font-bold hover:text-[#EF593E]">Editor</Button>
           <Button variant="ghost" className="text-slate-500 font-bold">Settings</Button>

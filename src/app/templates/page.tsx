@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { 
   Download, 
   Loader2,
-  Briefcase,
   FileText,
   Palette,
 } from 'lucide-react';
@@ -20,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
 import { ResumeData } from '@/types/resume';
+import { Logo } from '@/app/page';
 
 const THEMES = [
   { id: 'coral', name: 'Network Bulls Coral', primary: '#EF593E', accent: '#D44D35', text: '#1E293B', secondary: '#64748B' },
@@ -56,19 +56,6 @@ const TEMPLATES = [
   { id: 'executive', name: 'Executive Clean', category: 'Executive' },
   { id: 'tech', name: 'Tech Developer Style', category: 'Tech' },
 ];
-
-const Logo = () => (
-  <div className="flex flex-col -space-y-1 group">
-    <div className="flex items-center gap-1">
-      <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
-      <span className="text-[#334155] font-black text-xl tracking-tighter uppercase">Bulls</span>
-    </div>
-    <div className="flex items-center gap-1">
-      <div className="h-[1px] flex-1 bg-slate-200" />
-      <span className="text-[7px] text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Where Careers Fly</span>
-    </div>
-  </div>
-);
 
 export default function ResumeBuilderPage() {
   const [activeTab, setActiveTab] = useState('content');
@@ -144,7 +131,7 @@ export default function ResumeBuilderPage() {
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b flex items-center justify-between px-8 z-50 no-print">
-        <Link href="/"><Logo /></Link>
+        <Link href="/"><Logo size="sm" /></Link>
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-slate-500 font-black uppercase text-[10px] tracking-widest">Resume Editor</Button>
           <div className="h-6 w-[1px] bg-slate-200 mx-2" />
