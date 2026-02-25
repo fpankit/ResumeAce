@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -19,7 +20,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
 import { ResumeData } from '@/types/resume';
-import { Logo } from '@/app/page';
+import { Logo } from '@/components/brand/logo';
 
 const THEMES = [
   { id: 'coral', name: 'Network Bulls Coral', primary: '#EF593E', accent: '#D44D35', text: '#1E293B', secondary: '#64748B' },
