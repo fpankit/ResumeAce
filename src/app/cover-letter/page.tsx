@@ -10,6 +10,9 @@ import {
   User,
   Layout,
   Check,
+  Building2,
+  Loader2,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +26,7 @@ import { Logo } from '@/components/brand/logo';
 
 export default function CoverLetterPage() {
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
+  const [isGenerating, setIsGenerating] = useState(false);
   const [data, setData] = useState({
     fullName: 'Ankit',
     email: 'ankit@example.com',
@@ -48,6 +52,23 @@ Ankit`
   });
 
   const { toast } = useToast();
+
+  const handleGenerate = async () => {
+    setIsGenerating(true);
+    // Simulate offline generation
+    await new Promise(r => setTimeout(r, 1500));
+    
+    try {
+      const generatedContent = `Dear ${data.recipientName || 'Hiring Manager'},\n\nI am writing to formally express my interest in the ${data.jobTitle || 'Professional'} position at ${data.companyName || 'your esteemed organization'}. With a proven track record of excellence and a deep commitment to delivering high-impact results, I am confident that my background and expertise align perfectly with the goals of your team.\n\nThroughout my career, I have consistently demonstrated an ability to navigate complex challenges, drive technical innovation, and foster collaboration across diverse departments. My core strengths in ${data.skills || 'strategic problem solving and execution'} have allowed me to contribute significantly to previous organizational milestones.\n\nI am particularly impressed by ${data.companyName || 'your organization'}'s reputation for innovation and industry leadership. I am eager to bring my skills and enthusiasm to your team and contribute to your ongoing success.\n\nThank you for considering my application. I look forward to the opportunity to discuss how my experience can benefit your organization in more detail.\n\nSincerely,\n\n${data.fullName}`;
+      
+      setData(prev => ({ ...prev, content: generatedContent }));
+      toast({ title: "Letter Generated", description: "Professional preset applied successfully." });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "Generation Failed", description: "Could not apply preset." });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleExport = async () => {
     const html2canvas = (await import('html2canvas')).default;
@@ -109,8 +130,45 @@ Ankit`
                       <User className="h-4 w-4 text-[#EF593E]" />
                       <h3 className="text-[10px] font-black uppercase text-slate-900 tracking-widest">Personal Info</h3>
                     </div>
-                    <Input value={data.fullName} onChange={e => setData({...data, fullName: e.target.value})} placeholder="Full Name" />
-                    <Input value={data.email} onChange={e => setData({...data, email: e.target.value})} placeholder="Email" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[9px] font-black text-slate-400 uppercase">Full Name</Label>
+                        <Input value={data.fullName} onChange={e => setData({...data, fullName: e.target.value})} className="rounded-xl h-10 bg-white" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[9px] font-black text-slate-400 uppercase">Email</Label>
+                        <Input value={data.email} onChange={e => setData({...data, email: e.target.value})} className="rounded-xl h-10 bg-white" />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="space-y-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Building2 className="h-4 w-4 text-[#EF593E]" />
+                      <h3 className="text-[10px] font-black uppercase text-slate-900 tracking-widest">Application Details</h3>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[9px] font-black text-slate-400 uppercase">Target Job Title</Label>
+                        <Input value={data.jobTitle} onChange={e => setData({...data, jobTitle: e.target.value})} className="rounded-xl h-10 bg-white" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[9px] font-black text-slate-400 uppercase">Company Name</Label>
+                        <Input value={data.companyName} onChange={e => setData({...data, companyName: e.target.value})} className="rounded-xl h-10 bg-white" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[9px] font-black text-slate-400 uppercase">Key Strengths to Highlight</Label>
+                      <Textarea value={data.skills} onChange={e => setData({...data, skills: e.target.value})} className="rounded-xl bg-white text-xs h-20" placeholder="List your top 3 achievements..." />
+                    </div>
+                    <Button 
+                      onClick={handleGenerate} 
+                      disabled={isGenerating}
+                      className="w-full h-12 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest gap-2 rounded-xl"
+                    >
+                      {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-[#EF593E]" />}
+                      Magic AI Preset
+                    </Button>
                   </section>
 
                   <section className="space-y-4 pt-4 border-t">

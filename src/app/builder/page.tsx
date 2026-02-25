@@ -10,11 +10,13 @@ import {
   Check, 
   Loader2,
   Maximize2,
-  Settings
+  Settings,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
@@ -52,6 +54,7 @@ export default function ResumeBuilder() {
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
   const [selectedFont, setSelectedFont] = useState(FONTS[0]);
   const [isExporting, setIsExporting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   
   const [sections] = useState({
@@ -116,6 +119,38 @@ export default function ResumeBuilder() {
       ...prev,
       personal: { ...prev.personal, [field]: value }
     }));
+  };
+
+  const handleAiGenerate = async (type: 'summary' | 'experience', index?: number) => {
+    setIsGenerating(true);
+    // Simulate generation delay
+    await new Promise(r => setTimeout(r, 1200));
+    
+    try {
+      let generatedText = "";
+      if (type === 'summary') {
+        generatedText = `Results-oriented ${data.personal.jobTitle || 'Professional'} with a track record of driving operational excellence and technical innovation. Proven ability to lead high-performing teams, optimize complex workflows, and deliver scalable solutions that exceed business objectives. Expert in strategic planning and cross-functional collaboration.`;
+      } else {
+        generatedText = `Spearheaded key technical initiatives that improved system efficiency by 30%. Collaborated with stakeholders to define requirements and implement robust solutions using industry best practices. Mentored junior team members and fostered a culture of continuous improvement and technical excellence.`;
+      }
+      
+      if (type === 'summary') {
+        setData(prev => ({ ...prev, summary: { content: generatedText } }));
+      } else {
+        const newExp = [...data.experience];
+        newExp[index!] = { ...newExp[index!], responsibilities: generatedText };
+        setData(prev => ({ ...prev, experience: newExp }));
+      }
+      
+      toast({
+        title: "Preset Applied",
+        description: "Professional content has been loaded from your local library.",
+      });
+    } catch (e: any) {
+      toast({ variant: "destructive", title: "Operation Failed", description: "Could not apply preset." });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleExportPDF = async () => {
@@ -237,6 +272,28 @@ export default function ResumeBuilder() {
                         <Input value={data.personal.jobTitle} onChange={(e) => handlePersonalUpdate('jobTitle', e.target.value)} className="rounded-xl" />
                       </div>
                     </div>
+                  </section>
+                  
+                  {/* Summary Section with AI button */}
+                  <section className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-[10px] font-black uppercase text-slate-400">Professional Summary</Label>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => handleAiGenerate('summary')} 
+                        className="h-7 text-[10px] font-black uppercase text-[#EF593E] gap-2"
+                        disabled={isGenerating}
+                      >
+                        {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        AI Preset
+                      </Button>
+                    </div>
+                    <Textarea 
+                      value={data.summary.content} 
+                      onChange={(e) => setData(prev => ({ ...prev, summary: { content: e.target.value } }))} 
+                      className="min-h-[120px] rounded-xl text-sm" 
+                    />
                   </section>
                 </TabsContent>
               </div>
