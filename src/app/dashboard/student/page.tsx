@@ -11,38 +11,19 @@ import { useToast } from "@/hooks/use-toast";
 import { collection, query, orderBy } from "firebase/firestore";
 import { useAuth } from "@/firebase";
 import { signOut } from "firebase/auth";
-import { useRouter } from "navigation";
+import { useRouter } from "next/navigation";
 import { FileText, Loader2, LogOut, History, Zap } from "lucide-react";
 import Link from "next/link";
 
-const FlameIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    <path d="M12 2C12 2 17 6.5 17 11C17 13.7614 14.7614 16 12 16C9.23858 16 7 13.7614 7 11C7 6.5 12 2 12 2Z" fill="url(#flame-grad-top-dash)" />
-    <path d="M12 22C12 22 18 16.5 18 12C18 10.5 17 9 15.5 8.5C14 8 13 8.5 12 9.5C11 8.5 10 8 8.5 8.5C7 9 6 10.5 6 12C6 16.5 12 22 12 22Z" fill="url(#flame-grad-bottom-dash)" opacity="0.9" />
-    <defs>
-      <linearGradient id="flame-grad-top-dash" x1="12" y1="2" x2="12" y2="16" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#FF5C00" />
-        <stop offset="1" stopColor="#FFB800" />
-      </linearGradient>
-      <linearGradient id="flame-grad-bottom-dash" x1="12" y1="8" x2="12" y2="22" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#FFB800" />
-        <stop offset="0.5" stopColor="#FF5C00" />
-        <stop offset="1" stopColor="#FF005C" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-
 const Logo = () => (
-  <div className="flex items-center gap-2">
-    <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm">
-      <FlameIcon className="w-6 h-6" />
+  <div className="flex flex-col -space-y-1 group">
+    <div className="flex items-center gap-1">
+      <span className="text-[#EF593E] font-black text-lg tracking-tighter uppercase">Network</span>
+      <span className="text-[#334155] font-black text-lg tracking-tighter uppercase">Bulls</span>
     </div>
-    <div className="flex flex-col -space-y-1">
-      <div className="flex items-center gap-1">
-        <span className="text-[#EF593E] font-black text-lg tracking-tighter uppercase">Network</span>
-        <span className="text-[#44546A] font-black text-lg tracking-tighter uppercase">Bulls</span>
-      </div>
+    <div className="flex items-center gap-1">
+      <div className="h-[1px] flex-1 bg-slate-200" />
+      <span className="text-[7px] text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Where Careers Fly</span>
     </div>
   </div>
 );
@@ -136,6 +117,7 @@ export default function StudentDashboard() {
                     <Button 
                       className="w-full h-14 text-base font-bold bg-[#EF593E] hover:bg-[#D44D35] text-white rounded-xl shadow-lg" 
                       onClick={handleAnalyze}
+                      disabled
                     >
                       Analyze Compatibility (Disabled)
                     </Button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { 
   CheckCircle2, 
@@ -12,46 +12,23 @@ import Link from "next/link";
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 
-const FlameIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    <path d="M12 2C12 2 17 6.5 17 11C17 13.7614 14.7614 16 12 16C9.23858 16 7 13.7614 7 11C7 6.5 12 2 12 2Z" fill="url(#flame-grad-top)" />
-    <path d="M12 22C12 22 18 16.5 18 12C18 10.5 17 9 15.5 8.5C14 8 13 8.5 12 9.5C11 8.5 10 8 8.5 8.5C7 9 6 10.5 6 12C6 16.5 12 22 12 22Z" fill="url(#flame-grad-bottom)" opacity="0.9" />
-    <defs>
-      <linearGradient id="flame-grad-top" x1="12" y1="2" x2="12" y2="16" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#FF5C00" />
-        <stop offset="1" stopColor="#FFB800" />
-      </linearGradient>
-      <linearGradient id="flame-grad-bottom" x1="12" y1="8" x2="12" y2="22" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#FFB800" />
-        <stop offset="0.5" stopColor="#FF5C00" />
-        <stop offset="1" stopColor="#FF005C" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-
 const Logo = ({ size = "md" }: { size?: "sm" | "md" | "lg" }) => {
   const sizes = {
-    sm: { icon: "w-6 h-6", text: "text-lg", subtext: "text-[6px]" },
-    md: { icon: "w-10 h-10", text: "text-xl", subtext: "text-[7px]" },
-    lg: { icon: "w-12 h-12", text: "text-2xl", subtext: "text-[8px]" }
+    sm: { text: "text-lg", subtext: "text-[6px]", line: "h-[1px]" },
+    md: { text: "text-xl", subtext: "text-[7px]", line: "h-[1px]" },
+    lg: { text: "text-2xl", subtext: "text-[8px]", line: "h-[1px]" }
   };
   const s = sizes[size];
 
   return (
-    <div className="flex items-center gap-2 group">
-      <div className={`relative ${s.icon} rounded-lg bg-white flex items-center justify-center overflow-hidden shadow-lg shadow-primary/5 border border-slate-100`}>
-        <FlameIcon className="w-full h-full p-1 transition-transform group-hover:scale-110 duration-300" />
+    <div className="flex flex-col -space-y-1 group">
+      <div className="flex items-center gap-1">
+        <span className={`text-[#EF593E] font-black ${s.text} tracking-tighter uppercase`}>Network</span>
+        <span className={`text-[#334155] font-black ${s.text} tracking-tighter uppercase`}>Bulls</span>
       </div>
-      <div className="flex flex-col -space-y-1">
-        <div className="flex items-center gap-1">
-          <span className={`text-[#EF593E] font-black ${s.text} tracking-tighter uppercase`}>Network</span>
-          <span className={`text-[#44546A] font-black ${s.text} tracking-tighter uppercase`}>Bulls</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="h-[1px] flex-1 bg-slate-200" />
-          <span className={`${s.subtext} text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap`}>Where Careers Fly</span>
-        </div>
+      <div className="flex items-center gap-1">
+        <div className={`${s.line} flex-1 bg-slate-200`} />
+        <span className={`${s.subtext} text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap`}>Where Careers Fly</span>
       </div>
     </div>
   );

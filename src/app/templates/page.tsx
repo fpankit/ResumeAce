@@ -4,31 +4,18 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Download, 
-  User, 
-  Check, 
   Loader2,
   Briefcase,
-  Code,
-  PlusCircle,
   FileText,
-  Trash2,
-  Layout,
   Palette,
-  Maximize2,
-  Languages,
-  Heart,
-  Plus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { ResumeCanvas } from '@/components/resume/resume-canvas';
@@ -71,19 +58,14 @@ const TEMPLATES = [
 ];
 
 const Logo = () => (
-  <div className="flex items-center gap-2">
-    <div className="w-10 h-10 rounded-xl bg-[#EF593E] flex items-center justify-center text-white overflow-hidden shadow-lg shadow-[#EF593E]/20">
-      <Briefcase className="w-6 h-6" />
+  <div className="flex flex-col -space-y-1 group">
+    <div className="flex items-center gap-1">
+      <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
+      <span className="text-[#334155] font-black text-xl tracking-tighter uppercase">Bulls</span>
     </div>
-    <div className="flex flex-col -space-y-1">
-      <div className="flex items-center gap-1">
-        <span className="text-[#EF593E] font-black text-xl tracking-tighter uppercase">Network</span>
-        <span className="text-[#334155] font-black text-xl tracking-tighter uppercase">Bulls</span>
-      </div>
-      <div className="flex items-center gap-1">
-        <div className="h-[1px] flex-1 bg-slate-200" />
-        <span className="text-[7px] text-[#EF593E] font-black tracking-[0.2em] uppercase whitespace-nowrap">Professional Builder</span>
-      </div>
+    <div className="flex items-center gap-1">
+      <div className="h-[1px] flex-1 bg-slate-200" />
+      <span className="text-[7px] text-[#EF593E] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Where Careers Fly</span>
     </div>
   </div>
 );
@@ -137,15 +119,6 @@ export default function ResumeBuilderPage() {
       current[keys[keys.length - 1]] = value;
       return newData;
     });
-  };
-
-  const addArrayItem = (key: keyof Omit<ResumeData, 'personal' | 'summary' | 'interests'>) => {
-    const newItem: any = { id: Math.random().toString(36).substr(2, 9) };
-    setData(prev => ({ ...prev, [key]: [...(prev[key] as any[]), newItem] }));
-  };
-
-  const removeArrayItem = (key: keyof Omit<ResumeData, 'personal' | 'summary' | 'interests'>, id: string) => {
-    setData(prev => ({ ...prev, [key]: (prev[key] as any[]).filter((i: any) => i.id !== id) }));
   };
 
   const handleExportPDF = async () => {
